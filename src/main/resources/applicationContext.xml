@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://mybatis.org/schema/mybatis-spring
+        http://mybatis.org/schema/mybatis-spring.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <context:component-scan base-package="com.chuhelan"/>
+    <!--加载数据库属性配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--配置数据源，注入容器-->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <!--驱动名称-->
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <!--JDBC连接串-->
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <!--数据库用户名称-->
+        <property name="username" value="${jdbc.username}"/>
+        <!--数据库密码-->
+        <property name="password" value="${jdbc.password}"/>
+        <!--连接最大时间 -->
+        <property name="maxLifetime" value="30000"/>
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maximumPoolSize" value="10" />
+        <!-- 连接池最小空闲 -->
+        <property name="minimumIdle" value="1" />
+        <!--此属性控制从池返回的连接的默认自动提交行为,默认值：true-->
+        <property name="autoCommit" value="true"/>
+        <!--个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟-->
+        <property name="idleTimeout" value="20000"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="connectionTimeout" value="60000" />
+    </bean>
+    <!--配置sqlSessionFactory-->
+    <bean id="sqlSessionFactory"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <!--配置mybatis配置文件的路径-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--开启驼峰映射规则，下面的configuration和上面configLocation的不能同时使
+        用-->
+        <!--<property name="configuration">
+        <bean class="org.apache.ibatis.session.Configuration">
+        <property name="mapUnderscoreToCamelCase" value="true"/>
+        </bean>
+        </property>-->
+    </bean>
+    <!--mapper扫描，扫描的mapper对象会被注入spring容器-->
+    <bean id="mapperScannerConfigurer"
+          class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.chuhelan.dao"/>
+    </bean>
+    <!--配置事务管理器,将事务管理器注入Spring容器，需要配置一个数据库连接池-->
+    <bean id="txManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--开启事务注解驱动，配置使用的事务管理器-->
+    <tx:annotation-driven transaction-manager="txManager"/>
+</beans>
