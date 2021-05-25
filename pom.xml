@@ -39,6 +39,7 @@
             <artifactId>mybatis-spring</artifactId>
             <version>2.0.6</version>
         </dependency>
+        <!--数据库连接池-->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -97,10 +98,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.20</version>
-            <!--数据库连接池-->
         </dependency>
         <!--Jackson相关依赖-->
-        <!--https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <!--
+        https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -147,6 +148,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>2.0.0-alpha1</version>
+        </dependency>
+        <!--druid 的数据源-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.5</version>
         </dependency>
     </dependencies>
 
