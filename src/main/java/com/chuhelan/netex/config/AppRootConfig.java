@@ -19,7 +19,7 @@ import javax.sql.DataSource;
  **/
 
 @Configuration
-@ComponentScan("com.chuhelan")
+@ComponentScan("com.chuhelan.netex")
 @MapperScan("com.chuhelan.netex.dao")
 @EnableTransactionManagement //开启事务
 @EnableAspectJAutoProxy //开启AspectJ自动代理
