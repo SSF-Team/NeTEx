@@ -5,7 +5,10 @@ import com.chuhelan.netex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @description:
@@ -20,9 +23,21 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("/UserById")
-    public String findUserById(Integer id , Model model){
+    public String findUserById(Integer id, Model model) {
         User user = userService.findUserById(id);
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         return "user";
+    }
+
+    @PostMapping("/signin")
+    public String login(User user, Model model, HttpSession session) {
+        String username = user.getUser_name();
+        String password = user.getUser_password();
+        if (username != null && password != null && )) {
+            session.setAttribute("user", user);
+            return "redirect:main";
+        }
+        model.addAttribute("msg", "用户名或密码错误，请重新登录！");
+        return "login";
     }
 }
