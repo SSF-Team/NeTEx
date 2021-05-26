@@ -9,7 +9,7 @@
 .top_banner {
     height: 600px;
     width: 100%;
-    background: url("../../img/sign_in/banner.png") no-repeat;
+    background: url("../img/sign_in/banner.png") no-repeat;
 }
 
 .partnerBox {
@@ -100,18 +100,18 @@
     height: 20px;
     border-right: 1px solid #EBEBEB;
     position: absolute;
-    left: 0;
-    top: 10px;
+    left: 5px;
+    top: 15px;
 }
 
 .icon_code {
-    background-image: url("../../img/sign_in/icon_code.png");
+    background-image: url("../img/sign_in/icon_code.png");
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .icon_pwd {
-    background-image: url("../../img/sign_in/icon_pwd.png");
+    background-image: url("../img/sign_in/icon_pwd.png");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -159,4 +159,16 @@
 }
 .sign_in_Btn:hover{
     background: #fe6600;
+}
+
+.errbar {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 62px;
+    background: #DE002E;
+    color: #fff;
+    margin-left: 16px;
+    border-radius: 50px;
+    margin-right: 16px;
 }

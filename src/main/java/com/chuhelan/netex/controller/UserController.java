@@ -1,6 +1,8 @@
 package com.chuhelan.netex.controller;
 
 import com.chuhelan.netex.util.*;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -28,16 +30,21 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/UserById")
+    @GetMapping("/UserById")
     public String findUserById(Integer id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
         return "user";
     }
 
+    @RequestMapping("/SignIn")
+    public String LoginPage() {
+        return "sign_in";
+    }
+
     @PostMapping("/Login")
     public String LoginPass(String email, String password, String back, Model model) {
-        System.out.println("操作 > 登录 > LogginPass > " + email + " / " + password);
+        System.out.println("操作 > 登录 > LogginPass > " + email + " / " + password + " / " + back);
         // 检索用户信息
         User user = userService.findUserByMail(email);
         // 验证登录
@@ -52,18 +59,30 @@ public class UserController {
             // 写数据库
             userService.loginUser(user, token, time);
             // 返回
+            System.out.println("操作 > 登录 > LogginPass > 登陆成功");
             if(back != null) {
                 model.addAttribute("id", user.getUser_id());
                 model.addAttribute("token", token);
                 return back;
             } else {
-                model.addAttribute("str", "{\"stat\":20, \"id\":" + user.getUser_id() + ",\"token\":\"" + token + "\", \"dietime\":" + time);
+                model.addAttribute("str", "{\"stat\":200, \"id\":" + user.getUser_id() + ",\"token\":\"" + token + "\", \"dietime\":" + time + "}");
                 return "api";
             }
         } else {
-            model.addAttribute("err", "账号或密码错误。");
-            return "../../index";
+            if(back != null) {
+                model.addAttribute("err", "账号或密码错误");
+                return "sign_in";
+            } else {
+                model.addAttribute("str", "{\"stat\":302, \"msg\":\"账号或密码错误\"}");
+                return "api";
+            }
         }
+    }
+
+    @PostMapping("/VerToken")
+    public String VerToken(Integer id, String token, Model model) throws ParseException {
+        model.addAttribute("str", "{\"msg\":\"" + userService.verificationToken(id, token) + "\"}");
+        return "api";
     }
 
     @PostMapping("/Register")
