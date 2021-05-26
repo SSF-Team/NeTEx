@@ -1,8 +1,7 @@
 package com.chuhelan.netex.dao;
 
 import com.chuhelan.netex.domain.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @description:
@@ -12,12 +11,22 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface UserDao {
+
+    // Select
+
     @Select("select * from netex_user where user_id=#{id}")
     public User findUserById(Integer id);
 
     @Select("select * from netex_user where user_email=#{email}")
     public User findUserByMail(String email);
 
-    @Select("select *from netex_user where user_email=#{email} and user_password=#{password}")
-    public User signin(String email, String password);
+    // Update
+
+    @Update("update netex_user set user_token=#{token}, user_dtime=#{dtime} where user_id=#{id}")
+    public void loginUser(@Param("id") Integer id, @Param("token") String token, @Param("dtime") String dtime);
+
+    // insert
+
+    @Insert("insert into netex_user ( user_name, user_profile, user_email, user_password, user_phone ) values ( #{name}, '', #{mail}, #{password}, #{phone} );")
+    public void regUser(@Param("name") String name, @Param("mail") String mail, @Param("password") String password, @Param("phone") String phone);
 }

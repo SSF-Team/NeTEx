@@ -6,5 +6,6 @@ public interface UserService {
     public User findUserById(Integer id);
     public User findUserByMail(String email);
 
-    public User signin(String email,String password);
+    public void loginUser(User user, String token, String dietime);
+    public void regUser(String name, String phone, String mail, String password);
 }

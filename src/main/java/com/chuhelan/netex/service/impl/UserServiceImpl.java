@@ -44,7 +44,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User signin(String email, String password) {
-        return null;
+    public void loginUser(User user, String token, String dietime) {
+        System.out.println("操作 > 登录 > LogginUser > " + token + "/" +dietime);
+        userDao.loginUser(user.getUser_id(), token, dietime);
+    }
+
+    @Override
+    public void regUser(String name, String phone, String mail, String password) {
+        System.out.println("操作 > 注册 > RegUser");
+        userDao.regUser(name, mail, password, phone);
     }
 }

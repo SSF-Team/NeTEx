@@ -1,5 +1,6 @@
 package com.chuhelan.netex.controller;
 
+import com.chuhelan.netex.util.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -36,6 +37,7 @@ public class UserController {
 
     @PostMapping("/Login")
     public String LoginPass(String email, String password, String back, Model model) {
+        System.out.println("操作 > 登录 > LogginPass > " + email + " / " + password);
         // 检索用户信息
         User user = userService.findUserByMail(email);
         // 验证登录
@@ -47,14 +49,57 @@ public class UserController {
             sdf.applyPattern("yyyyMMdd");
             Date date = new Date(new Date().getTime() + 518400000);
             String time = sdf.format(date);
+            // 写数据库
+            userService.loginUser(user, token, time);
+            // 返回
             if(back != null) {
-                model.addAttribute("user", user);
+                model.addAttribute("id", user.getUser_id());
+                model.addAttribute("token", token);
                 return back;
             } else {
                 model.addAttribute("str", "{\"stat\":20, \"id\":" + user.getUser_id() + ",\"token\":\"" + token + "\", \"dietime\":" + time);
                 return "api";
             }
+        } else {
+            model.addAttribute("err", "账号或密码错误。");
+            return "../../index";
         }
-        return "../../index";
+    }
+
+    @PostMapping("/Register")
+    public String RegPass(String email, String name, String password, String phone, String back, Model model) {
+        System.out.println("操作 > 注册 > RegPass > " + email + " / " + name + " / " + password + " / " + phone);
+        // 验证用户是否存在
+        User user = userService.findUserByMail(email);
+        if(user == null) {
+            // 账号不存在，开始注册流程
+            // 检查数据合法性
+            boolean isNOlegalitys = !legality.mail(email) && !legality.mobile(phone) && !legality.name(name) && !legality.password(password);
+            System.out.println("操作 > 注册 > RegPass > 输入合法性：" + isNOlegalitys);
+            if(isNOlegalitys) {
+                if(back != null) {
+                    return "";
+                } else {
+                    model.addAttribute("str", "{\"stat\":406, \"msg\":\"参数不合法。\"}");
+                    return "api";
+                }
+            }
+            // 写数据库
+            userService.regUser(name, phone, email, password);
+            if(back != null) {
+                return "";
+            } else {
+                model.addAttribute("str", "{\"stat\":200, \"msg\":\"注册完成。\"}");
+                return "api";
+            }
+        } else {
+            if(back != null) {
+                model.addAttribute("err", "账号已存在。");
+                return back;
+            } else {
+                model.addAttribute("str", "{\"stat\":406, \"msg\":\"账号已存在。\"}");
+                return "api";
+            }
+        }
     }
 }
