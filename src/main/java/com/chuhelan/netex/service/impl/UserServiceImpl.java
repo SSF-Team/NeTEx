@@ -32,17 +32,19 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Autowired
-
-
     @Override
-    public User signin(String email, String password) {
-        Optional<User> userOption =
-                Optional.ofNullable(userDao.signin(email,password));
-        if(userOption.isPresent()){
-            User user
+    public User findUserByMail(String email) {
+        Optional<User> userOptional =
+                Optional.ofNullable(userDao.findUserByMail(email));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user;
         }
         return null;
     }
 
+    @Override
+    public User signin(String email, String password) {
+        return null;
+    }
 }

@@ -13,7 +13,7 @@
 <body>
 <span>用户名：${user.user_name}</span><br>
 <img src="${user.user_profile}" style="height: 200px;width:200px;border-radius: 100%; box-shadow: 0px 0px 12px #E0E0E0"><br>
-<span>地址：${user.user_address}</span><br>
+<%--<span>地址：${user.user_address}</span><br>--%>
 <span>邮箱：${user.user_email}</span><br>
 <span>电话：${user.user_phone}</span><br>
 
