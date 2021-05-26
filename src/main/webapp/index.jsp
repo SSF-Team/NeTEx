@@ -1,4 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.chuhelan.netex.util.*" %>
+
+<%
+  if(request.getAttribute("id") != null && request.getAttribute("token") != null) {
+    // 更新 Cookie
+    cookie.set(response, "id", request.getAttribute("id").toString(), 60*60*12*6);
+    cookie.set(response, "token", request.getAttribute("token").toString(), 60*60*12*6);
+  }
+  if(request.getAttribute("err") != null) {
+    switch (request.getAttribute("err").toString()) {
+      case "账号或密码错误。": {
+        // 删除 cookie
+        cookie.remove(response, "id");
+        cookie.remove(response, "cookie");
+      }
+    }
+  }
+%>
 
 <!DOCTYPE html>
 <html lang="cn">
@@ -50,7 +68,7 @@
                 <form action="/Login" method="post">
                   <input class="form-control" type="text" name="email" placeholder=" 账号" aria-label="账号" style="width: 200px;margin: 0 5px;">
                   <input class="form-control" type="password" name="password" placeholder=" 密码" aria-label="密码" style="width: 200px;margin: 0 5px;margin-top: 5px;">
-                  <input class="form-control" type="text" name="back" content="user" style="display: none;">
+                  <input class="form-control" type="text" name="back" value="../../index" style="display: none;">
                   <button type="submit" class="btn btn-light">登录</button>
                 </form>
                 <a style="line-height: 10px;">忘记密码？</a>
