@@ -1,0 +1,158 @@
+#loginDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#loginDiv h3 {
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 30px;
+}
+
+#loginDiv h4 {
+    font-weight: lighter;
+    text-align: center;
+    width: 1000px;
+    padding-bottom: 30px;
+}
+
+#loginDiv p {
+    font-weight: bolder;
+}
+
+#name_trip {
+    margin-left: 50px;
+    color: red;
+}
+
+#xing_trip {
+    margin-left: 50px;
+    color: red;
+}
+
+.sexDiv > input,
+.location > input {
+    width: 30px;
+    height: 17px;
+}
+
+input,
+select {
+    margin-left: 15px;
+    border-radius: 5px;
+    border-style: hidden;
+    height: 60px;
+    width: 140px;
+    background-color: #F2F2F2;
+    outline: none;
+    color: #000;
+    padding-left: 10px;
+}
+
+.button {
+    font-size: 19px;
+    color: #fff;
+    background-color: #ff6200;
+    border-radius: 0;
+    text-decoration: none;
+    margin: 50px;
+}
+
+.introduce {
+    margin-left: 110px;
+}
+
+.introduce > textarea {
+    background-color: rgba(216, 191, 216, 0.5);
+    border-style: hidden;
+    outline: none;
+    border-radius: 5px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: #f0edf3;
+}
+
+b {
+    margin-left: 50px;
+    color: #FFEB3B;
+    font-size: 10px;
+    font-weight: initial;
+}
+
+.setBanner {
+    height: 350px;
+    width: 100%;
+    background: url("../../img/sign_up/banner2.jpg") no-repeat;
+    background-size: cover;
+}
+
+.word_left {
+    padding-top: 60px;
+    float: left;
+    position: absolute;
+    left: 8%;
+}
+
+.word_left > p:first-child {
+    color: #FFFFFF;
+    font-family: "微软雅黑", "宋体", "Arial", "Source Han Sans CN", "Microsoft YaHei";
+    font-weight: lighter;
+    font-size: 3rem;
+}
+
+.word_left div p {
+    width: 550px;
+    color: #FFFFFF;
+    font-family: "微软雅黑", "宋体", "Arial", "Source Han Sans CN", "Microsoft YaHei";
+    font-weight: lighter;
+    font-size: 1.2rem;
+}
+
+.register {
+
+}
+
+.filed {
+    margin-top: 30px;
+    width: 1000px;
+}
+
+.word_filed {
+    float: left;
+    width: 600px;
+}
+
+.pic_filed {
+    float: right;
+    position: relative;
+    right: 100px;
+    text-align: center;
+}
+
+.pic_filed div {
+    font-size: 1.3rem;
+}
+
+.pic_filed img {
+    margin: 25px;
+    height: 150px;
+    width: 150px;
+    border-radius: 100%;
+    box-shadow: 0px 0px 12px #E0E0E0;
+}
+
+.personalPic {
+    height: 45px;
+    width: 100px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #ff6200;
+    border-radius: 0;
+    text-decoration: none;
+}
