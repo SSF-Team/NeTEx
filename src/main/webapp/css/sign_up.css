@@ -88,7 +88,7 @@ b {
 .setBanner {
     height: 350px;
     width: 100%;
-    background: url("../../img/sign_up/banner2.jpg") no-repeat;
+    background: url("../img/sign_up/banner2.jpg") no-repeat;
     background-size: cover;
 }
 

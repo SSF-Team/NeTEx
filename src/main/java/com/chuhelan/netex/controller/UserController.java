@@ -45,6 +45,10 @@ public class UserController {
     public String LoginPage() {
         return "sign_in";
     }
+    @RequestMapping("SignUp")
+    public String RegPage() {
+        return "sign_up";
+    }
 
     // 实际功能 API
     @PostMapping("/Login")
