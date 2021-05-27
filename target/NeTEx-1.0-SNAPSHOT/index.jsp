@@ -28,13 +28,13 @@
         </ol>
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <img src="test.jpg" class="d-block">
+            <img src="/img/indexBanner.jpg" class="d-block">
           </div>
           <div class="carousel-item">
-            <img src="test.jpg" class="d-block">
+            <img src="/img/indexBanner.jpg" class="d-block">
           </div>
           <div class="carousel-item">
-            <img src="test.jpg" class="d-block">
+            <img src="/img/indexBanner.jpg" class="d-block">
           </div>
         </div>
         <a class="carousel-control-prev" href="#mslide" role="button" data-slide="prev">
