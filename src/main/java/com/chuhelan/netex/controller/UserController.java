@@ -27,18 +27,26 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/UserById")
+    // 以下 API 功能仅用于测试
+    @RequestMapping("/UserById")
     public String findUserById(Integer id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
         return "user";
     }
+    @PostMapping("/VerToken")
+    public String VerToken(Integer id, String token, Model model) throws ParseException {
+        model.addAttribute("str", "{\"msg\":\"" + userService.verificationToken(id, token) + "\"}");
+        return "api";
+    }
 
-    @RequestMapping("/SignIn")
+    // 页面指向
+    @RequestMapping("SignIn")
     public String LoginPage() {
         return "sign_in";
     }
 
+    // 实际功能 API
     @PostMapping("/Login")
     public String LoginPass(String email, String password, String back, Model model) {
         System.out.println("操作 > 登录 > LogginPass > " + email + " / " + password + " / " + back);
@@ -75,13 +83,6 @@ public class UserController {
             }
         }
     }
-
-    @PostMapping("/VerToken")
-    public String VerToken(Integer id, String token, Model model) throws ParseException {
-        model.addAttribute("str", "{\"msg\":\"" + userService.verificationToken(id, token) + "\"}");
-        return "api";
-    }
-
     @PostMapping("/Register")
     public String RegPass(String email, String name, String password, String phone, String back, Model model) {
         System.out.println("操作 > 注册 > RegPass > " + email + " / " + name + " / " + password + " / " + phone);
