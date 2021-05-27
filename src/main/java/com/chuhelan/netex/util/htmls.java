@@ -20,7 +20,9 @@ public class htmls {
         return "<header>\n" +
                 "      <nav class=\"navbar navbar-expand-lg navbar-dark topbar\">\n" +
                 "        <div>\n" +
-                "          <img src=\"../../img/logo.svg\" style=\"width: 70px;\">\n" +
+                "           <a href=\"/\">\n"  +
+                "               <img src=\"../../img/logo.svg\" style=\"width: 70px;\">\n" +
+                "           </a>" +
                 "          <span class=\"bartrademark\">®</span>\n" +
                 "        </div>\n" +
                 "        <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNavDropdown\"\n" +
@@ -30,7 +32,7 @@ public class htmls {
                 "        <div class=\"collapse navbar-collapse\" id=\"navbarNavDropdown\">\n" +
                 "          <ul class=\"navbar-nav\">\n" +
                 "            <li class=\"nav-item active\">\n" +
-                "              <a class=\"nav-link active\" href=\"#\">首页</a>\n" +
+                "              <a class=\"nav-link active\" href=\"/\">首页</a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item dropdown\">\n" +
                 "              <a class=\"nav-link dropdown-toggle active\" href=\"#\" id=\"DpdSevice\" data-toggle=\"dropdown\"\n" +
