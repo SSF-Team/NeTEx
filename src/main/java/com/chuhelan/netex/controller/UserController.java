@@ -125,6 +125,7 @@ public class UserController {
         }
     }
 
+  
     // 纯文本 API
     @GetMapping("/UserAddress")
     public String UserAddress(Integer id, String token, Model model) throws ParseException {
@@ -146,6 +147,11 @@ public class UserController {
             model.addAttribute("str", "{\"stat\":500, \"msg\":\"" + addresses[0].getAddress_content() + "\"}");
             return "api";
         }
+      
+    @GetMapping("/getInfo")
+    public String getUserInfoByToken(Integer id ,String token, Model model){
+        User user = userService.getUserInfoByToken(id,token);
+        model.addAttribute("user", user);
         return "api";
     }
 }
