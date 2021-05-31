@@ -104,38 +104,37 @@
 <!--注册表-->
 <div class="register">
     <div id="loginDiv">
-        <form action="">
+        <form action="/Register" method="post">
             <h3>立即注册，有机会享受最低可至六折* 运费！</h3>
             <h4>请填写以下信息， 之后我们的客户服务代表将联系您， 以协助您开设账户。 个人寄件者，请致电联邦快递国际客服热线了解最新政策。</h4>
             <div class="filed">
                 <div class="word_filed">
                     <p>
                         用&nbsp;户&nbsp;名&nbsp;&nbsp;:
-                        <input id="user_name" type="text" autofocus required>
+                        <input name="name" id="user_name" type="text" autofocus required>
                         <label id="name_trip"></label>
                         手机号码:
-                        <input id="phoneNumber" type="text" required>
+                        <input name="phone" id="phoneNumber" type="text" required>
                         <label id="phoneNumber_trip"></label>
 
                     </p>
                     <p>
                         电子邮件:
-                        <input id="email" type="email" required>
+                        <input name="email" id="email" type="email" required>
                         <label id="email_trip"></label>
                         &emsp;&emsp;&emsp;&nbsp;邮政编码:
-                        <input id="postcode" type="text" required>
+                        <input name="postCode" id="postcode" type="text" required>
                         <label id="postcode_trip"></label>
                     </p>
                     <p>
                         密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:
-                        <input id="password" type="password" autofocus required>
+                        <input name="password" id="password" type="password" autofocus required>
                         <label id="password_trip"></label>
                         &emsp;&emsp;&emsp;&nbsp;确认密码:
                         <input id="surePassword" type="password" autofocus required>
                         <label id="surePassword_trip"></label>
                     </p>
-
-
+                    <input name="back" type="text" value="sign_in" style="display: none;">
                     <p style="text-align: center;">
                         <input type="submit" class="button" onblur="checkForm()" onclick="return submitT()" value="提交">
                     </p>

@@ -40,10 +40,20 @@
 
 <div class="top_banner">
     <div class="loginOption">
-        <div class="alert alert-danger errbar alert-dismissible fade show" role="alert" style="
+        <div class="alert
+        <%
+        if(request.getAttribute("ok") != null) {
+            out.println("alert-success");
+        } else {
+            out.println("alert-danger");
+        }
+        %>
+          errbar alert-dismissible fade show" role="alert" style="
             <%
             if(request.getAttribute("err") != null) {
-                out.println("\">" + request.getAttribute("err").toString());
+                out.println("background=#60c378;\">" + request.getAttribute("err").toString());
+            } else if(request.getAttribute("ok") != null) {
+                out.println("\">" + request.getAttribute("ok").toString());
             } else {
                 out.println("display: none;\">");
             }
@@ -71,7 +81,7 @@
         </div>
         <!-- 我同意-->
         <p class="privacy">
-            <input class="goCheck" id="goCheck" autocomplete="off" type="checkbox">
+            <input checked class="goCheck" id="goCheck" autocomplete="off" type="checkbox" name="accept">
             <label for="goCheck">我同意</label>
             <a class="privacy_herf" target="_blank" href="#">《NeTEx隐私政策》</a>
         </p>
