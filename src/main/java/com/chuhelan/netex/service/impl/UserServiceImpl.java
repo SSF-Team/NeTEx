@@ -131,31 +131,33 @@ public class UserServiceImpl implements UserService {
     public Address[] getAddresses(Integer id, String token) throws ParseException {
         System.out.println("操作 > 获取用户地址");
         String passToken = verificationToken(id, token);
-        if(passToken.equals("ok")) {
+        if (passToken.equals("ok")) {
             Address[] addresses = userDao.getUserAddresses(id);
             System.out.println("操作 > 获取用户地址 > 地址列表为：");
             System.out.println(Arrays.toString(addresses));
             return addresses;
         } else {
             // 返回填充报错的 Address 数组
-            return new Address[] {
+            return new Address[]{
                     new Address(-1, "", "", passToken)
             };
         }
-      
-    @SneakyThrows
+    }
+
     @Override
-    public User getUserInfoByToken(Integer id, String token) {
+    public User getUserInfoByToken(Integer id, String token) throws ParseException {
         System.out.println("getUserInfoByToken");
         Optional<User> userOptional =
-                Optional.ofNullable(userDao.getUserInfoByToken(id, token));
+                Optional.ofNullable(userDao.getUserInfoByToken(id));
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (verificationToken(id, token).equals("ok")){
+            String passToken = verificationToken(id, token);
+            if (passToken.equals("ok")){
                 return user;
             }
             else{
-                return null;
+                // 返回填充错误信息的 User 对象
+                return new User(-1, passToken);
             }
         }
         return null;

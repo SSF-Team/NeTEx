@@ -130,9 +130,9 @@ public class UserController {
     @GetMapping("/UserAddress")
     public String UserAddress(Integer id, String token, Model model) throws ParseException {
         Address[] addresses = userService.getAddresses(id, token);
-        if(addresses[0].getAddress_id() != -1) {
+        if (addresses[0].getAddress_id() != -1) {
             StringBuilder back = new StringBuilder("[");
-            for (Address add: addresses) {
+            for (Address add : addresses) {
                 back.append("{");
                 back.append("\"id\":").append(add.getAddress_id()).append(",");
                 back.append("\"name\":\"").append(add.getAddress_name()).append("\",");
@@ -143,15 +143,28 @@ public class UserController {
             back = new StringBuilder(back.substring(0, back.length() - 1));
             back.append("]");
             model.addAttribute("str", back.toString());
+            return "api";
         } else {
             model.addAttribute("str", "{\"stat\":500, \"msg\":\"" + addresses[0].getAddress_content() + "\"}");
             return "api";
         }
+    }
       
     @GetMapping("/getInfo")
-    public String getUserInfoByToken(Integer id ,String token, Model model){
+    public String getUserInfoByToken(Integer id ,String token, Model model) throws ParseException {
         User user = userService.getUserInfoByToken(id,token);
-        model.addAttribute("user", user);
-        return "api";
+        if(user.getUser_id() != -1) {
+            String back = "{";
+            back += "\"name\":\"" + user.getUser_name() + "\",";
+            back += "\"gender\":\"" + user.getUser_gender() + "\",";
+            back += "\"mail\":\"" + user.getUser_email() + "\",";
+            back += "\"phone\":\"" + user.getUser_phone() + "\"";
+            back += "}";
+            model.addAttribute("str", back);
+            return "api";
+        } else {
+            model.addAttribute("str", "{\"stat\":500, \"msg\":\"" + user.getUser_name() + "\"}");
+            return "api";
+        }
     }
 }
