@@ -53,8 +53,17 @@ public class UserController {
 
     // 实际功能 API
     @PostMapping("/Login")
-    public String LoginPass(String email, String password, String back, Model model) {
-        System.out.println("操作 > 登录 > LogginPass > " + email + " / " + password + " / " + back);
+    public String LoginPass(String email, String password, String back, String accept, Model model) {
+        System.out.println("操作 > 登录 > LogginPass > " + email + " / " + password + " / " + back + " / " +accept);
+        if(accept == null) {
+            if(back != null) {
+                model.addAttribute("err", "请勾选隐私政策");
+                return "sign_in";
+            } else {
+                model.addAttribute("str", "{\"stat\":302, \"msg\":\"请勾选隐私政策\"}");
+                return "api";
+            }
+        }
         // 检索用户信息
         User user = userService.findUserByMail(email);
         // 验证登录
@@ -100,7 +109,7 @@ public class UserController {
             System.out.println("操作 > 注册 > RegPass > 输入合法性：" + isNOlegalitys);
             if(isNOlegalitys) {
                 if(back != null) {
-                    return "";
+                    return "sign_up";
                 } else {
                     model.addAttribute("str", "{\"stat\":406, \"msg\":\"参数不合法。\"}");
                     return "api";
@@ -109,17 +118,18 @@ public class UserController {
             // 写数据库
             userService.regUser(name, phone, email, password);
             if(back != null) {
-                return "";
+                model.addAttribute("ok", "注册完成");
+                return back;
             } else {
                 model.addAttribute("str", "{\"stat\":200, \"msg\":\"注册完成。\"}");
                 return "api";
             }
         } else {
             if(back != null) {
-                model.addAttribute("err", "账号已存在。");
+                model.addAttribute("err", "账号已存在，请直接登录");
                 return back;
             } else {
-                model.addAttribute("str", "{\"stat\":406, \"msg\":\"账号已存在。\"}");
+                model.addAttribute("str", "{\"stat\":406, \"msg\":\"账号已存在，请直接登录\"}");
                 return "api";
             }
         }
@@ -149,7 +159,6 @@ public class UserController {
             return "api";
         }
     }
-      
     @GetMapping("/getInfo")
     public String getUserInfoByToken(Integer id ,String token, Model model) throws ParseException {
         User user = userService.getUserInfoByToken(id,token);
