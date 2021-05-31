@@ -1,5 +1,6 @@
 package com.chuhelan.netex.dao;
 
+import com.chuhelan.netex.domain.Address;
 import com.chuhelan.netex.domain.User;
 import org.apache.ibatis.annotations.*;
 
@@ -20,8 +21,12 @@ public interface UserDao {
     @Select("select * from netex_user where user_email=#{email}")
     public User findUserByMail(String email);
 
+    @Select("select * from netex_address where address_userID=#{id}")
+    public Address[] getUserAddresses(Integer id
+                                      
     @Select("select * from netex_user where user_token=#{user_token} and user_id=#{id}")
     public User getUserInfoByToken(Integer id, String token);
+                                      
 
     // Update
 

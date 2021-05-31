@@ -1,5 +1,6 @@
 package com.chuhelan.netex.controller;
 
+import com.chuhelan.netex.domain.Address;
 import com.chuhelan.netex.util.*;
 
 import java.text.ParseException;
@@ -124,6 +125,29 @@ public class UserController {
         }
     }
 
+  
+    // 纯文本 API
+    @GetMapping("/UserAddress")
+    public String UserAddress(Integer id, String token, Model model) throws ParseException {
+        Address[] addresses = userService.getAddresses(id, token);
+        if(addresses[0].getAddress_id() != -1) {
+            StringBuilder back = new StringBuilder("[");
+            for (Address add: addresses) {
+                back.append("{");
+                back.append("\"id\":").append(add.getAddress_id()).append(",");
+                back.append("\"name\":\"").append(add.getAddress_name()).append("\",");
+                back.append("\"phone\":\"").append(add.getAddress_phone()).append("\",");
+                back.append("\"address\":\"").append(add.getAddress_content()).append("\"");
+                back.append("},");
+            }
+            back = new StringBuilder(back.substring(0, back.length() - 1));
+            back.append("]");
+            model.addAttribute("str", back.toString());
+        } else {
+            model.addAttribute("str", "{\"stat\":500, \"msg\":\"" + addresses[0].getAddress_content() + "\"}");
+            return "api";
+        }
+      
     @GetMapping("/getInfo")
     public String getUserInfoByToken(Integer id ,String token, Model model){
         User user = userService.getUserInfoByToken(id,token);
