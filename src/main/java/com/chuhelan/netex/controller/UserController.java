@@ -123,4 +123,11 @@ public class UserController {
             }
         }
     }
+
+    @GetMapping("/getInfo")
+    public String getUserInfoByToken(Integer id ,String token, Model model){
+        User user = userService.getUserInfoByToken(id,token);
+        model.addAttribute("user", user);
+        return "api";
+    }
 }

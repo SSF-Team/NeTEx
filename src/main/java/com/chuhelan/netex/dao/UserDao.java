@@ -20,6 +20,9 @@ public interface UserDao {
     @Select("select * from netex_user where user_email=#{email}")
     public User findUserByMail(String email);
 
+    @Select("select * from netex_user where user_token=#{user_token} and user_id=#{id}")
+    public User getUserInfoByToken(Integer id, String token);
+
     // Update
 
     @Update("update netex_user set user_token=#{token}, user_dtime=#{dtime} where user_id=#{id}")

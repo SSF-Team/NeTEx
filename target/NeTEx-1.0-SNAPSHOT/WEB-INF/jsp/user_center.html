@@ -7,89 +7,146 @@
     <!-- 样式表 -->
     <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../index.css">
-    <link rel="stylesheet" href="../css/sign_in.css">
-    <script src="../../bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/usr_center.css">
+    <script src="../../js/jquery-1.12.4.js"></script>
+    <script src="../../js/jquery-ui.js"></script>
 </head>
+<script>
+    // 使用 JQuery UI 实现的 TabView
+    $( function() {
+      $( "#tabs" ).tabs();
+    } );
+</script>
 <body>
 <!-- 顶栏 -->
-<nav class="navbar navbar-expand-lg navbar-dark topbar">
-    <div>
-        <img src="../../img/logo.svg" style="width: 70px;">
-        <span class="bartrademark">®</span>
-    </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link active" href="#">首页</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle active" href="#" id="DpdSevice" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    物流服务
-                </a>
-                <div class="dropdown-menu" aria-labelledby="DpdSevice">
-                    <a class="dropdown-item" href="#">个人寄件</a>
-                    <a class="dropdown-item" href="#">大件服务</a>
-                    <a class="dropdown-item" href="#">冷链服务</a>
-                    <a class="dropdown-item" href="#">跨境服务</a>
-                    <a class="dropdown-item" href="#">星际速递</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="form-inline">
-        <div class="dropdown">
-            <button class="btn barbtn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="user-circle" class="svg-inline--fa fa-user-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248 104c-53 0-96 43-96 96s43 96 96 96 96-43 96-96-43-96-96-96zm0 144c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm0-240C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-49.7 0-95.1-18.3-130.1-48.4 14.9-23 40.4-38.6 69.6-39.5 20.8 6.4 40.6 9.6 60.5 9.6s39.7-3.1 60.5-9.6c29.2 1 54.7 16.5 69.6 39.5-35 30.1-80.4 48.4-130.1 48.4zm162.7-84.1c-24.4-31.4-62.1-51.9-105.1-51.9-10.2 0-26 9.6-57.6 9.6-31.5 0-47.4-9.6-57.6-9.6-42.9 0-80.6 20.5-105.1 51.9C61.9 339.2 48 299.2 48 256c0-110.3 89.7-200 200-200s200 89.7 200 200c0 43.2-13.9 83.2-37.3 115.9z"></path></svg>
-            </button>
-            <div class="dropdown-menu dropdownbg" aria-labelledby="dropdownMenuButton">
-                <input class="form-control" type="text" placeholder=" 账号" aria-label="账号" style="width: 200px;margin: 0 5px;">
-                <input class="form-control" type="password" placeholder=" 密码" aria-label="密码" style="width: 200px;margin: 0 5px;margin-top: 5px;">
-                <button type="button" class="btn btn-light">登录</button>
-                <a style="line-height: 10px;">忘记密码？</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="btn barbtn" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg>
-            </button>
-            <div class="dropdown-menu dropdownbg" aria-labelledby="dropdownMenuButton1" style="margin-top: -65px;margin-left: 50px;">
-                <input class="form-control" type="search" placeholder="搜索……" aria-label="搜索" style="width: 300px;">
-            </div>
-        </div>
-    </div>
-</nav>
-<!--这边开始写代码-->
-<!--这边开始写代码-->
-<footer>
-    <div class="info">
-        <div style="width: calc(100% - 500px);">
-            <span id="title">NeTEx China Group</span>
-            <div id="sevlink">
-                <a>免责声明</a>
-                <a>使用条款</a>
-                <a>无障碍访问</a>
-                <a>Cookie 设置</a>
-            </div>
-        </div>
-        <div>
-            <span id="title">联系我们</span>
-            <div id="findus">
-                <a href="https://github.com/SSF-Team/NeTEx/issues" target="_blank">
-                    <svg class="octicon octicon-mark-github v-align-middle" height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="buton">
-        <span>@NeTEx 2021</span>
-        <span style="float: right;"><a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">苏ICP备 20015498号</a> - netex.chuhelan.com</span>
-    </div>
-</footer>
 
-<script src="../../bootstrap/jquery-3.4.1.slim.min.js"></script>
+<!-- 主体 -->
+<div class="main">
+  <div id="tabs">
+    <ul class="main-tab list-group">
+      <li>
+          <a href="#tabs-3" class="list-group-item list-group-item-action">
+              <div></div>
+              <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="id-card" class="svg-inline--fa fa-id-card fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M528 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h480c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm0 400H303.2c.9-4.5.8 3.6.8-22.4 0-31.8-30.1-57.6-67.2-57.6-10.8 0-18.7 8-44.8 8-26.9 0-33.4-8-44.8-8-37.1 0-67.2 25.8-67.2 57.6 0 26-.2 17.9.8 22.4H48V144h480v288zm-168-80h112c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8H360c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8zm0-64h112c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8H360c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8zm0-64h112c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8H360c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8zm-168 96c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64z"></path></svg>
+              <span>我的资料</span>
+          </a>
+      </li>
+      <li>
+          <a href="#tabs-2" class="list-group-item list-group-item-action">
+              <div></div>
+              <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="coins" class="svg-inline--fa fa-coins fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z"></path></svg>
+              <span>我的积分</span>
+        </a>
+      </li>
+      <li>
+          <a href="#tabs-1" class="list-group-item list-group-item-action">
+              <div></div>
+              <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="question-circle" class="svg-inline--fa fa-question-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 448c-110.532 0-200-89.431-200-200 0-110.495 89.472-200 200-200 110.491 0 200 89.471 200 200 0 110.53-89.431 200-200 200zm107.244-255.2c0 67.052-72.421 68.084-72.421 92.863V300c0 6.627-5.373 12-12 12h-45.647c-6.627 0-12-5.373-12-12v-8.659c0-35.745 27.1-50.034 47.579-61.516 17.561-9.845 28.324-16.541 28.324-29.579 0-17.246-21.999-28.693-39.784-28.693-23.189 0-33.894 10.977-48.942 29.969-4.057 5.12-11.46 6.071-16.666 2.124l-27.824-21.098c-5.107-3.872-6.251-11.066-2.644-16.363C184.846 131.491 214.94 112 261.794 112c49.071 0 101.45 38.304 101.45 88.8zM298 368c0 23.159-18.841 42-42 42s-42-18.841-42-42 18.841-42 42-42 42 18.841 42 42z"></path></svg>
+              <span>帮助与反馈</span>
+          </a>
+      </li>
+    </ul>
+    <div class="right-view">
+        <div id="tabs-3">
+            <div class="name-card">
+                <div id="avatar"></div>
+                <span>user_name</span>
+            </div>
+            <div class="user-info">
+                <Span class="title">个人信息</Span>
+                <div class="hrs"></div>
+                <div id="user-info-box">
+                    <p>
+                        <em>姓名</em>
+                        <span>user_name</span>
+                    </p>
+                    <p>
+                        <em>性别</em>
+                        <span>user_gender</span>
+                    </p>
+                    <p>
+                        <em>邮箱</em>
+                        <span>user_mail</span>
+                    </p>
+                    <p>
+                        <em>手机</em>
+                        <span>user_phone</span>
+                    </p>
+                </div>
+            </div>
+            <div class="user-addresses">
+                <div style="height: 30px;line-height: 30px;position: absolute;">
+                    <Span class="title">地址簿</Span>
+                </div>
+                <button>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg>
+                </button>
+                <div id="add-search">
+                    <input name="search" type="text" placeholder="查找地址簿">
+                    <button>查找</button>
+                </div>
+                <div class="hrs"></div>
+                <table>
+                    <thead>
+                    <tr>
+                        <td style="width: 150px">姓名</td>
+                        <td style="width: 180px">联系方式</td>
+                        <td style="width: 430px">地址</td>
+                        <td style="width: 100px">操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>address_name</td>
+                            <td>address_phone</td>
+                            <td>address_content</td>
+                            <td>
+                                <div style="display: flex;">
+                                    <button><svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path></svg></button>
+                                    <button><svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path></svg></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="add-page-bar">
+                    <button><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg></button>
+                    <button style="background: #F9893C;color: #fff;padding-bottom: 3px;"><span>0</span></button>
+                    <button><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" class="svg-inline--fa fa-chevron-right fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg></button>
+                    <div style="width: 100%;"><span style="float: right;margin-right: 5px;">共 0 页</span></div>
+                </div>
+            </div>
+        </div>
+        <div id="tabs-2" style="display: flex;">
+            <div class="point-show">
+                我的积分
+                <div id="point-main"><span>-1</span></div>
+                <button>立即签到</button>
+                <div class="hrs" style="border-color: #fff;border-top: 1px solid;margin: 0;margin-top: 80px;"></div>
+                <div style="text-align: left;padding: 0 2px;">
+                    <span>可用积分</span>
+                    <span style="float:right;">-1</span>
+                </div>
+            </div>
+            <div class="point-info">
+
+            </div>
+        </div>
+        <div id="tabs-1">
+
+        </div>
+    </div>
+  </div>
+</div>
+<!-- 弹窗 -->
+<div class="pop">
+    <div id="pop-main">
+
+    </div>
+</div>
+<!-- 底栏 -->
+
+
 <script src="../../bootstrap/bootstrap.min.js"></script>
 </body>
 </html>
