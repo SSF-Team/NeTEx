@@ -1,6 +1,7 @@
 package com.chuhelan.netex.service.impl;
 
 import com.chuhelan.netex.dao.UserDao;
+import com.chuhelan.netex.domain.Address;
 import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 
@@ -95,6 +97,7 @@ public class UserServiceImpl implements UserService {
     **/
     @Override
     public String verificationToken(Integer id, String token) throws ParseException {
+        System.out.println("操作 > 验证 Token");
         // 检索用户信息
         User user = findUserById(id);
         // 验证登录
@@ -112,6 +115,30 @@ public class UserServiceImpl implements UserService {
             }
         } else {
             return "err - 验证登陆失败（登录无效）";
+        }
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 获取用户地址信息
+     * @Date 上午 08:34 2021/5/31
+     * @Param [id, token]
+     * @return java.lang.String
+    **/
+    @Override
+    public Address[] getAddresses(Integer id, String token) throws ParseException {
+        System.out.println("操作 > 获取用户地址");
+        String passToken = verificationToken(id, token);
+        if(passToken.equals("ok")) {
+            Address[] addresses = userDao.getUserAddresses(id);
+            System.out.println("操作 > 获取用户地址 > 地址列表为：");
+            System.out.println(Arrays.toString(addresses));
+            return addresses;
+        } else {
+            // 返回填充报错的 Address 数组
+            return new Address[] {
+                    new Address(-1, "", "", passToken)
+            };
         }
     }
 }
