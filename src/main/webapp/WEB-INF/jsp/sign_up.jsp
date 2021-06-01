@@ -139,11 +139,11 @@
                         <input type="submit" class="button" onblur="checkForm()" onclick="return submitT()" value="提交">
                     </p>
                 </div>
-                <div class="pic_filed">
-                    <div>请设置您的头像</div>
-                    <img src="../../img/sign_up/netex_personal.jpg"/><br>
-                    <input type="button" class="personalPic" value="上传头像">
-                </div>
+<%--                <div class="pic_filed">--%>
+<%--                    <div>请设置您的头像</div>--%>
+<%--                    <img src="../../img/sign_up/netex_personal.jpg"/><br>--%>
+<%--                    <input type="button" class="personalPic" value="上传头像">--%>
+<%--                </div>--%>
             </div>
         </form>
     </div>

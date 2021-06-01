@@ -1,0 +1,339 @@
+body {
+    background: #F8F8FA;
+}
+
+.out_form {
+
+}
+
+.out_div {
+    width: 1200px;
+    height: auto;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.shipping_online {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    color: #FFBF00;
+}
+
+.time_to_send {
+    font-style: normal;
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.sendPerson_box {
+    background: #fff;
+    width: 100%;
+    line-height: 68px;
+    padding: 0 20px;
+    border-bottom: 1px solid #DCDCDC;
+    font-family: "Microsoft YaHei";
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+.sendPerson_box img{
+    top: 6px;
+    position: relative;
+}
+
+.delivery_info {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    padding: 22px 20px;
+    background: #fff;
+    margin-bottom: 38px;
+}
+
+.ship_p {
+    position: relative;
+    width: 50%;
+    height: 32px;
+    margin-bottom: 25px;
+}
+
+.f1 {
+    float: left;
+}
+
+.inputName {
+    display: inline-block;
+    width: 70px;
+    height: 100%;
+    line-height: 32px;
+    font-size: 14px;
+    color: #000;
+}
+
+.inputs {
+    width: 400px;
+    height: 30px;
+    padding-left: 15px;
+    outline: none;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.save_addressBtn {
+    width: 100%;
+    height: auto;
+    padding-left: 70px;
+    font-size: 12px;
+    color: #000;
+    line-height: 20px;
+}
+
+.articleBox, .articleInformation {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    padding: 0 20px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.articleInformation {
+    padding: 20px 0;
+    border-top: 1px solid #DCDCDC;
+}
+
+.articleTitle {
+    font-weight: bold;
+    color: #262222;
+}
+
+.closeType {
+    background: url("/img/shipping/down.png") no-repeat 370px center;
+    background-size: 16px 16px;
+}
+
+.closeTypeList {
+    display: none;
+    position: absolute;
+    left: 75px;
+    top: 35px;
+    width: 400px;
+    height: auto;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.closeTypeListSpan {
+    display: inline-block;
+    width: 84px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: #f5f5f5;
+}
+
+.weightRadio:checked:after {
+    content: "●";
+    font-size: 10px;
+    color: #fff;
+    line-height: 11px;
+    border: 1px solid #FFBF00;
+    background: #FFBF00;
+}
+
+.weightRadio:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    content: " ";
+    background-color: #fff;
+    border: 1px solid #aaa;
+    color: #000;
+    display: inline-block;
+    visibility: visible;
+    border-radius: 100%;
+    text-align: center;
+}
+
+.weightBox {
+    float: left;
+    font-size: 14px;
+    color: #000;
+    margin-right: 20px;
+    line-height: 26px;
+}
+
+.weightBox input {
+    margin-right: 5px;
+}
+
+.weightRadio {
+    width: 14px;
+    height: 14px;
+    outline: none;
+    vertical-align: middle;
+    cursor: pointer;
+    position: relative;
+}
+
+.disabledCover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    width: 110px;
+    height: 30px;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.close_less, .close_plus {
+    float: left;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    font-style: normal;
+    font-size: 32px;
+    color: #aaa;
+    text-align: center;
+    line-height: 22px;
+    border: 1px solid #aaa;
+}
+
+.weightInput {
+    float: left;
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    margin: 0 !important;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+    border-left: none;
+    border-right: none;
+}
+
+.serviceType_list, .serviceType_Remarks {
+    display: inline-block;
+    width: auto;
+    height: 100%;
+    text-align: center;
+    line-height: 32px;
+    font-size: 14px;
+    font-style: normal;
+    color: #262222;
+    margin-right: 40px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #EBEBEB;
+}
+
+
+.articleInformation > div {
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    margin-bottom: 20px;
+}
+
+.serviceType {
+    width: 100%;
+    height: 32px;
+    float: left;
+}
+
+.cursorPointer {
+    cursor: pointer;
+}
+
+.activeService, .activeRemarks {
+    color: #fff !important;
+    background: #000 !important;
+}
+
+.serviceType {
+    width: 100%;
+    height: 32px;
+}
+
+.remarks_text {
+    width: 1007px;
+}
+
+.remarks_text {
+    height: 64px;
+    line-height: 30px;
+    resize: none;
+}
+
+.submitBox {
+    position: relative;
+    text-align: center;
+    padding: 30px 0 20px;
+}
+
+.terms_div {
+    padding-left: 0;
+    margin-bottom: 32px;
+}
+.save_addrBookBtn {
+    width: 100%;
+    height: auto;
+    font-size: 12px;
+    color: #000;
+    line-height: 20px;
+}
+
+.goCheck, .registeredCheckInput, .checkPerson, .termsCheck, .mailCheck {
+    width: 15px;
+    height: 15px;
+    outline: none;
+    vertical-align: middle;
+    margin-right: 10px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.save_addrBookBtn > a {
+    color: #FFBF00;
+}
+
+a {
+    text-decoration: none;
+}
+
+.submitBtn {
+    width: 400px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    border-radius: 30px;
+    background: #FFBF00;
+    margin: 0 auto;
+}
+
+.coverBtn {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    margin: 0 auto;
+    width: 400px;
+    height: 60px;
+    background: pink;
+    opacity: 0;
+}

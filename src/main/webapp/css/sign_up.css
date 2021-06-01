@@ -124,8 +124,9 @@ b {
 }
 
 .word_filed {
-    float: left;
-    width: 600px;
+    /*float: left;*/
+    /*width: 600px;*/
+    text-align: center;
 }
 
 .pic_filed {
