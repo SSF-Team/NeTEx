@@ -52,22 +52,48 @@
                             <button>查找</button>
                         </div>
                         <div class="history">
-                            <a data-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
-                                查询历史
-                            </a>
-                            <div class="collapse" id="collapseHistory">
+                            <div class="collapse" id="collapseHistory" style="text-align: left;">
                                 <div class="card card-body">
                                     就是查询历史而已
                                 </div>
                             </div>
+                            <a data-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
+                                查询历史
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="main-card">
-                    <div>
+                    <div class="order-info">
                         <Span class="title">运单信息</Span>
                         <div class="hrs"></div>
-
+                        <div id="info-run">
+                            <span style="float: left;">南京市</span>
+                            <div></div>
+                            <span style="float: right;margin-top: -20px;">南京市</span>
+                        </div>
+                        <div id="info-time">
+                            <span style="float: left;">2021/05/31</span>
+                            <span style="float: right;">2021/06/01</span>
+                        </div>
+                        <div id="info-info">
+                            <div>
+                                <div>
+                                    <p>
+                                        <em>寄件人</em>
+                                        <span>order_sendUserID</span>
+                                    </p>
+                                    <p>
+                                        <em>收件人</em>
+                                        <span>order_deliveryUserID</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="display: flex;">
+                                <span>运单备注：</span>
+                                <span>无</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="main-card">
@@ -75,8 +101,18 @@
                         <Span class="title">运单跟踪</Span>
                         <div class="hrs"></div>
                         <div class="map">
-                            <div id="bar"></div>
                             <div id="container"></div>
+                            <div id="bar">
+                                <div style="display: flex;">
+                                    <span>南京市</span>
+                                    <div id="run-line"></div>
+                                    <span>南京市</span>
+                                </div>
+                                <div id="order-infos">
+                                    <span>派送中</span>
+                                    <span>运单号 NT0521000001A</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
