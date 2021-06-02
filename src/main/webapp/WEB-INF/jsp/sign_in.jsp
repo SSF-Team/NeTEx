@@ -23,16 +23,23 @@
 
     String id = cookie.get(request, "id");
     String token = cookie.get(request, "token");
-    if(id != null && token != null) {
-        UserService userService = new UserServiceImpl();
+    UserService userService = (UserService) request.getAttribute("UserService");
+    System.out.println(userService);
+    if(id != null && token != null && userService != null) {
+        System.out.println("页面 > sign_in > 验证登录");
         try {
             String back = userService.verificationToken(Integer.parseInt(id), token);
             if (back.equals("ok")) {
+                System.out.println("页面 > sign_in > 跳转个人中心");
                 // response.sendRedirect("/");
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+    String backMsg = (String) request.getAttribute("msg");
+    if(backMsg != null && backMsg.equals("ok")) {
+        System.out.println("页面 > sign_in > 跳转个人中心");
     }
 %>
 

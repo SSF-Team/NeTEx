@@ -24,7 +24,7 @@ public class PageController {
 
     // 页面指向
     @RequestMapping("Order")
-    public String LoginPage(Model model) {
+    public String OrderPage(Model model) {
         model.addAttribute("UserService", userService);
         model.addAttribute("PostService", postService);
         return "oneline";
@@ -34,7 +34,8 @@ public class PageController {
         return "shipping";
     }
     @RequestMapping("SignIn")
-    public String LoginPage() {
+    public String LoginPage(Model model) {
+        model.addAttribute("UserService", userService);
         return "sign_in";
     }
     @RequestMapping("SignUp")

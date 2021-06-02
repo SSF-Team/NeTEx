@@ -47,7 +47,9 @@
         </a>
         <!-- 搜索框 -->
         <div class="seachbar">
-          <input class="form-control" type="search" placeholder="查询运单号，使用英文逗号分隔" aria-label="搜索">
+          <form action="/Order" method="get">
+            <input class="form-control" name="id" type="search" placeholder="查询运单号，使用英文逗号分隔" aria-label="搜索">
+          </form>
           <div>
             <div>
               <div>

@@ -73,6 +73,7 @@ public class UserController {
             if(back != null) {
                 model.addAttribute("id", user.getUser_id());
                 model.addAttribute("token", token);
+                model.addAttribute("msg", "ok");
                 return back;
             } else {
                 model.addAttribute("str", "{\"stat\":200, \"id\":" + user.getUser_id() + ",\"token\":\"" + token + "\", \"dietime\":" + time + "}");

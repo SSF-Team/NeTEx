@@ -36,6 +36,9 @@
 
         // 获取运单信息
         postInfo = postService.PostInfo(postID);
+        if(postInfo == null) {
+            postID = null;
+        }
     }
 %>
 
@@ -90,6 +93,12 @@
                     <div>
                         <Span class="title">运单查询</Span>
                         <div class="hrs"></div>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 50px;background: #DE002E;color: #fff;<%if(postID != null)out.print("display:none;");%>">
+                            运单号不存在！
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <form action="/Order" method="get">
                             <div class="order-search">
                                 <input value="<%if(postID != null){out.print(postID);}%>" name="id" type="text" placeholder="查找运单号">
@@ -108,31 +117,45 @@
                         </div>
                     </div>
                 </div>
-                <div class="main-card">
+                <div class="main-card" style="<%if(postID==null || !back.equals("ok"))out.print("display:none;");%>">
                     <div class="order-info">
                         <Span class="title">运单信息</Span>
                         <div class="hrs"></div>
                         <div id="info-run">
                             <span style="float: left;"><%
-                                String start = userService.getAddressById(postInfo.getOrder_sendAddressId());
-                                out.print(start);
+                                String start = null;
+                                if(postID != null) {
+                                    start = userService.getAddressById(postInfo.getOrder_sendAddressId(), null, null);
+                                }
+                                if(back.equals("ok")) {
+                                    out.print(start);
+                                }
                             %></span>
                             <div></div>
                             <span style="float: right;margin-top: -20px;"><%
-                                String end = userService.getAddressById(postInfo.getOrder_deliveryAddressId());
-                                out.print(end);
+                                String end = null;
+                                if(postID != null) {
+                                    end = userService.getAddressById(postInfo.getOrder_deliveryAddressId(), null, null);
+                                }
+                                if(back.equals("ok")) {
+                                    out.print(end);
+                                }
                             %></span>
                         </div>
                         <div id="info-time">
                             <span style="float: left;"><%
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                                out.print(sdf.format(postInfo.getOrder_sendDate()));
+                                if(postID != null) {
+                                    out.print(sdf.format(postInfo.getOrder_sendDate()));
+                                }
                             %></span>
                             <span style="float: right;"><%
-                                Calendar calendar = new GregorianCalendar();
-                                calendar.setTime(postInfo.getOrder_sendDate());
-                                calendar.add(Calendar.DATE, 1);
-                                out.print(sdf.format(calendar.getTime()));
+                                if(postID != null) {
+                                    Calendar calendar = new GregorianCalendar();
+                                    calendar.setTime(postInfo.getOrder_sendDate());
+                                    calendar.add(Calendar.DATE, 1);
+                                    out.print(sdf.format(calendar.getTime()));
+                                }
                             %></span>
                         </div>
                         <div id="info-info">
@@ -206,8 +229,8 @@
 %>
 <%
     // 获取两点位置
-    String add1 = userService.getAddressById(postInfo.getOrder_sendAddressId());
-    String add2 = userService.getAddressById(postInfo.getOrder_deliveryAddressId());
+    String add1 = userService.getAddressById(postInfo.getOrder_sendAddressId(), Integer.parseInt(id), token);
+    String add2 = userService.getAddressById(postInfo.getOrder_deliveryAddressId(), Integer.parseInt(id), token);
     String[][] info1 = new String[][] {
             new String[] {"address", add1},
             new String[] {"output", "json"},
