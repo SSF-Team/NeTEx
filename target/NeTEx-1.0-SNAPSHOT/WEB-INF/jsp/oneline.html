@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在线服务|NeTEx中国</title>
+
+    <!-- 样式表 -->
+    <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../index.css">
+    <link rel="stylesheet" href="css/online.css">
+    <script src="../../js/jquery-1.12.4.js"></script>
+    <script src="../../js/jquery-ui.js"></script>
+    <!-- 百度地图 js -->
+    <script type="text/javascript" src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=62WAvGClEExBObY1zU4ZuMMEYxVRmWdF"></script>
+</head>
+<script>
+    // 使用 JQuery UI 实现的 TabView
+    $( function() {
+        $( "#tabs" ).tabs();
+    } );
+</script>
+<body>
+<!-- 顶栏 -->
+
+<!-- 主体 -->
+<div class="main">
+    <div id="tabs">
+        <ul class="main-tab list-group">
+            <li>
+                <a href="#tabs-1" onclick="location.href='https://www.baidu.com/';" target="_blank" class="list-group-item list-group-item-action">
+                    <div></div>
+                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="paper-plane" class="svg-inline--fa fa-paper-plane fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z"></path></svg>
+                    <span>在线寄件</span>
+                </a>
+            </li>
+            <li>
+                <a href="#tabs-1" class="list-group-item list-group-item-action">
+                    <div></div>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-alt" class="svg-inline--fa fa-file-alt fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg>
+                    <span>信息查询</span>
+                </a>
+            </li>
+        </ul>
+        <div class="right-view">
+            <div id="tabs-1">
+                <div class="main-card">
+                    <div>
+                        <Span class="title">运单查询</Span>
+                        <div class="hrs"></div>
+                        <div class="order-search">
+                            <input name="search" type="text" placeholder="查找运单号">
+                            <button>查找</button>
+                        </div>
+                        <div class="history">
+                            <a data-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
+                                查询历史
+                            </a>
+                            <div class="collapse" id="collapseHistory">
+                                <div class="card card-body">
+                                    就是查询历史而已
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-card">
+                    <div>
+                        <Span class="title">运单信息</Span>
+                        <div class="hrs"></div>
+
+                    </div>
+                </div>
+                <div class="main-card">
+                    <div>
+                        <Span class="title">运单跟踪</Span>
+                        <div class="hrs"></div>
+                        <div class="map">
+                            <div id="bar"></div>
+                            <div id="container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 弹窗 -->
+<div class="pop">
+    <div id="pop-main">
+
+    </div>
+</div>
+<!-- 底栏 -->
+
+<script>
+    // 地图加载相关代码
+    var map = new BMapGL.Map("container");
+    map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 11);
+
+    var p1 = new BMapGL.Point(116.301934,39.977552);
+    var p2 = new BMapGL.Point(116.508328,39.919141);
+
+    var driving = new BMapGL.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+    driving.search(p1, p2);
+</script>
+<script src="../../bootstrap/bootstrap.min.js"></script>
+</body>
+</html>
