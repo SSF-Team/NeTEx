@@ -4,7 +4,6 @@ import com.chuhelan.netex.dao.UserDao;
 import com.chuhelan.netex.domain.Address;
 import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.UserService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +35,7 @@ public class UserServiceImpl implements UserService {
      **/
     @Override
     public User findUserById(Integer id) {
+        System.out.println("操作 > 获取用户 > findUserById > " + id);
         Optional<User> userOptional =
                 Optional.ofNullable(userDao.findUserById(id));
         if (userOptional.isPresent()) {
@@ -141,6 +141,37 @@ public class UserServiceImpl implements UserService {
             return new Address[]{
                     new Address(-1, "", "", passToken)
             };
+        }
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 使用地址 ID 获取地址非详细信息（精确到市）
+     * @Date 下午 03:44 2021/6/2
+     * @Param [id]
+     * @return com.chuhelan.netex.domain.Address
+    **/
+    @Override
+    public String getAddressById(Integer id) {
+        Address address = userDao.getAddress(id);
+        return address.getAddress_content().substring(address.getAddress_content().indexOf("省") + 1, address.getAddress_content().indexOf("市") + 1);
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 验证 token 并获取完整地址信息
+     * @Date 下午 05:19 2021/6/2
+     * @Param [id, token]
+     * @return com.chuhelan.netex.domain.Address
+    **/
+    @Override
+    public Address getFullAddressById(Integer id, String token) throws ParseException {
+        System.out.println("操作 > 获取用户地址(id)");
+        String passToken = verificationToken(id, token);
+        if (passToken.equals("ok")) {
+            return userDao.getAddress(id);
+        } else {
+            return null;
         }
     }
 

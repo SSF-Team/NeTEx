@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.chuhelan.netex.util.*" %>
+<%@ page import="com.chuhelan.netex.service.UserService" %>
+<%@ page import="com.chuhelan.netex.service.impl.UserServiceImpl" %>
+<%@ page import="java.text.ParseException" %>
 
 <%
     if (request.getAttribute("id") != null && request.getAttribute("token") != null) {
@@ -15,6 +18,20 @@
                 cookie.remove(response, "id");
                 cookie.remove(response, "token");
             }
+        }
+    }
+
+    String id = cookie.get(request, "id");
+    String token = cookie.get(request, "token");
+    if(id != null && token != null) {
+        UserService userService = new UserServiceImpl();
+        try {
+            String back = userService.verificationToken(Integer.parseInt(id), token);
+            if (back.equals("ok")) {
+                // response.sendRedirect("/");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 %>

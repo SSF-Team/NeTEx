@@ -152,7 +152,6 @@ $.widget = function( name, base, prototype ) {
 	} );
 	constructor.prototype = $.widget.extend( basePrototype, {
 
-		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
 		widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
@@ -3529,7 +3528,6 @@ var effectsEffectSize = $.effects.define( "size", function( options, done ) {
 		hProps = hProps.concat( [ "marginLeft", "marginRight" ] );
 
 		// Only animate children with width attributes specified
-		// TODO: is this right? should we include anything with css width specified as well
 		element.find( "*[width]" ).each( function() {
 			var child = $( this ),
 				childOriginal = $.effects.scaledDimensions( child ),

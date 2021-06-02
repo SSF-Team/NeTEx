@@ -42,16 +42,6 @@ public class UserController {
         return "api";
     }
 
-    // 页面指向
-    @RequestMapping("SignIn")
-    public String LoginPage() {
-        return "sign_in";
-    }
-    @RequestMapping("SignUp")
-    public String RegPage() {
-        return "sign_up";
-    }
-
     // 实际功能 API
     @PostMapping("/Login")
     public String LoginPass(String email, String password, String back, String accept, Model model) {

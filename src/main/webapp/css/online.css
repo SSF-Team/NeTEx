@@ -235,7 +235,7 @@ body {
     height: 1px;
     width: 80px;
     background: #adb5bd;
-    margin-top: 6%;
+    margin-top: 40px;
     margin-left: 10px;
     margin-right: -10px;
 }
@@ -294,10 +294,6 @@ body {
     width: 60%;
 }
 .order-info #info-info > div > div {
-    display: flex;
-}
-.order-info #info-info > div > div > p:last-child {
-    margin-left: 10%;
     text-align: center;
 }
 

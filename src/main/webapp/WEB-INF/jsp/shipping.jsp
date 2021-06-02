@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.chuhelan.netex.util.*" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +8,12 @@
     <title>在线寄件</title>
 </head>
 <body>
-<link rel="stylesheet" href="css/shipping.css">
+<%
+    out.println(htmls.header());
+%>
+<link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="../../index.css">
+<link rel="stylesheet" href="../../css/shipping.css">
 <form class="out_form">
     <div class="out_div">
         <!--在线寄件-->
@@ -154,8 +162,11 @@
             </div>
 
         </div>
-        <!--提交-->
     </div>
 </form>
+<%
+    out.println(htmls.footer());
+%>
 </body>
+<script src="../../bootstrap/bootstrap.min.js"></script>
 </html>

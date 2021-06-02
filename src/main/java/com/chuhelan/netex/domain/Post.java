@@ -24,7 +24,7 @@ public class Post {
     private Date order_date;
     private Date order_sendDate;
     private Integer order_sendUserID;
-    private String order_sendAddressId;
+    private Integer order_sendAddressId;
     private Date order_deliveryDate;
     private Integer order_deliveryUserID;
     private Integer order_deliveryAddressId;

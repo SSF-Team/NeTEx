@@ -23,6 +23,7 @@ public class User {
     private String user_email;
     private String user_password;
     private String user_phone;
+    private Integer user_point;
     private String user_token;
     private String user_dtime;
 
