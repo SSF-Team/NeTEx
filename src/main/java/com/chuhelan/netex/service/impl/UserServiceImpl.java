@@ -65,6 +65,23 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * @Author Stapxs
+     * @Description 使用手机号寻找用户
+     * @Date 下午 04:36 2021/6/3
+     * @Param [phone]
+     * @return com.chuhelan.netex.domain.User
+    **/
+    public User findUserByPhone(String phone) {
+        Optional<User> userOptional =
+                Optional.ofNullable(userDao.findUserByPhone(phone));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user;
+        }
+        return null;
+    }
+
+    /**
      * @return void
      * @Author Stapxs
      * @Description 登录
@@ -120,6 +137,25 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User getUserInfoByToken(Integer id, String token) throws ParseException {
+        System.out.println("getUserInfoByToken");
+        Optional<User> userOptional =
+                Optional.ofNullable(userDao.getUserInfoByToken(id));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String passToken = verificationToken(id, token);
+            if (passToken.equals("ok")){
+                return user;
+            }
+            else{
+                // 返回填充错误信息的 User 对象
+                return new User(-1, passToken);
+            }
+        }
+        return null;
+    }
+
   
     /**
      * @Author Stapxs
@@ -153,34 +189,28 @@ public class UserServiceImpl implements UserService {
      * @return com.chuhelan.netex.domain.Address
     **/
     @Override
-    public String getAddressById(Integer id, @Nullable Integer uid, @Nullable String token) throws ParseException {
+    public Address getAddressById(Integer id, @Nullable Integer uid, @Nullable String token) throws ParseException {
         System.out.println("操作 > 获取用户地址（ID） > " + uid);
         Address address = userDao.getAddress(id);
         if(token != null) {
             String passToken = verificationToken(uid, token);
             if (passToken.equals("ok")) {
-                return address.getAddress_content();
+                return address;
             }
         }
-        return address.getAddress_content().substring(address.getAddress_content().indexOf("省") + 1, address.getAddress_content().indexOf("市") + 1);
+        // 返回只有简单信息的地址
+        return new Address(address.getAddress_content().substring(address.getAddress_content().indexOf("省") + 1, address.getAddress_content().indexOf("市") + 1));
     }
 
-    @Override
-    public User getUserInfoByToken(Integer id, String token) throws ParseException {
-        System.out.println("getUserInfoByToken");
-        Optional<User> userOptional =
-                Optional.ofNullable(userDao.getUserInfoByToken(id));
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            String passToken = verificationToken(id, token);
-            if (passToken.equals("ok")){
-                return user;
-            }
-            else{
-                // 返回填充错误信息的 User 对象
-                return new User(-1, passToken);
-            }
-        }
-        return null;
+    /**
+     * @Author Stapxs
+     * @Description 检查用户是否存在这个地址簿
+     * @Date 下午 04:23 2021/6/3
+     * @Param [id, name, phone, address]
+     * @return boolean
+    **/
+    public Address fullAddress(Integer id, String name, String phone, String address) {
+        return userDao.getAddressByFullInfo(id, name, phone, address);
     }
+
 }

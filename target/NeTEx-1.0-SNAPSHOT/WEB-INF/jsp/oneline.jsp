@@ -2,31 +2,48 @@
 <%@ page import="com.chuhelan.netex.util.*" %>
 <%@ page import="com.chuhelan.netex.service.UserService" %>
 <%@ page import="java.text.ParseException" %>
-<%@ page import="com.chuhelan.netex.service.PostService" %>
-<%@ page import="com.chuhelan.netex.domain.Post" %>
+<%@ page import="com.chuhelan.netex.service.OrderService" %>
+<%@ page import="com.chuhelan.netex.domain.Order" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.GregorianCalendar" %>
-<%@ page import="java.util.Arrays" %>
 
 <%
+    // TODO 代码写太 jb 乱了重新整理一遍打上注释
 
-    String postID = null;
-    String back = null;
-    Post postInfo = new Post();
-    postID = request.getParameter("id");
-    String id = cookie.get(request, "id");
-    String token = cookie.get(request, "token");
+    // 获取传参
+    String orderID = request.getParameter("id");     // Get 方法订单号
+    String id = cookie.get(request, "id");          // Cookie 登录用户 ID
+    String token = cookie.get(request, "token");    // Cookie 登录用户 token
+    System.out.println("页面 > 基础信息 > oneline > " + orderID);
+    // Attribute 传参 Service 层对象
+    /*
+     理论上说 jsp 不该访问  Service 层方法，但是因为时间不够加上代码写的太乱了
+     没办法只能复用 Service 层方法来加快编写速度
+    */
     UserService userService = (UserService) request.getAttribute("UserService");
-    PostService postService = (PostService) request.getAttribute("PostService");
+    OrderService orderService = (OrderService) request.getAttribute("PostService");
+
+    // 全局变量
+    String back = "err";                    // 登录验证返回值
+    Order orderInfo = new Order();          // 订单信息
+
+    // 运单相关全局变量
+    String startAdd2 = null;                // 起点（市）
+    String endAdd2 = null;                  // 终点（市）
+    String startDate = "等待发件";           // 发件时间
+    String endDate = startDate;             // 预计到达时间
+    String[] startPoint = new String[2];    // 起点坐标
+    String[] endPoint = new String[2];      // 终点坐标
+
 
     // 获取订单信息
-    if(postID != null)
+    if(orderID != null)
     {
+        orderID = orderID.toUpperCase();      // 格式化订单号（全大写）
         // 验证登录
-        System.out.println("页面 > oneline > " + id + " / " + token);
+        System.out.println("页面 > 验证登陆 > oneline > " + id + " / " + token);
         if(id != null && token != null) {
-            userService = (UserService) request.getAttribute("UserService");
             try {
                 back = userService.verificationToken(Integer.parseInt(id), token);
             } catch (ParseException e) {
@@ -35,9 +52,74 @@
         }
 
         // 获取运单信息
-        postInfo = postService.PostInfo(postID);
-        if(postInfo == null) {
-            postID = null;
+        orderInfo = orderService.PostInfo(orderID);
+        if(orderInfo == null) {
+            // 获取失败清空订单号
+            orderID = null;
+        } else {
+            // 初始化运单信息
+
+            /*
+             因为讲运单和地址库绑定的方式太过繁琐
+             决定将运单地址详细信息直接存储在运单里不与地址库相关
+             */
+            // 运单粗略起始结束地址（市)
+            String add = orderInfo.getOrder_sendAddress();
+            startAdd2 = add.substring(add.indexOf("省") + 1, add.indexOf("市") + 1);
+            add = orderInfo.getOrder_deliveryAddress();
+            endAdd2  = add.substring(add.indexOf("省") + 1, add.indexOf("市") + 1);
+            // 运单运输时间段
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            if(orderInfo.getOrder_sendDate() != null) {
+                startDate = sdf.format(orderInfo.getOrder_sendDate());
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(orderInfo.getOrder_sendDate());
+                calendar.add(Calendar.DATE, 1);     // 预计到达就草率的 +1 好了
+                endDate = sdf.format(calendar.getTime());
+            }
+
+            // 收件人 / 寄件人信息
+            /*
+                这里显示的是存储在 OrderInfo 里的运单联系信息，和用户不绑定
+                因为不是所有收件人 / 寄件人都会注册平台账户
+            */
+
+            // 地图坐标信息
+            // 获取两点位置
+            /*
+                如果用户没有登录只会获取到不精确的地址（市）
+            */
+            add = orderInfo.getOrder_sendAddress();
+            String add1 = add.substring(add.indexOf("市") + 1);
+            add = orderInfo.getOrder_deliveryAddress();
+            String add2 = add.substring(add.indexOf("市") + 1);
+            if(back.equals("ok")) {
+                add1 = orderInfo.getOrder_sendAddress();
+                add2 = orderInfo.getOrder_deliveryAddress();
+            }
+            System.out.println("页面 > 地址信息 > oneline >" + add1 + " / " + add2);
+            // 请求百度逆向定位 API 获取地址对应经纬度（百度坐标系）
+            String[][] info1 = new String[][] {
+                    new String[] {"address", add1},
+                    new String[] {"output", "json"},
+                    new String[] {"ak", "62WAvGClEExBObY1zU4ZuMMEYxVRmWdF"}
+            };
+            String[][] info2 = new String[][] {
+                    new String[] {"address", add2},
+                    new String[] {"output", "json"},
+                    new String[] {"ak", "62WAvGClEExBObY1zU4ZuMMEYxVRmWdF"}
+            };
+            String get = http.result("http://api.map.baidu.com/geocoding/v3/", info1);
+            // 解析 JSON
+            startPoint = new String[] {
+                    get.substring(get.indexOf("\"lng\":") + 6, get.indexOf(",\"lat\":")),
+                    get.substring(get.indexOf("\"lat\":") + 6, get.indexOf("},\"precise\":"))
+            };
+            get = http.result("http://api.map.baidu.com/geocoding/v3/", info2);
+            endPoint = new String[] {
+                    get.substring(get.indexOf("\"lng\":") + 6, get.indexOf(",\"lat\":")),
+                    get.substring(get.indexOf("\"lat\":") + 6, get.indexOf("},\"precise\":"))
+            };
         }
     }
 %>
@@ -93,7 +175,7 @@
                     <div>
                         <Span class="title">运单查询</Span>
                         <div class="hrs"></div>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 50px;background: #DE002E;color: #fff;<%if(postID != null)out.print("display:none;");%>">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 50px;background: #DE002E;color: #fff;<%if(orderID != null || request.getParameter("id") == null)out.print("display:none;");%>">
                             运单号不存在！
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -101,94 +183,43 @@
                         </div>
                         <form action="/Order" method="get">
                             <div class="order-search">
-                                <input value="<%if(postID != null){out.print(postID);}%>" name="id" type="text" placeholder="查找运单号">
+                                <input value="<%if(orderID != null){out.print(orderID);}%>" name="id" type="text" placeholder="查找运单号">
                                 <button>查找</button>
                             </div>
                         </form>
-                        <div class="history">
-                            <div class="collapse" id="collapseHistory" style="text-align: left;">
-                                <div class="card card-body">
-                                    就是查询历史而已
-                                </div>
-                            </div>
-                            <a data-toggle="collapse" href="#collapseHistory" role="button" aria-expanded="false" aria-controls="collapseHistory">
-                                查询历史
-                            </a>
-                        </div>
                     </div>
                 </div>
-                <div class="main-card" style="<%if(postID==null || !back.equals("ok"))out.print("display:none;");%>">
+                <div class="main-card" style="<%if(orderID==null || !back.equals("ok"))out.print("display:none;");%>">
                     <div class="order-info">
                         <Span class="title">运单信息</Span>
                         <div class="hrs"></div>
                         <div id="info-run">
-                            <span style="float: left;"><%
-                                String start = null;
-                                if(postID != null) {
-                                    start = userService.getAddressById(postInfo.getOrder_sendAddressId(), null, null);
-                                }
-                                if(back.equals("ok")) {
-                                    out.print(start);
-                                }
-                            %></span>
+                            <span style="float: left;"><%out.print(startAdd2);%></span>
                             <div></div>
-                            <span style="float: right;margin-top: -20px;"><%
-                                String end = null;
-                                if(postID != null) {
-                                    end = userService.getAddressById(postInfo.getOrder_deliveryAddressId(), null, null);
-                                }
-                                if(back.equals("ok")) {
-                                    out.print(end);
-                                }
-                            %></span>
+                            <span style="float: right;margin-top: -20px;"><%out.print(endAdd2);%></span>
                         </div>
                         <div id="info-time">
-                            <span style="float: left;"><%
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                                if(postID != null) {
-                                    out.print(sdf.format(postInfo.getOrder_sendDate()));
-                                }
-                            %></span>
-                            <span style="float: right;"><%
-                                if(postID != null) {
-                                    Calendar calendar = new GregorianCalendar();
-                                    calendar.setTime(postInfo.getOrder_sendDate());
-                                    calendar.add(Calendar.DATE, 1);
-                                    out.print(sdf.format(calendar.getTime()));
-                                }
-                            %></span>
+                            <span style="float: left;"><%out.print(startDate);%></span>
+                            <span style="float: right;"><%out.print(endDate);%></span>
                         </div>
                         <div id="info-info">
                             <div>
                                 <div>
                                         <em>寄件人</em>
-                                        <span><%
-                                            if(back.equals("ok")) {
-                                                userService = (UserService) request.getAttribute("UserService");
-                                                out.print(userService.findUserById(postInfo.getOrder_sendUserID()).getUser_name());
-                                            }
-                                        %></span>
+                                        <span><%if(back.equals("ok"))out.print(orderInfo.getOrder_sendName());%></span>
                                         <em style="margin-left: 20%;">收件人</em>
-                                        <span><%
-                                            if(back.equals("ok")) {
-                                            out.print(userService.findUserById(postInfo.getOrder_deliveryUserID()).getUser_name());
-                                        }
-                                        %></span>
+                                        <span><%if(back.equals("ok"))out.print(orderInfo.getOrder_deliveryName());%></span>
                                 </div>
                             </div>
                             <div style="text-align: center;margin-top: 10px;">
                                 <span>运单备注：</span>
-                                <span><%
-                                    if(back.equals("ok")) {
-                                        out.print(postInfo.getOrder_content());
-                                    }
-                                %></span>
+                                <span><%if(back.equals("ok"))out.print(orderInfo.getOrder_content());%></span>
 
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="main-card">
+                <div class="main-card" style="<%if(orderID == null)out.print("visibility: hidden;");%>">
                     <div>
                         <Span class="title">运单跟踪</Span>
                         <div class="hrs"></div>
@@ -196,18 +227,18 @@
                             <div id="container"></div>
                             <div id="bar">
                                 <div style="display: flex;">
-                                    <span><%out.print(start);%></span>
+                                    <span><%out.print(startAdd2);%></span>
                                     <div id="run-line"></div>
-                                    <span><%out.print(end);%></span>
+                                    <span><%out.print(endAdd2);%></span>
                                 </div>
                                 <div id="order-infos">
                                     <span><%
-                                        if(postInfo.getOrder_deliveryDate() == null)
+                                        if(orderInfo.getOrder_deliveryDate() == null)
                                             out.print("运输中");
                                         else
                                             out.print("已签收");
                                     %></span>
-                                    <span>运单号 <%if(postID != null){out.print(postID);}%></span>
+                                    <span>运单号 <%if(orderID != null){out.print(orderID);}%></span>
                                 </div>
                             </div>
                         </div>
@@ -226,34 +257,6 @@
 <!-- 底栏 -->
 <%
     out.println(htmls.footer());
-%>
-<%
-    // 获取两点位置
-    String add1 = userService.getAddressById(postInfo.getOrder_sendAddressId(), Integer.parseInt(id), token);
-    String add2 = userService.getAddressById(postInfo.getOrder_deliveryAddressId(), Integer.parseInt(id), token);
-    String[][] info1 = new String[][] {
-            new String[] {"address", add1},
-            new String[] {"output", "json"},
-            new String[] {"ak", "62WAvGClEExBObY1zU4ZuMMEYxVRmWdF"}
-    };
-    String[][] info2 = new String[][] {
-            new String[] {"address", add2},
-            new String[] {"output", "json"},
-            new String[] {"ak", "62WAvGClEExBObY1zU4ZuMMEYxVRmWdF"}
-    };
-    String get = http.result("http://api.map.baidu.com/geocoding/v3/", info1);
-    System.out.println("起点信息：" + get);
-    String[] startPoint = new String[] {
-            get.substring(get.indexOf("\"lng\":") + 6, get.indexOf(",\"lat\":")),
-            get.substring(get.indexOf("\"lat\":") + 6, get.indexOf("},\"precise\":"))
-    };
-    get = http.result("http://api.map.baidu.com/geocoding/v3/", info2);
-    System.out.println("终点信息：" + get);
-    String[] endPoint = new String[] {
-            get.substring(get.indexOf("\"lng\":") + 6, get.indexOf(",\"lat\":")),
-            get.substring(get.indexOf("\"lat\":") + 6, get.indexOf("},\"precise\":"))
-    };
-
 %>
 <script>
     // 地图加载相关代码

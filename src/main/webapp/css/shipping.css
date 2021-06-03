@@ -42,6 +42,7 @@ body {
 .sendPerson_box img{
     top: 6px;
     position: relative;
+    vertical-align: initial;
 }
 
 .delivery_info {
@@ -80,6 +81,9 @@ body {
     outline: none;
     border-radius: 15px;
     border: 1px solid rgba(0, 0, 0, 0.15);
+}
+.inputs:focus {
+    border: 1px solid rgba(0, 0, 0, 0.55);
 }
 
 .save_addressBtn {

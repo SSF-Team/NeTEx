@@ -22,4 +22,8 @@ public class Address {
     private String address_name;
     private String address_phone;
     private String address_content;
+
+    public Address(String substring) {
+        this.address_content = substring;
+    }
 }

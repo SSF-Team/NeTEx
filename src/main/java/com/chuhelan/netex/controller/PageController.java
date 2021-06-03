@@ -1,6 +1,6 @@
 package com.chuhelan.netex.controller;
 
-import com.chuhelan.netex.service.PostService;
+import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class PageController {
     @Autowired
-    PostService postService;
+    OrderService orderService;
     @Autowired
     UserService userService;
 
@@ -26,7 +26,7 @@ public class PageController {
     @RequestMapping("Order")
     public String OrderPage(Model model) {
         model.addAttribute("UserService", userService);
-        model.addAttribute("PostService", postService);
+        model.addAttribute("PostService", orderService);
         return "oneline";
     }
     @RequestMapping("Shipping")
