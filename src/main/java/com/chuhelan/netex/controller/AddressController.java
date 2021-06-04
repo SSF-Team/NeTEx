@@ -47,24 +47,24 @@ public class AddressController {
             if(add != null && add.getAddress_userID().equals(uid)) {
                 // 删除
                 addressService.deleteAddress(aid);
-                model.addAttribute("UserService", userService);
-                model.addAttribute("OrderService", orderService);
-                model.addAttribute("AddressService", addressService);
             } else {
-                if(back != null) {
+                if(back == null) {
                     model.addAttribute("err", "地址簿不存在或权限错误！");
                 } else {
                     model.addAttribute("str", "{\"stat\":403, \"msg\":\"地址簿不存在或权限错误！\"}");
                 }
             }
         } else {
-            if(back != null) {
+            if(back == null) {
                 model.addAttribute("err", "验证登陆失败");
             } else {
                 model.addAttribute("str", "{\"stat\":403, \"msg\":\"验证登陆失败\"}");
             }
         }
         if(back == null) {
+            model.addAttribute("UserService", userService);
+            model.addAttribute("OrderService", orderService);
+            model.addAttribute("AddressService", addressService);
             model.addAttribute("run", "reLoad");
             return "user_center";
         } else {

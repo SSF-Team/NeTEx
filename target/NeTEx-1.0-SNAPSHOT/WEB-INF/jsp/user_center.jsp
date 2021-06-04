@@ -19,6 +19,7 @@
     String runCommand = (String) request.getAttribute("run");
     User user = new User();
     Address[] addresses = null;
+    PointInfo[] points = null;
 
     // 全局变量
     String login = userService.verificationToken(Integer.parseInt(id), token);
@@ -34,6 +35,8 @@
         user = userService.getUserInfoByToken(Integer.parseInt(id), token);
         // 获取地址簿
         addresses = addressService.getAddresses(Integer.parseInt(id), token);
+        // 获取积分明细
+        points = userService.getUserPoints(Integer.parseInt(id));
     } else {
         response.sendRedirect("/SignIn");
     }
@@ -228,12 +231,12 @@
             <div id="tabs-2" style="display: flex;">
                 <div class="point-show">
                     我的积分
-                    <div id="point-main"><span>-1</span></div>
-                    <button>立即签到</button>
+                    <div id="point-main"><span><%out.print(user.getUser_point());%></span></div>
+                    <button onclick="location='/ClockIn?uid=<%=id%>&tid=<%=token%>'">立即签到</button>
                     <div class="hrs" style="border-color: #fff;border-top: 1px solid;margin: 0;margin-top: 80px;"></div>
                     <div style="text-align: left;padding: 0 2px;">
                         <span>可用积分</span>
-                        <span style="float:right;">-1</span>
+                        <span style="float:right;"><%out.print(user.getUser_point());%></span>
                     </div>
                 </div>
                 <div class="point-info">
@@ -245,19 +248,14 @@
                             <table>
                                 <tr>
                                     <td>+50</td>
-                                    <td>注册获取50积分</td>
+                                    <td>注册获取</td>
                                     <td>2021-06-01</td>
                                 </tr>
-                                <tr>
-                                    <td>+5</td>
-                                    <td>签到获取5积分</td>
-                                    <td>2021-06-02</td>
-                                </tr>
-                                <tr>
-                                    <td>+5</td>
-                                    <td>签到获取5积分</td>
-                                    <td>2021-06-03</td>
-                                </tr>
+                                <%
+                                    for(PointInfo info : points) {
+                                        out.println(htmls.pointDetail(info.getPoints_change(), info.getPoints_content(), info.getPoints_time()));
+                                    }
+                                %>
                             </table>
                         </div>
                     </div>
@@ -595,11 +593,15 @@
 <div class="pop" id="addressPop" style="visibility: collapse;">
     <div id="pop-main">
         <div>
-            <button onclick="openAddAddress(false)">
+            <button onclick="return openAddAddress(false)">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="76" viewBox="0 0 76.00 76.00" enable-background="new 0 0 76.00 76.00" xml:space="preserve">
 	                <path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z "/>
                 </svg>
             </button>
+        </div>
+        <div>
+            <!-- 添加地址表单 -->
+
         </div>
     </div>
 </div>
@@ -615,6 +617,7 @@
         } else {
             document.getElementById("addressPop").style.visibility = "collapse";
         }
+        return false;
     }
 </script>
 

@@ -1,9 +1,11 @@
 package com.chuhelan.netex.controller;
 
 import com.chuhelan.netex.domain.Address;
+import com.chuhelan.netex.service.AddressService;
 import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.util.*;
 
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,6 +34,8 @@ public class UserController {
     UserService userService;
     @Autowired
     OrderService orderService;
+    @Autowired
+    AddressService addressService;
 
     // 以下 API 功能仅用于测试
     @RequestMapping("/UserById")
@@ -96,6 +100,7 @@ public class UserController {
     @PostMapping("/Register")
     public String RegPass(String email, String name, String password, String phone, String back, Model model) {
         System.out.println("操作 > 注册 > RegPass > " + email + " / " + name + " / " + password + " / " + phone);
+        name = new String(name.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         // 验证用户是否存在
         User user = userService.findUserByMail(email);
         if(user == null) {
@@ -146,6 +151,38 @@ public class UserController {
             return "api";
         } else {
             model.addAttribute("str", "{\"stat\":500, \"msg\":\"" + user.getUser_name() + "\"}");
+            return "api";
+        }
+    }
+    @GetMapping("/ClockIn")
+    public String ClockIn(Integer uid, String tid, @Nullable String back, Model model) throws ParseException {
+        // 验证 token
+        if(userService.verificationToken(uid, tid).equals("ok")) {
+            // 判断今天有没有签到过
+            if(userService.getPointByTime(uid, new Date()) == null) {
+                userService.ChangePoint(uid,userService.getUserInfoByToken(uid, tid).getUser_point() + 5);
+                userService.addPointInfo(uid, new Date(), 5, "签到奖励");
+            } else {
+                if(back == null) {
+                    model.addAttribute("err", "今天签到过啦");
+                } else {
+                    model.addAttribute("str", "{\"stat\":403, \"msg\":\"今天签到过啦\"}");
+                }
+            }
+        } else {
+            if(back == null) {
+                model.addAttribute("err", "验证登陆失败");
+            } else {
+                model.addAttribute("str", "{\"stat\":403, \"msg\":\"验证登陆失败\"}");
+            }
+        }
+        if(back == null) {
+            model.addAttribute("UserService", userService);
+            model.addAttribute("OrderService", orderService);
+            model.addAttribute("AddressService", addressService);
+            model.addAttribute("run", "reLoad");
+            return "user_center";
+        } else {
             return "api";
         }
     }

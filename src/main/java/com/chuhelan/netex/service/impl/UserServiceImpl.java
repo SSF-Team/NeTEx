@@ -2,6 +2,7 @@ package com.chuhelan.netex.service.impl;
 
 import com.chuhelan.netex.dao.UserDao;
 import com.chuhelan.netex.domain.Address;
+import com.chuhelan.netex.domain.PointInfo;
 import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +144,54 @@ public class UserServiceImpl implements UserService {
         } else {
             return "err - 验证登陆失败（登录无效）";
         }
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 获取用户的积分明细
+     * @Date 下午 10:39 2021/6/4
+     * @Param [id]
+     * @return com.chuhelan.netex.domain.PointInfo[]
+    **/
+    @Override
+    public PointInfo[] getUserPoints(Integer id) {
+        return userDao.getUserPoints(id);
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 修改积分
+     * @Date 下午 10:51 2021/6/4
+     * @Param [num]
+     * @return void
+    **/
+    @Override
+    public void ChangePoint(Integer id, Integer num) {
+        userDao.changePoint(id, num);
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 根据时间获取积分详情
+     * @Date 下午 11:01 2021/6/4
+     * @Param [id, date]
+     * @return com.chuhelan.netex.domain.PointInfo
+    **/
+    @Override
+    public PointInfo getPointByTime(Integer id, Date date) {
+        return userDao.getUserPointByTime(id ,date);
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 添加积分详情
+     * @Date 下午 11:13 2021/6/4
+     * @Param [id, date, num, info]
+     * @return void
+    **/
+    @Override
+    public void addPointInfo(Integer id, Date date, Integer num, String info) {
+        userDao.addPointInfo(id, date, num, info);
     }
 
     @Override

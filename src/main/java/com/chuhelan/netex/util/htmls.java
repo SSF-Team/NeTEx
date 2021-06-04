@@ -2,6 +2,9 @@ package com.chuhelan.netex.util;
 
 import com.chuhelan.netex.domain.Address;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @Version: 1.0
  * @Date: 2021/5/27 上午 08:18
@@ -120,6 +123,13 @@ public class htmls {
                 "      </footer>";
     }
 
+    /**
+     * @Author Stapxs
+     * @Description 输出地址簿 tr 列表
+     * @Date 下午 10:41 2021/6/4
+     * @Param [address, id, token]
+     * @return java.lang.String
+    **/
     public static String addressTr(Address address, Integer id, String token) {
         return "<tr>\n" +
                 "                            <td>" + address.getAddress_name() + "</td>\n" +
@@ -147,5 +157,14 @@ public class htmls {
                 "                                </div>\n" +
                 "                            </td>\n" +
                 "                        </tr>";
+    }
+
+    public static String pointDetail(Integer change, String info, Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return "<tr>\n" +
+                "                                    <td>" + (change > 0 ? "+" : "-") + change + "</td>\n" +
+                "                                    <td>" + info + "</td>\n" +
+                "                                    <td>" + sdf.format(date) + "</td>\n" +
+                "                                </tr>";
     }
 }
