@@ -23,6 +23,11 @@ public class PageController {
     UserService userService;
 
     // 页面指向
+    @RequestMapping("/")
+    public  String MainPage()
+    {
+        return "index";
+    }
     @RequestMapping("Order")
     public String OrderPage(Model model) {
         model.addAttribute("UserService", userService);

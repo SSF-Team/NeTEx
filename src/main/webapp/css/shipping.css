@@ -171,11 +171,10 @@ body {
 }
 
 .weightBox {
-    float: left;
     font-size: 14px;
     color: #000;
-    margin-right: 20px;
     line-height: 26px;
+    margin-left: 20px;
 }
 
 .weightBox input {

@@ -21,15 +21,15 @@ public interface UserDao {
     public User findUserByMail(String email);
     @Select("select * from netex_user where user_email=#{phone}")
     public User findUserByPhone(String phone);
+    @Select("select * from netex_user where user_type=1")
+    public User[] findAllCourier();
     @Select("select * from netex_address where address_userID=#{id}")
     public Address[] getUserAddresses(Integer id);
     @Select("select * from netex_address where address_id=#{id}")
     public Address getAddress(Integer id);
     @Select("select * from netex_user where user_id=#{id}")
     public User getUserInfoByToken(Integer id);
-    @Select("select * from netex_address where address_userID=#{userID} and address_name=#{name} and address_phone=#{phone} and address_content=#{address}")
-    public Address getAddressByFullInfo(@Param("userID") Integer userID, @Param("name") String name, @Param("phone") String phone, @Param("address") String address);
-                                      
+
 
     // Update
 

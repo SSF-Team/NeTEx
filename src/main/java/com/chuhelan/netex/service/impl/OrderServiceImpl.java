@@ -1,6 +1,6 @@
 package com.chuhelan.netex.service.impl;
 
-import com.chuhelan.netex.dao.PostDao;
+import com.chuhelan.netex.dao.OrderDao;
 import com.chuhelan.netex.domain.Order;
 import com.chuhelan.netex.domain.OrderUser;
 import com.chuhelan.netex.service.OrderService;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    PostDao postDao;
+    OrderDao orderDao;
 
     /**
      * @Author Stapxs
@@ -34,27 +34,47 @@ public class OrderServiceImpl implements OrderService {
      * @return com.chuhelan.netex.domain.Post
     **/
     @Override
-    public Order PostInfo(String id) {
-        Optional<Order> userOptional =
-                Optional.ofNullable(postDao.getPostInfo(id));
-        if (userOptional.isPresent()) {
-            Order order = userOptional.get();
-            return order;
-        }
-        return null;
+    public Order getOrder(String id) {
+        Optional<Order> userOptional = Optional.ofNullable(orderDao.getOrderInfo(id));
+        return userOptional.orElse(null);
     }
 
     /**
      * @Author Stapxs
      * @Description 创建订单
-     * @Date 下午 04:47 2021/6/3
-     * @Param [id, sender, delivery, deliveryManID, Marks, type]
+     * @Date 下午 10:12 2021/6/3
+     * @Param [id, createID, deliveryManID, sender, delivery, marks, type]
      * @return void
     **/
     @Override
-    public void CreatePost(String id, OrderUser sender, OrderUser delivery, Integer deliveryManID, String marks, String type) {
-        if(sender.getUserID() != null && delivery.getUserID() != null) {
-            postDao.createPostW1W2(id, new Date(), sender, delivery, deliveryManID, marks, type);
-        }
+    public void CreateOrder(String id, Integer createID, OrderUser sender, OrderUser delivery, String marks, String type) {
+        orderDao.saveOrder(id, createID, null, new Date(),
+                            sender.getName(), sender.getPhone(), sender.getAddress(),
+                            delivery.getName(), delivery.getPhone(), delivery.getAddress(),
+                            type, marks);
+    }
+
+    /*
+     * @Author Stapxs
+     * @Description 删除订单
+     * @Date 上午 09:52 2021/6/4
+     * @Param [id]
+     * @return void
+    **/
+    @Override
+    public void deleteOrder(String id) {
+        orderDao.deleteOrder(id);
+    }
+
+    /*
+     * @Author Stapxs
+     * @Description 为订单分配快递员
+     * @Date 上午 09:53 2021/6/4
+     * @Param [oid, cid]
+     * @return void
+    **/
+    @Override
+    public void assignCourier(String oid, Integer cid) {
+        orderDao.assignCourier(oid, cid);
     }
 }

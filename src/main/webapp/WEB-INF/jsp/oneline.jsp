@@ -52,7 +52,7 @@
         }
 
         // 获取运单信息
-        orderInfo = orderService.PostInfo(orderID);
+        orderInfo = orderService.getOrder(orderID);
         if(orderInfo == null) {
             // 获取失败清空订单号
             orderID = null;

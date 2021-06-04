@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Order {
     private String order_id;
-    private Integer order_createrID;
+    private Integer order_createID;
     private Integer order_deliveryManID;
     private Date order_date;
     private Date order_sendDate;

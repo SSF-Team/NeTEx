@@ -53,7 +53,6 @@
     <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../index.css">
     <link rel="stylesheet" href="../css/sign_in.css">
-    <script src="../../bootstrap/bootstrap.min.js"></script>
 </head>
 <body>
 <!-- 顶栏 -->

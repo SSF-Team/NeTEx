@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
 <link rel="stylesheet" href="../../index.css">
 <link rel="stylesheet" href="../../css/shipping.css">
-<form class="out_form" action="/Create" method="order" onsubmit="return checkForm()" id="create">
+<form class="out_form" action="/Create" method="post" onsubmit="return checkForm()" id="create">
     <input name="userID" value="<%out.print(cookie.get(request, "id"));%>" style="display:none;"></input>
     <div class="out_div">
         <!--在线寄件-->

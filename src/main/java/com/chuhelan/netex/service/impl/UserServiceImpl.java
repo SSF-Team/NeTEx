@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * @description:
@@ -79,6 +80,13 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         return null;
+    }
+
+    @Override
+    public User getOneCourier() {
+        User[] users = userDao.findAllCourier();
+        Integer one = new Random().nextInt(users.length);
+        return users[one];
     }
 
     /**
@@ -179,38 +187,6 @@ public class UserServiceImpl implements UserService {
                     new Address(-1, "", "", passToken)
             };
         }
-    }
-
-    /**
-     * @Author Stapxs
-     * @Description 使用地址 ID 获取地址非详细信息（精确到市）
-     * @Date 下午 03:44 2021/6/2
-     * @Param [id]
-     * @return com.chuhelan.netex.domain.Address
-    **/
-    @Override
-    public Address getAddressById(Integer id, @Nullable Integer uid, @Nullable String token) throws ParseException {
-        System.out.println("操作 > 获取用户地址（ID） > " + uid);
-        Address address = userDao.getAddress(id);
-        if(token != null) {
-            String passToken = verificationToken(uid, token);
-            if (passToken.equals("ok")) {
-                return address;
-            }
-        }
-        // 返回只有简单信息的地址
-        return new Address(address.getAddress_content().substring(address.getAddress_content().indexOf("省") + 1, address.getAddress_content().indexOf("市") + 1));
-    }
-
-    /**
-     * @Author Stapxs
-     * @Description 检查用户是否存在这个地址簿
-     * @Date 下午 04:23 2021/6/3
-     * @Param [id, name, phone, address]
-     * @return boolean
-    **/
-    public Address fullAddress(Integer id, String name, String phone, String address) {
-        return userDao.getAddressByFullInfo(id, name, phone, address);
     }
 
 }

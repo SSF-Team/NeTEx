@@ -4,6 +4,8 @@ import com.chuhelan.netex.domain.Order;
 import com.chuhelan.netex.domain.OrderUser;
 
 public interface OrderService {
-    public Order PostInfo(String id);
-    public void CreatePost(String id, OrderUser sender, OrderUser delivery, Integer deliveryManID, String Marks, String type);
+    public Order getOrder(String id);
+    public void deleteOrder(String id);
+    public void assignCourier(String oid, Integer cid);
+    public void CreateOrder(String id, Integer createID, OrderUser sender, OrderUser delivery, String marks, String type);
 }

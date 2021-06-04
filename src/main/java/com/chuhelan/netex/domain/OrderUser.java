@@ -18,20 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderUser {
-    private Integer userID;
-    private Integer addressID;
     private String name;
     private String phone;
     private String address;
-
-    public OrderUser(Integer uid, Integer aid) {
-        this.userID = uid;
-        this.addressID = aid;
-    }
-
-    public OrderUser(String name, String phone, String address) {
-        this.name = name;
-        this.phone = phone;
-        this.address = address;
-    }
 }

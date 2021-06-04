@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../index.css">
     <link rel="stylesheet" href="../../css/sign_up.css">
-    <script src="../../bootstrap/bootstrap.min.js"></script>
 </head>
 <script type="text/javascript">
     function trip(obj, trip) {
@@ -104,7 +103,7 @@
 <!--注册表-->
 <div class="register">
     <div id="loginDiv">
-        <form action="/Register" method="order">
+        <form action="/Register" method="post">
             <h3>立即注册，有机会享受最低可至六折* 运费！</h3>
             <h4>请填写以下信息， 之后我们的客户服务代表将联系您， 以协助您开设账户。 个人寄件者，请致电联邦快递国际客服热线了解最新政策。</h4>
             <div class="filed">

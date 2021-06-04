@@ -10,8 +10,8 @@
     <!-- 响应式触发 -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- 样式表 -->
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../index.css">
 </head>
 <body>
     <!-- 顶栏 -->
@@ -79,7 +79,7 @@
         <div style="display: flex;justify-content: center;align-items: center;margin-top: 10px;margin-bottom: 20px;">
           <div class="srcards">
             <div class="card" id="card" style="width: 190px;">
-              <img src="img/save-sev.png" class="card-img-top" alt="仓储服务">
+              <img src="../../img/save-sev.png" class="card-img-top" alt="仓储服务">
               <div class="card-body">
                 <h5 class="card-title">仓储服务</h5>
               </div>
@@ -87,7 +87,7 @@
           </div>
           <div class="srcards">
             <div class="card" id="card" style="width: 190px;">
-              <img src="img/big-sev.png" class="card-img-top" alt="大件服务">
+              <img src="../../img/big-sev.png" class="card-img-top" alt="大件服务">
               <div class="card-body">
                 <h5 class="card-title">大件服务</h5>
               </div>
@@ -95,7 +95,7 @@
           </div>
           <div class="srcards">
             <div class="card" id="card" style="width: 190px;">
-              <img src="img/cold-sev.png" class="card-img-top" alt="冷链服务">
+              <img src="../../img/cold-sev.png" class="card-img-top" alt="冷链服务">
               <div class="card-body">
                 <h5 class="card-title">冷链服务</h5>
               </div>
@@ -103,7 +103,7 @@
           </div>
           <div class="srcards">
             <div class="card" id="card" style="width: 190px;">
-              <img src="img/word-sev.png" class="card-img-top" alt="跨境服务">
+              <img src="../../img/word-sev.png" class="card-img-top" alt="跨境服务">
               <div class="card-body">
                 <h5 class="card-title">跨境服务</h5>
               </div>
@@ -111,7 +111,7 @@
           </div>
           <div class="srcards">
             <div class="card" id="card" style="width: 190px;">
-              <img src="img/space-sev.png" class="card-img-top" alt="星际服务">
+              <img src="../../img/space-sev.png" class="card-img-top" alt="星际服务">
               <div class="card-body">
                 <h5 class="card-title">星际服务</h5>
               </div>
@@ -136,8 +136,8 @@
         out.println(htmls.footer());
       %>
 
-    <script src="bootstrap/jquery-3.4.1.slim.min.js"></script>
-    <script src="bootstrap/bootstrap.min.js"></script>
+    <script src="../../bootstrap/jquery-3.4.1.slim.min.js"></script>
+    <script src="../../bootstrap/bootstrap.min.js"></script>
 </body>
 
 </html>
