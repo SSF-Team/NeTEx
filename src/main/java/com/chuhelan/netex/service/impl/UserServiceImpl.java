@@ -164,29 +164,4 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-  
-    /**
-     * @Author Stapxs
-     * @Description 获取用户地址信息
-     * @Date 上午 08:34 2021/5/31
-     * @Param [id, token]
-     * @return java.lang.String
-    **/
-    @Override
-    public Address[] getAddresses(Integer id, String token) throws ParseException {
-        System.out.println("操作 > 获取用户地址");
-        String passToken = verificationToken(id, token);
-        if (passToken.equals("ok")) {
-            Address[] addresses = userDao.getUserAddresses(id);
-            System.out.println("操作 > 获取用户地址 > 地址列表为：");
-            System.out.println(Arrays.toString(addresses));
-            return addresses;
-        } else {
-            // 返回填充报错的 Address 数组
-            return new Address[]{
-                    new Address(-1, "", "", passToken)
-            };
-        }
-    }
-
 }

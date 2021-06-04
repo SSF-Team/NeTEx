@@ -1,5 +1,6 @@
 package com.chuhelan.netex.controller;
 
+import com.chuhelan.netex.service.AddressService;
 import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class PageController {
     OrderService orderService;
     @Autowired
     UserService userService;
+    @Autowired
+    AddressService addressService;
 
     // 页面指向
     @RequestMapping("/")
@@ -46,5 +49,13 @@ public class PageController {
     @RequestMapping("SignUp")
     public String RegPage() {
         return "sign_up";
+    }
+    @RequestMapping("UserCenter")
+    public String UserPage(Model model) {
+        // 传递必要参数
+        model.addAttribute("UserService", userService);
+        model.addAttribute("OrderService", orderService);
+        model.addAttribute("AddressService", addressService);
+        return "user_center";
     }
 }

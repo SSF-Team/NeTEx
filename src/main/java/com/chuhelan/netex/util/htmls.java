@@ -1,5 +1,7 @@
 package com.chuhelan.netex.util;
 
+import com.chuhelan.netex.domain.Address;
+
 /**
  * @Version: 1.0
  * @Date: 2021/5/27 上午 08:18
@@ -17,7 +19,7 @@ public class htmls {
     **/
     public static String header() {
         // 为了在所有页面统一显示顶栏，我们使用方法来返回顶栏的内容
-        return "<header>\n" +
+        return "<header style=\"flex: 0 0 auto;\">\n" +
                 "      <nav class=\"navbar navbar-expand-lg navbar-dark topbar\">\n" +
                 "        <div>\n" +
                 "           <a href=\"/\">\n"  +
@@ -34,19 +36,21 @@ public class htmls {
                 "            <li class=\"nav-item active\">\n" +
                 "              <a class=\"nav-link active\" href=\"/\">首页</a>\n" +
                 "            </li>\n" +
-                "            <li class=\"nav-item dropdown\">\n" +
-                "              <a class=\"nav-link dropdown-toggle active\" href=\"#\" id=\"DpdSevice\" data-toggle=\"dropdown\"\n" +
-                "                 aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
-                "                物流服务\n" +
-                "              </a>\n" +
-                "              <div class=\"dropdown-menu\" aria-labelledby=\"DpdSevice\">\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">个人寄件</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">大件服务</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">冷链服务</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">跨境服务</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">星际速递</a>\n" +
-                "              </div>\n" +
+                "            <li class=\"nav-item active\">\n" +
+                "              <a class=\"nav-link active\" href=\"/Shipping\">物流服务</a>\n" +
                 "            </li>\n" +
+//                "              <a class=\"nav-link dropdown-toggle active\" href=\"#\" id=\"DpdSevice\" data-toggle=\"dropdown\"\n" +
+//                "                 aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+//                "                物流服务\n" +
+//                "              </a>\n" +
+//                "              <div class=\"dropdown-menu\" aria-labelledby=\"DpdSevice\">\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">个人寄件</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">大件服务</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">冷链服务</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">跨境服务</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">星际速递</a>\n" +
+//                "              </div>\n" +
+//                "            </li>\n" +
                 "          </ul>\n" +
                 "        </div>\n" +
                 "        <div class=\"form-inline\">\n" +
@@ -89,7 +93,7 @@ public class htmls {
     **/
     public static String footer() {
         // 同上
-        return "<footer>\n" +
+        return "<footer style=\"flex: 0 0 auto;\">\n" +
                 "        <div class=\"info\">\n" +
                 "          <div style=\"width: calc(100% - 500px);\">\n" +
                 "            <span id=\"title\">NeTEx China Group</span>\n" +
@@ -114,5 +118,34 @@ public class htmls {
                 "          <span style=\"float: right;\"><a rel=\"nofollow\" href=\"http://www.beian.miit.gov.cn\" target=\"_blank\">苏ICP备 20015498号</a> - netex.chuhelan.com</span>\n" +
                 "        </div>\n" +
                 "      </footer>";
+    }
+
+    public static String addressTr(Address address, Integer id, String token) {
+        return "<tr>\n" +
+                "                            <td>" + address.getAddress_name() + "</td>\n" +
+                "                            <td>" + address.getAddress_phone() + "</td>\n" +
+                "                            <td>" + address.getAddress_content() + "</td>\n" +
+                "                            <td>\n" +
+                "                                <div style=\"text-align: center;\">\n" +
+//                "                                <div style=\"display: flex;\">\n" +
+//                "                                    <button onclick=\"\">\n" +
+//                "                                        <svg aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\" data-icon=\"edit\"\n" +
+//                "                                             class=\"svg-inline--fa fa-edit fa-w-18\" role=\"img\"\n" +
+//                "                                             xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 576 512\">\n" +
+//                "                                            <path fill=\"currentColor\"\n" +
+//                "                                                  d=\"M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z\"></path>\n" +
+//                "                                        </svg>\n" +
+//                "                                    </button>\n" +
+                "                                    <button onclick=\"location='/DeleteAdd?uid=" + id + "&tid=" + token + "&aid=" + address.getAddress_id() + "'\">\n" +
+                "                                        <svg aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\"\n" +
+                "                                             data-icon=\"trash-alt\" class=\"svg-inline--fa fa-trash-alt fa-w-14\"\n" +
+                "                                             role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\">\n" +
+                "                                            <path fill=\"currentColor\"\n" +
+                "                                                  d=\"M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z\"></path>\n" +
+                "                                        </svg>\n" +
+                "                                    </button>\n" +
+                "                                </div>\n" +
+                "                            </td>\n" +
+                "                        </tr>";
     }
 }

@@ -1,4 +1,44 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.chuhelan.netex.util.*" %>
+<%@ page import="com.chuhelan.netex.service.*" %>
+<%@ page import="com.chuhelan.netex.domain.*" %>
 <!DOCTYPE html>
+
+<%
+    // 获取传参
+    String id = cookie.get(request, "id");          // Cookie 登录用户 ID
+    String token = cookie.get(request, "token");    // Cookie 登录用户 token
+    // Attribute 传参 Service 层对象
+    /*
+     理论上说 jsp 不该访问  Service 层方法，但是因为时间不够加上代码写的太乱了
+     没办法只能复用 Service 层方法来加快编写速度
+    */
+    UserService userService = (UserService) request.getAttribute("UserService");
+    OrderService orderService = (OrderService) request.getAttribute("PostService");
+    AddressService addressService = (AddressService) request.getAttribute("AddressService");
+    String runCommand = (String) request.getAttribute("run");
+    User user = new User();
+    Address[] addresses = null;
+
+    // 全局变量
+    String login = userService.verificationToken(Integer.parseInt(id), token);
+
+    // 刷新 URL
+    if(runCommand != null && runCommand.equals("reLoad")) {
+        response.sendRedirect("/UserCenter");
+        return;
+    }
+    // 验证登录
+    if(login.equals("ok")) {
+        // 获取用户信息
+        user = userService.getUserInfoByToken(Integer.parseInt(id), token);
+        // 获取地址簿
+        addresses = addressService.getAddresses(Integer.parseInt(id), token);
+    } else {
+        response.sendRedirect("/SignIn");
+    }
+%>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +47,7 @@
     <!-- 样式表 -->
     <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../index.css">
-    <link rel="stylesheet" href="css/usr_center.css">
+    <link rel="stylesheet" href="../../css/user_center.css">
     <script src="../../js/jquery-1.12.4.js"></script>
     <script src="../../js/jquery-ui.js"></script>
 </head>
@@ -19,9 +59,11 @@
 </script>
 <body>
 <!-- 顶栏 -->
-
+<%
+    out.println(htmls.header());
+%>
 <!-- 主体 -->
-<div class="main">
+<div class="main" style="flex: 1 0 auto;">
     <div id="tabs">
         <ul class="main-tab list-group">
             <li>
@@ -57,7 +99,7 @@
                         <path fill="currentColor"
                               d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 448c-110.532 0-200-89.431-200-200 0-110.495 89.472-200 200-200 110.491 0 200 89.471 200 200 0 110.53-89.431 200-200 200zm107.244-255.2c0 67.052-72.421 68.084-72.421 92.863V300c0 6.627-5.373 12-12 12h-45.647c-6.627 0-12-5.373-12-12v-8.659c0-35.745 27.1-50.034 47.579-61.516 17.561-9.845 28.324-16.541 28.324-29.579 0-17.246-21.999-28.693-39.784-28.693-23.189 0-33.894 10.977-48.942 29.969-4.057 5.12-11.46 6.071-16.666 2.124l-27.824-21.098c-5.107-3.872-6.251-11.066-2.644-16.363C184.846 131.491 214.94 112 261.794 112c49.071 0 101.45 38.304 101.45 88.8zM298 368c0 23.159-18.841 42-42 42s-42-18.841-42-42 18.841-42 42-42 42 18.841 42 42z"></path>
                     </svg>
-                    <span>帮助与反馈</span>
+                    <span>常见问题</span>
                 </a>
             </li>
             <li>
@@ -102,8 +144,8 @@
         <div class="right-view">
             <div id="tabs-3">
                 <div class="name-card">
-                    <div id="avatar"></div>
-                    <span>user_name</span>
+                    <div id="avatar" style="background-image: <%out.print("url(" + user.getUser_profile().replace("/", "/") + ")");%>;"></div>
+                    <span><%out.print(user.getUser_name());%></span>
                 </div>
                 <div class="user-info">
                     <Span class="title">个人信息</Span>
@@ -111,19 +153,19 @@
                     <div id="user-info-box">
                         <p>
                             <em>姓名</em>
-                            <span>user_name</span>
+                            <span><%out.print(user.getUser_name());%></span>
                         </p>
                         <p>
                             <em>性别</em>
-                            <span>user_gender</span>
+                            <span><%out.print(user.getUser_gender());%></span>
                         </p>
                         <p>
                             <em>邮箱</em>
-                            <span>user_mail</span>
+                            <span><%out.print(user.getUser_email());%></span>
                         </p>
                         <p>
                             <em>手机</em>
-                            <span>user_phone</span>
+                            <span><%out.print(user.getUser_phone());%></span>
                         </p>
                     </div>
                 </div>
@@ -131,7 +173,7 @@
                     <div style="height: 30px;line-height: 30px;position: absolute;">
                         <Span class="title">地址簿</Span>
                     </div>
-                    <button>
+                    <button onclick="openAddAddress(true)">
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
                              class="svg-inline--fa fa-plus fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg"
                              viewBox="0 0 448 512">
@@ -154,53 +196,33 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>address_name</td>
-                            <td>address_phone</td>
-                            <td>address_content</td>
-                            <td>
-                                <div style="display: flex;">
-                                    <button>
-                                        <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit"
-                                             class="svg-inline--fa fa-edit fa-w-18" role="img"
-                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                            <path fill="currentColor"
-                                                  d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
-                                        </svg>
-                                    </button>
-                                    <button>
-                                        <svg aria-hidden="true" focusable="false" data-prefix="far"
-                                             data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14"
-                                             role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                            <path fill="currentColor"
-                                                  d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        <%
+                            for(Address add: addresses) {
+                                out.println(htmls.addressTr(add, Integer.parseInt(id), token));
+                            }
+                        %>
                         </tbody>
                     </table>
-                    <div id="add-page-bar">
-                        <button>
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left"
-                                 class="svg-inline--fa fa-chevron-left fa-w-10" role="img"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                                <path fill="currentColor"
-                                      d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path>
-                            </svg>
-                        </button>
-                        <button style="background: #F9893C;color: #fff;padding-bottom: 3px;"><span>0</span></button>
-                        <button>
-                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right"
-                                 class="svg-inline--fa fa-chevron-right fa-w-10" role="img"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                                <path fill="currentColor"
-                                      d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path>
-                            </svg>
-                        </button>
-                        <div style="width: 100%;"><span style="float: right;margin-right: 5px;">共 0 页</span></div>
-                    </div>
+<%--                    <div id="add-page-bar">--%>
+<%--                        <button>--%>
+<%--                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left"--%>
+<%--                                 class="svg-inline--fa fa-chevron-left fa-w-10" role="img"--%>
+<%--                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">--%>
+<%--                                <path fill="currentColor"--%>
+<%--                                      d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path>--%>
+<%--                            </svg>--%>
+<%--                        </button>--%>
+<%--                        <button style="background: #F9893C;color: #fff;padding-bottom: 3px;"><span>0</span></button>--%>
+<%--                        <button>--%>
+<%--                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right"--%>
+<%--                                 class="svg-inline--fa fa-chevron-right fa-w-10" role="img"--%>
+<%--                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">--%>
+<%--                                <path fill="currentColor"--%>
+<%--                                      d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path>--%>
+<%--                            </svg>--%>
+<%--                        </button>--%>
+<%--                        <div style="width: 100%;"><span style="float: right;margin-right: 5px;">共 0 页</span></div>--%>
+<%--                    </div>--%>
                 </div>
             </div>
             <div id="tabs-2" style="display: flex;">
@@ -217,8 +239,7 @@
                 <div class="point-info">
                     <div id="point" class="point">
                         <div>
-                            <label style="float: left; margin-right: 400px">积分明细</label>
-                            <label style="float: right;">全部</label>
+                            <label>积分明细</label>
                         </div>
                         <div class="pointList">
                             <table>
@@ -229,12 +250,12 @@
                                 </tr>
                                 <tr>
                                     <td>+5</td>
-                                    <td>签到获取10积分</td>
+                                    <td>签到获取5积分</td>
                                     <td>2021-06-02</td>
                                 </tr>
                                 <tr>
                                     <td>+5</td>
-                                    <td>签到获取10积分</td>
+                                    <td>签到获取5积分</td>
                                     <td>2021-06-03</td>
                                 </tr>
                             </table>
@@ -247,10 +268,6 @@
             <div id="tabs-1">
                 <div class="user-info">
                     <Span class="title">常见问题</Span>
-                    <div id="add-search">
-                        <input name="search" type="text" placeholder="输入订单号">
-                        <button>查找</button>
-                    </div>
                     <div class="hrs"></div>
                     <div id="user-info-box">
                         <div class="accordion" id="accordionExample">
@@ -315,37 +332,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="user-info">
-                    <Span class="title">订单信息</Span>
-                    <div class="hrs"></div>
-                    <div id="user-info-box">
-                        <p>
-                            <em>订单号</em>
-                            <span>order_id</span>
-                        </p>
-                        <p>
-                            <em>下单日期</em>
-                            <span>order_date</span>
-                        </p>
-                        <p>
-                            <em>发件人id</em>
-                            <span>order_sendUserID</span>
-                        </p>
-                        <p>
-                            <em>备注</em>
-                            <span>order_Contend</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="user-info">
-                    <Span class="title">对订单有什么疑问</Span>
-                    <div id="add-search">
-                        <button>提交</button>
-                    </div>
-                    <div class="hrs"></div>
-                    <textarea name="problem" cols="80" maxlength="800" style="width: 100%; outline: none;" rows="5"
-                              placeholder="对订单有什么疑问"></textarea>
-                </div>
 
             </div>
             <!--工单中心页面-->
@@ -364,67 +350,85 @@
                         <li><a href="#tabNew-3">我创建的</a></li>
                     </ul>
                     <!--创建工单-->
-                    <div id="tabNew-1" class="createOrder">
-                        <div>
-                            <label><i>*</i>工单编号</label>
-                            <input placeholder="[自动生成]" readonly="readonly">
-                            <label><i>*</i>运单编号</label>
-                            <input placeholder="请输入您13位运单号" type="text">
+                    <div id="tabNew-1">
+                        <div class="createOrder user-info">
+                            <Span class="title">检索订单</Span>
+                            <div id="add-search">
+                                <input name="search" type="text" placeholder="输入订单号">
+                                <button>查找</button>
+                            </div>
+                            <div class="hrs"></div>
+                            <div id="user-info-box">
+                                <p>
+                                    <em>订单号</em>
+                                    <span>order_id</span>
+                                </p>
+                                <p>
+                                    <em>下单日期</em>
+                                    <span>order_date</span>
+                                </p>
+                                <p>
+                                    <em>发件人id</em>
+                                    <span>order_sendUserID</span>
+                                </p>
+                                <p>
+                                    <em>备注</em>
+                                    <span>order_Contend</span>
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <label><i>*</i>联 系 人 &nbsp;</label>
-                            <input type="text">
-                            <label><i>*</i>联系电话</label>
-                            <input type="text" maxlength="11">
-                        </div>
-                        <!--                        <div>-->
-                        <!--                            <label><i>*</i>主&emsp;题&emsp;</label>-->
-                        <!--                            <input type="text">-->
-                        <!--                        </div>-->
-                        <div>
-                            <label>&ensp;备&emsp;注</label>
-                            <textarea placeholder="[服务咨询][详细探讨功能需求]"></textarea>
-                        </div>
-                        <div style="text-align: center">
-                            <button type="submit">提交</button>
+                        <div class="createOrder">
+                            <div>
+                                <label><i>*</i>工单编号</label>
+                                <input placeholder="[自动生成]" readonly="readonly">
+                                <label><i>*</i>运单编号</label>
+                                <input placeholder="请输入您13位运单号" type="text">
+                            </div>
+                            <div>
+                                <label><i>*</i>联 系 人 &nbsp;</label>
+                                <input type="text">
+                                <label><i>*</i>联系电话</label>
+                                <input type="text" maxlength="11">
+                            </div>
+                            <!--                        <div>-->
+                            <!--                            <label><i>*</i>主&emsp;题&emsp;</label>-->
+                            <!--                            <input type="text">-->
+                            <!--                        </div>-->
+                            <div>
+                                <label>&ensp;备&emsp;注</label>
+                                <textarea placeholder="[服务咨询][详细探讨功能需求]"></textarea>
+                            </div>
+                            <div style="text-align: center">
+                                <button type="submit">提交</button>
+                            </div>
                         </div>
                     </div>
                     <!--待处理的-->
                     <div id="tabNew-2" class="waitFixing">
                         <table>
                             <tr>
-                                <th>NO</th>
                                 <th>运单</th>
                                 <th>创建时间</th>
                                 <th>联系人</th>
                                 <th>电话</th>
                                 <th>备注</th>
                                 <th>状态</th>
-                                <th>操作</th>
                             </tr>
                             <tr>
-                                <td>1</td>
                                 <td>NT0521000001A</td>
                                 <td>2021-06-02</td>
                                 <td>黄鸿涛</td>
                                 <td>13086205025</td>
                                 <td>包裹提前送达了</td>
-                                <td>等待处理</td>
-                                <td>
-                                    <button>处理</button>
-                                </td>
+                                <td>等待</td>
                             </tr>
                             <tr>
-                                <td>2</td>
                                 <td>NT0621000002X</td>
                                 <td>2021-06-03</td>
                                 <td>宋弘文</td>
                                 <td>13086205025</td>
                                 <td>包裹直接送到我家里面了</td>
-                                <td>等待处理</td>
-                                <td>
-                                    <button>处理</button>
-                                </td>
+                                <td>等待</td>
                             </tr>
                         </table>
                     </div>
@@ -432,38 +436,28 @@
                     <div id="tabNew-3" class="waitFixing">
                         <table>
                             <tr>
-                                <th>NO</th>
                                 <th>运单</th>
                                 <th>创建时间</th>
                                 <th>联系人</th>
                                 <th>电话</th>
                                 <th>备注</th>
                                 <th>状态</th>
-                                <th>操作</th>
                             </tr>
                             <tr>
-                                <td>1</td>
                                 <td>NT0521000001A</td>
                                 <td>2021-06-02</td>
                                 <td>黄鸿涛</td>
                                 <td>13086205025</td>
                                 <td>包裹提前送达了</td>
-                                <td style="background: red">等待处理</td>
-                                <td>
-                                    <button style="background: gray">驳回</button>
-                                </td>
+                                <td style="background: red">等待</td>
                             </tr>
                             <tr>
-                                <td>2</td>
                                 <td>NT0621000002X</td>
                                 <td>2021-06-03</td>
                                 <td>宋弘文</td>
                                 <td>13086205025</td>
                                 <td>包裹直接送到我家里面了，你不说我还没发现</td>
-                                <td style="background: greenyellow">处理完成</td>
-                                <td>
-                                    <button style="background: gray">驳回</button>
-                                </td>
+                                <td style="background: greenyellow">完成</td>
                             </tr>
                         </table>
                     </div>
@@ -598,13 +592,35 @@
     </div>
 </div>
 <!-- 弹窗 -->
-<div class="pop">
+<div class="pop" id="addressPop" style="visibility: collapse;">
     <div id="pop-main">
-
+        <div>
+            <button onclick="openAddAddress(false)">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="76" viewBox="0 0 76.00 76.00" enable-background="new 0 0 76.00 76.00" xml:space="preserve">
+	                <path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z "/>
+                </svg>
+            </button>
+        </div>
+        <div>
+            <!-- 添加地址表单 -->
+            
+        </div>
     </div>
 </div>
 <!-- 底栏 -->
+<%
+    out.println(htmls.footer());
+%>
 
+<script>
+    function openAddAddress(isOpen) {
+        if(isOpen) {
+            document.getElementById("addressPop").style.visibility = "visible";
+        } else {
+            document.getElementById("addressPop").style.visibility = "collapse";
+        }
+    }
+</script>
 
 <script src="../../bootstrap/bootstrap.min.js"></script>
 </body>

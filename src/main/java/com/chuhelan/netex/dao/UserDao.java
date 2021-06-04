@@ -40,4 +40,9 @@ public interface UserDao {
 
     @Insert("insert into netex_user ( user_name, user_profile, user_email, user_password, user_phone ) values ( #{name}, '', #{mail}, #{password}, #{phone} );")
     public void regUser(@Param("name") String name, @Param("mail") String mail, @Param("password") String password, @Param("phone") String phone);
+
+    // Delete
+
+    @Delete("delete from netex_address where address_id=#{id}")
+    public void deleteAddress(Integer id);
 }
