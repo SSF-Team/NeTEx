@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../index.css">
     <link rel="stylesheet" href="../../css/sign_up.css">
-    <script src="../../bootstrap/bootstrap.min.js"></script>
 </head>
 <script type="text/javascript">
     function trip(obj, trip) {

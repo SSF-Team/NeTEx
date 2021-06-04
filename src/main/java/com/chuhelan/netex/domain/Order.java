@@ -19,15 +19,19 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class Order {
     private String order_id;
+    private Integer order_createID;
+    private Integer order_deliveryManID;
     private Date order_date;
     private Date order_sendDate;
-    private Integer order_sendUserID;
-    private String order_sendAddressId;
     private Date order_deliveryDate;
-    private Integer order_deliveryUserID;
-    private Integer order_deliveryAddressId;
-    private Integer order_deliveryManID;
+    private String order_sendName;
+    private String order_sendPhone;
+    private String order_sendAddress;
+    private String order_deliveryName;
+    private String order_deliveryPhone;
+    private String order_deliveryAddress;
+    private String order_type;
     private String order_content;
 }

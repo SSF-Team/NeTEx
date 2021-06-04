@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.chuhelan.netex.util.*" %>
+<%@ page import="com.chuhelan.netex.service.UserService" %>
+<%@ page import="com.chuhelan.netex.service.impl.UserServiceImpl" %>
+<%@ page import="java.text.ParseException" %>
 
 <%
     if (request.getAttribute("id") != null && request.getAttribute("token") != null) {
@@ -17,6 +20,27 @@
             }
         }
     }
+
+    String id = cookie.get(request, "id");
+    String token = cookie.get(request, "token");
+    UserService userService = (UserService) request.getAttribute("UserService");
+    System.out.println(userService);
+    if(id != null && token != null && userService != null) {
+        System.out.println("页面 > sign_in > 验证登录");
+        try {
+            String back = userService.verificationToken(Integer.parseInt(id), token);
+            if (back.equals("ok")) {
+                System.out.println("页面 > sign_in > 跳转个人中心");
+                // response.sendRedirect("/");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    String backMsg = (String) request.getAttribute("msg");
+    if(backMsg != null && backMsg.equals("ok")) {
+        System.out.println("页面 > sign_in > 跳转个人中心");
+    }
 %>
 
 <!DOCTYPE html>
@@ -29,7 +53,6 @@
     <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../index.css">
     <link rel="stylesheet" href="../css/sign_in.css">
-    <script src="../../bootstrap/bootstrap.min.js"></script>
 </head>
 <body>
 <!-- 顶栏 -->

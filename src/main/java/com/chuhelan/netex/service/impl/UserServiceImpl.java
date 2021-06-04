@@ -4,8 +4,8 @@ import com.chuhelan.netex.dao.UserDao;
 import com.chuhelan.netex.domain.Address;
 import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.UserService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * @description:
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
      **/
     @Override
     public User findUserById(Integer id) {
+        System.out.println("操作 > 获取用户 > findUserById > " + id);
         Optional<User> userOptional =
                 Optional.ofNullable(userDao.findUserById(id));
         if (userOptional.isPresent()) {
@@ -61,6 +63,30 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         return null;
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 使用手机号寻找用户
+     * @Date 下午 04:36 2021/6/3
+     * @Param [phone]
+     * @return com.chuhelan.netex.domain.User
+    **/
+    public User findUserByPhone(String phone) {
+        Optional<User> userOptional =
+                Optional.ofNullable(userDao.findUserByPhone(phone));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user;
+        }
+        return null;
+    }
+
+    @Override
+    public User getOneCourier() {
+        User[] users = userDao.findAllCourier();
+        Integer one = new Random().nextInt(users.length);
+        return users[one];
     }
 
     /**
@@ -119,6 +145,25 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User getUserInfoByToken(Integer id, String token) throws ParseException {
+        System.out.println("getUserInfoByToken");
+        Optional<User> userOptional =
+                Optional.ofNullable(userDao.getUserInfoByToken(id));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            String passToken = verificationToken(id, token);
+            if (passToken.equals("ok")){
+                return user;
+            }
+            else{
+                // 返回填充错误信息的 User 对象
+                return new User(-1, passToken);
+            }
+        }
+        return null;
+    }
+
   
     /**
      * @Author Stapxs
@@ -144,22 +189,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public User getUserInfoByToken(Integer id, String token) throws ParseException {
-        System.out.println("getUserInfoByToken");
-        Optional<User> userOptional =
-                Optional.ofNullable(userDao.getUserInfoByToken(id));
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            String passToken = verificationToken(id, token);
-            if (passToken.equals("ok")){
-                return user;
-            }
-            else{
-                // 返回填充错误信息的 User 对象
-                return new User(-1, passToken);
-            }
-        }
-        return null;
-    }
 }

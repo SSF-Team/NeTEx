@@ -23,4 +23,16 @@ public class cookie {
         addCookie.setMaxAge(0);
         response.addCookie(addCookie);
     }
+
+    public static String get(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
+        if( cookies != null ){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
 }
