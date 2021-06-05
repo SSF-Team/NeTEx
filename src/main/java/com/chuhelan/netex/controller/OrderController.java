@@ -6,6 +6,7 @@ import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,35 @@ public class OrderController {
 
         model.addAttribute("str", back + "}");
 
+        return "api";
+    }
+    @GetMapping("/GetOrder")
+    public String getOrder(Integer uid, String token, String oid, Model model) throws ParseException {
+        // 获取运单信息，将返回除去发件人收件人姓名手机号以外的全部信息
+        // 验证 token
+        if(userService.verificationToken(uid, token).equals("ok")) {
+            Order order = orderService.getOrder(oid);
+            String back = "{";
+            if(order != null) {
+                // 组合订单信息
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                back += "\"stat\":200,";
+                back += "\"id\":\"" + order.getOrder_id() + "\",";
+                back += "\"deliveryMan\":\"" + userService.findUserById(order.getOrder_deliveryManID()).getUser_name() + "\",";
+                back += "\"createDate\":\"" + sdf.format(order.getOrder_date()) + "\",";
+                back += "\"sendDate\":\"" + sdf.format(order.getOrder_sendDate()) + "\",";
+                back += "\"deliveryDate\":\"" + sdf.format(order.getOrder_deliveryDate()) + "\",";
+                back += "\"sendAddress\":\"" + order.getOrder_sendAddress().substring(0, order.getOrder_sendAddress().indexOf("市") + 1) + "\",";
+                back += "\"deliveryAddress\":\"" + order.getOrder_deliveryAddress().substring(0, order.getOrder_sendAddress().indexOf("市") + 1) + "\",";
+                back += "\"orderType\":\"" + order.getOrder_type() + "\",";
+                back += "\"orderMarks\":\"" + order.getOrder_content() + "\"";
+            } else {
+                back += "\"stat\":404,";
+                back += "\"msg\":\"运单不存在\"";
+            }
+            back += "}";
+            model.addAttribute("str", back);
+        }
         return "api";
     }
 

@@ -1,5 +1,15 @@
 package com.chuhelan.netex.util;
 
+import com.chuhelan.netex.controller.UserController;
+import com.chuhelan.netex.domain.Address;
+import com.chuhelan.netex.domain.User;
+import com.chuhelan.netex.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @Version: 1.0
  * @Date: 2021/5/27 上午 08:18
@@ -8,6 +18,7 @@ package com.chuhelan.netex.util;
  * @Description TO DO
  **/
 public class htmls {
+
     /**
      * @Author Stapxs
      * @Description 输出顶栏 HTML 代码
@@ -17,7 +28,7 @@ public class htmls {
     **/
     public static String header() {
         // 为了在所有页面统一显示顶栏，我们使用方法来返回顶栏的内容
-        return "<header>\n" +
+        return "<header style=\"flex: 0 0 auto;\">\n" +
                 "      <nav class=\"navbar navbar-expand-lg navbar-dark topbar\">\n" +
                 "        <div>\n" +
                 "           <a href=\"/\">\n"  +
@@ -34,19 +45,21 @@ public class htmls {
                 "            <li class=\"nav-item active\">\n" +
                 "              <a class=\"nav-link active\" href=\"/\">首页</a>\n" +
                 "            </li>\n" +
-                "            <li class=\"nav-item dropdown\">\n" +
-                "              <a class=\"nav-link dropdown-toggle active\" href=\"#\" id=\"DpdSevice\" data-toggle=\"dropdown\"\n" +
-                "                 aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
-                "                物流服务\n" +
-                "              </a>\n" +
-                "              <div class=\"dropdown-menu\" aria-labelledby=\"DpdSevice\">\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">个人寄件</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">大件服务</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">冷链服务</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">跨境服务</a>\n" +
-                "                <a class=\"dropdown-item\" href=\"#\">星际速递</a>\n" +
-                "              </div>\n" +
+                "            <li class=\"nav-item active\">\n" +
+                "              <a class=\"nav-link active\" href=\"/Shipping\">物流服务</a>\n" +
                 "            </li>\n" +
+//                "              <a class=\"nav-link dropdown-toggle active\" href=\"#\" id=\"DpdSevice\" data-toggle=\"dropdown\"\n" +
+//                "                 aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+//                "                物流服务\n" +
+//                "              </a>\n" +
+//                "              <div class=\"dropdown-menu\" aria-labelledby=\"DpdSevice\">\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">个人寄件</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">大件服务</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">冷链服务</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">跨境服务</a>\n" +
+//                "                <a class=\"dropdown-item\" href=\"#\">星际速递</a>\n" +
+//                "              </div>\n" +
+//                "            </li>\n" +
                 "          </ul>\n" +
                 "        </div>\n" +
                 "        <div class=\"form-inline\">\n" +
@@ -89,7 +102,7 @@ public class htmls {
     **/
     public static String footer() {
         // 同上
-        return "<footer>\n" +
+        return "<footer style=\"flex: 0 0 auto;\">\n" +
                 "        <div class=\"info\">\n" +
                 "          <div style=\"width: calc(100% - 500px);\">\n" +
                 "            <span id=\"title\">NeTEx China Group</span>\n" +
@@ -114,5 +127,92 @@ public class htmls {
                 "          <span style=\"float: right;\"><a rel=\"nofollow\" href=\"http://www.beian.miit.gov.cn\" target=\"_blank\">苏ICP备 20015498号</a> - netex.chuhelan.com</span>\n" +
                 "        </div>\n" +
                 "      </footer>";
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 输出地址簿 tr 列表
+     * @Date 下午 10:41 2021/6/4
+     * @Param [address, id, token]
+     * @return java.lang.String
+    **/
+    public static String addressTr(Address address, Integer id, String token) {
+        return "<tr>\n" +
+                "                            <td>" + address.getAddress_name() + "</td>\n" +
+                "                            <td>" + address.getAddress_phone() + "</td>\n" +
+                "                            <td>" + address.getAddress_content() + "</td>\n" +
+                "                            <td>\n" +
+                "                                <div style=\"text-align: center;\">\n" +
+//                "                                <div style=\"display: flex;\">\n" +
+//                "                                    <button onclick=\"\">\n" +
+//                "                                        <svg aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\" data-icon=\"edit\"\n" +
+//                "                                             class=\"svg-inline--fa fa-edit fa-w-18\" role=\"img\"\n" +
+//                "                                             xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 576 512\">\n" +
+//                "                                            <path fill=\"currentColor\"\n" +
+//                "                                                  d=\"M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z\"></path>\n" +
+//                "                                        </svg>\n" +
+//                "                                    </button>\n" +
+                "                                    <button onclick=\"location='/DeleteAdd?uid=" + id + "&tid=" + token + "&aid=" + address.getAddress_id() + "'\">\n" +
+                "                                        <svg aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\"\n" +
+                "                                             data-icon=\"trash-alt\" class=\"svg-inline--fa fa-trash-alt fa-w-14\"\n" +
+                "                                             role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\">\n" +
+                "                                            <path fill=\"currentColor\"\n" +
+                "                                                  d=\"M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z\"></path>\n" +
+                "                                        </svg>\n" +
+                "                                    </button>\n" +
+                "                                </div>\n" +
+                "                            </td>\n" +
+                "                        </tr>";
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 输出积分详情列表
+     * @Date 下午 06:49 2021/6/5
+     * @Param [change, info, date]
+     * @return java.lang.String
+    **/
+    public static String pointDetail(Integer change, String info, Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return "<tr>\n" +
+                "                                    <td>" + (change > 0 ? "+" : "-") + change + "</td>\n" +
+                "                                    <td>" + info + "</td>\n" +
+                "                                    <td>" + sdf.format(date) + "</td>\n" +
+                "                                </tr>";
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 输出我创建的工单列表
+     * @Date 下午 06:58 2021/6/5
+     * @Param [orderID, date, name, phone, str, nowWay]
+     * @return java.lang.String
+    **/
+    public static String workOrderTr(String orderID, Date date, String name, String phone, String str, Integer nowWay) {
+        /*
+         工单状态
+         0 - 待处理
+         1 - 处理完成
+         2 - 驳回
+        */
+        String[] way = new String[] {"待处理", "#4D148C", "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"};
+        if(nowWay == 1) {
+            way = new String[] {"处理完成", "green", "M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"};
+        } else if(nowWay == 2) {
+            way = new String[] {"驳回", "red", "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z"};
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return "<tr title=\"" + way[0] + "\">\n" +
+                "                                <td>" + orderID + "</td>\n" +
+                "                                <td>" + sdf.format(date) + "</td>\n" +
+                "                                <td>" + name + "</td>\n" +
+                "                                <td>" + phone + "</td>\n" +
+                "                                <td>" + str + "</td>\n" +
+                "                                <td style=\"color: " + way[1] + "\">\n" +
+                "                                   <svg style=\"width: 20px;\" aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\" data-icon=\"clock\" class=\"svg-inline--fa fa-clock fa-w-16\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\">\n" +
+                "                                       <path fill=\"currentColor\" d=\"" + way[2] + "\"></path>\n" +
+                "                                   </svg>" +
+                "                                </td>\n" +
+                "                            </tr>";
     }
 }

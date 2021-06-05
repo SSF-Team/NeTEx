@@ -1,8 +1,12 @@
 package com.chuhelan.netex.controller;
 
 import com.chuhelan.netex.domain.Address;
+import com.chuhelan.netex.service.AddressService;
+import com.chuhelan.netex.service.OrderService;
+import com.chuhelan.netex.service.WorkOrderService;
 import com.chuhelan.netex.util.*;
 
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +14,7 @@ import java.util.UUID;
 import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +33,12 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    OrderService orderService;
+    @Autowired
+    AddressService addressService;
+    @Autowired
+    WorkOrderService workOrderService;
 
     // 以下 API 功能仅用于测试
     @RequestMapping("/UserById")
@@ -92,6 +103,7 @@ public class UserController {
     @PostMapping("/Register")
     public String RegPass(String email, String name, String password, String phone, String back, Model model) {
         System.out.println("操作 > 注册 > RegPass > " + email + " / " + name + " / " + password + " / " + phone);
+        name = new String(name.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         // 验证用户是否存在
         User user = userService.findUserByMail(email);
         if(user == null) {
@@ -126,31 +138,8 @@ public class UserController {
             }
         }
     }
-
   
     // 纯文本 API
-    @GetMapping("/UserAddress")
-    public String UserAddress(Integer id, String token, Model model) throws ParseException {
-        Address[] addresses = userService.getAddresses(id, token);
-        if (addresses[0].getAddress_id() != -1) {
-            StringBuilder back = new StringBuilder("[");
-            for (Address add : addresses) {
-                back.append("{");
-                back.append("\"id\":").append(add.getAddress_id()).append(",");
-                back.append("\"name\":\"").append(add.getAddress_name()).append("\",");
-                back.append("\"phone\":\"").append(add.getAddress_phone()).append("\",");
-                back.append("\"address\":\"").append(add.getAddress_content()).append("\"");
-                back.append("},");
-            }
-            back = new StringBuilder(back.substring(0, back.length() - 1));
-            back.append("]");
-            model.addAttribute("str", back.toString());
-            return "api";
-        } else {
-            model.addAttribute("str", "{\"stat\":500, \"msg\":\"" + addresses[0].getAddress_content() + "\"}");
-            return "api";
-        }
-    }
     @GetMapping("/UserInfo")
     public String getUserInfoByToken(Integer id ,String token, Model model) throws ParseException {
         User user = userService.getUserInfoByToken(id,token);
@@ -168,4 +157,38 @@ public class UserController {
             return "api";
         }
     }
+    @GetMapping("/ClockIn")
+    public String ClockIn(Integer uid, String tid, @Nullable String back, Model model) throws ParseException {
+        // 验证 token
+        if(userService.verificationToken(uid, tid).equals("ok")) {
+            // 判断今天有没有签到过
+            if(userService.getPointByTime(uid, new Date()) == null) {
+                userService.ChangePoint(uid,userService.getUserInfoByToken(uid, tid).getUser_point() + 5);
+                userService.addPointInfo(uid, new Date(), 5, "签到奖励");
+            } else {
+                if(back == null) {
+                    model.addAttribute("err", "今天签到过啦");
+                } else {
+                    model.addAttribute("str", "{\"stat\":403, \"msg\":\"今天签到过啦\"}");
+                }
+            }
+        } else {
+            if(back == null) {
+                model.addAttribute("err", "验证登陆失败");
+            } else {
+                model.addAttribute("str", "{\"stat\":403, \"msg\":\"验证登陆失败\"}");
+            }
+        }
+        if(back == null) {
+            model.addAttribute("UserService", userService);
+            model.addAttribute("OrderService", orderService);
+            model.addAttribute("AddressService", addressService);
+            model.addAttribute("WorkOrderService", workOrderService);
+            model.addAttribute("run", "reLoad");
+            return "user_center";
+        } else {
+            return "api";
+        }
+    }
+
 }

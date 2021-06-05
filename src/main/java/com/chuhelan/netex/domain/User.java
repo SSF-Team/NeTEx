@@ -26,6 +26,7 @@ public class User {
     private Integer user_point;
     private String user_token;
     private String user_dtime;
+    private Integer user_type;
 
     public User(int i, String passToken) {
         this.user_id = i;

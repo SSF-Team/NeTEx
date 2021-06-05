@@ -31,7 +31,7 @@
             String back = userService.verificationToken(Integer.parseInt(id), token);
             if (back.equals("ok")) {
                 System.out.println("页面 > sign_in > 跳转个人中心");
-                // response.sendRedirect("/");
+                response.sendRedirect("/UserCenter");
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -40,6 +40,7 @@
     String backMsg = (String) request.getAttribute("msg");
     if(backMsg != null && backMsg.equals("ok")) {
         System.out.println("页面 > sign_in > 跳转个人中心");
+        response.sendRedirect("/UserCenter");
     }
 %>
 
