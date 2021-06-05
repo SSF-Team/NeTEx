@@ -3,6 +3,7 @@ package com.chuhelan.netex.controller;
 import com.chuhelan.netex.service.AddressService;
 import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.service.UserService;
+import com.chuhelan.netex.service.WorkOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,8 @@ public class PageController {
     UserService userService;
     @Autowired
     AddressService addressService;
+    @Autowired
+    WorkOrderService workOrderService;
 
     // 页面指向
     @RequestMapping("/")
@@ -56,6 +59,7 @@ public class PageController {
         model.addAttribute("UserService", userService);
         model.addAttribute("OrderService", orderService);
         model.addAttribute("AddressService", addressService);
+        model.addAttribute("WorkOrderService", workOrderService);
         return "user_center";
     }
 }

@@ -2,6 +2,7 @@
 <%@ page import="com.chuhelan.netex.util.*" %>
 <%@ page import="com.chuhelan.netex.service.*" %>
 <%@ page import="com.chuhelan.netex.domain.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 
 <%
@@ -16,6 +17,7 @@
     UserService userService = (UserService) request.getAttribute("UserService");
     OrderService orderService = (OrderService) request.getAttribute("PostService");
     AddressService addressService = (AddressService) request.getAttribute("AddressService");
+    WorkOrderService workOrderService = (WorkOrderService) request.getAttribute("WorkOrderService");
     String runCommand = (String) request.getAttribute("run");
     User user = new User();
     Address[] addresses = null;
@@ -341,125 +343,128 @@
                 </script>
 
                 <!--工单中心页面-->
-                <form id="tabNew" class="tabNew">
+                <div id="tabNew" class="tabNew" style="padding: 0">
                     <ul>
                         <li><a href="#tabNew-1">创建工单</a></li>
-                        <li><a href="#tabNew-2">待处理</a></li>
+                        <%if(user.getUser_type() == 2)out.println("<li><a href=\"#tabNew-2\">待处理</a></li>");%>
                         <li><a href="#tabNew-3">我创建的</a></li>
                     </ul>
                     <!--创建工单-->
                     <div id="tabNew-1">
                         <div class="createOrder user-info">
-                            <Span class="title">检索订单</Span>
-                            <div id="add-search">
-                                <input name="search" type="text" placeholder="输入订单号">
-                                <button>查找</button>
+                            <Span class="title">检索运单</Span>
+                            <div id="add-search" style="margin-bottom: 0">
+                                <input id="search_order" name="search" type="text" placeholder="输入订单号" oninput="this.style.border ='1px #00000024 solid';this.style.color = '#000'">
+                                <button onclick="getOrderInfo(document.getElementById('search_order').value);return false;">查找</button>
                             </div>
-                            <div class="hrs"></div>
-                            <div id="user-info-box">
+                            <div id="search_box" class="two_list" style="display: none;" name="search_order_box">
+                                <div class="hrs"></div>
                                 <p>
                                     <em>订单号</em>
-                                    <span>order_id</span>
+                                    <span id="search_id">id</span>
                                 </p>
                                 <p>
                                     <em>下单日期</em>
-                                    <span>order_date</span>
+                                    <span id="search_create">createDate</span>
                                 </p>
                                 <p>
-                                    <em>发件人id</em>
-                                    <span>order_sendUserID</span>
+                                    <em>发件地址</em>
+                                    <span id="search_sendAdd">deliveryMan</span>
                                 </p>
                                 <p>
-                                    <em>备注</em>
-                                    <span>order_Contend</span>
+                                    <em>收件地址</em>
+                                    <span id="search_deliveryAdd">deliveryMan</span>
+                                </p>
+                                <p>
+                                    <em>发件日期</em>
+                                    <span id="search_send">sendDate</span>
+                                </p>
+                                <p>
+                                    <em>送达日期</em>
+                                    <span id="search_delivery">deliveryDate</span>
+                                </p>
+                                <p>
+                                    <em>派送员</em>
+                                    <span id="search_deliveryMan">deliveryMan</span>
+                                </p>
+                                <p>
+                                    <em>运单类型</em>
+                                    <span id="search_type">orderType</span>
+                                </p>
+                                <p>
+                                    <em>运单备注</em>
+                                    <span id="search_marks">orderMarks</span>
                                 </p>
                             </div>
                         </div>
                         <div class="createOrder">
-                            <div>
-                                <label><i>*</i>工单编号</label>
-                                <input placeholder="[自动生成]" readonly="readonly">
-                                <label><i>*</i>运单编号</label>
-                                <input placeholder="请输入您13位运单号" type="text">
-                            </div>
-                            <div>
-                                <label><i>*</i>联 系 人 &nbsp;</label>
-                                <input type="text">
-                                <label><i>*</i>联系电话</label>
-                                <input type="text" maxlength="11">
-                            </div>
-                            <!--                        <div>-->
-                            <!--                            <label><i>*</i>主&emsp;题&emsp;</label>-->
-                            <!--                            <input type="text">-->
-                            <!--                        </div>-->
-                            <div>
-                                <label>&ensp;备&emsp;注</label>
-                                <textarea placeholder="[服务咨询][详细探讨功能需求]"></textarea>
-                            </div>
-                            <div style="text-align: center">
-                                <button type="submit">提交</button>
-                            </div>
+                            <form action="/CreateWorkOrder" method="post">
+                                <input name="uid" value="<%=id%>" style="display: none;">
+                                <input name="tid" value="<%=token%>" style="display: none;">
+                                <div>
+                                    <label><i>*</i>工单编号</label>
+                                    <input placeholder="[自动生成]" readonly="readonly">
+                                    <label>运单编号</label>
+                                    <input name="oid" placeholder="请输入您13位运单号" type="text">
+                                </div>
+                                <div>
+                                    <label><i>*</i>备&emsp;注</label>
+                                    <textarea name="str" placeholder="你可以在这里提交服务咨询、详细探讨功能需求以及运单疑问的反馈，如反馈运单疑问请在上方运单编号中填写编号。如有需要可以使用上方的运单检索快速查询运单。"></textarea>
+                                </div>
+                                <div style="text-align: center">
+                                    <button type="submit">提交</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <!--待处理的-->
-                    <div id="tabNew-2" class="waitFixing">
-                        <table>
-                            <tr>
-                                <th>运单</th>
-                                <th>创建时间</th>
-                                <th>联系人</th>
-                                <th>电话</th>
-                                <th>备注</th>
-                                <th>状态</th>
-                            </tr>
-                            <tr>
-                                <td>NT0521000001A</td>
-                                <td>2021-06-02</td>
-                                <td>黄鸿涛</td>
-                                <td>13086205025</td>
-                                <td>包裹提前送达了</td>
-                                <td>等待</td>
-                            </tr>
-                            <tr>
-                                <td>NT0621000002X</td>
-                                <td>2021-06-03</td>
-                                <td>宋弘文</td>
-                                <td>13086205025</td>
-                                <td>包裹直接送到我家里面了</td>
-                                <td>等待</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <%
+                        if(user.getUser_type() == 2) {
+                            // 输出表单头
+                            out.println("<div id=\"tabNew-2\" class=\"waitFixing\">\n" +
+                                    "                        <table>\n" +
+                                    "                            <tr>\n" +
+                                    "                                <th>运单</th>\n" +
+                                    "                                <th>创建时间</th>\n" +
+                                    "                                <th>联系人</th>\n" +
+                                    "                                <th>电话</th>\n" +
+                                    "                                <th>备注</th>\n" +
+                                    "                                <th>状态</th>\n" +
+                                    "                            </tr>");
+                            // 输出表单
+
+                            // 输出表单尾
+                            out.println("\n" +
+                                    "                        </table>\n" +
+                                    "                    </div>");
+                        }
+                    %>
                     <!--我创建的工单-->
-                    <div id="tabNew-3" class="waitFixing">
-                        <table>
-                            <tr>
-                                <th>运单</th>
-                                <th>创建时间</th>
-                                <th>联系人</th>
-                                <th>电话</th>
-                                <th>备注</th>
-                                <th>状态</th>
-                            </tr>
-                            <tr>
-                                <td>NT0521000001A</td>
-                                <td>2021-06-02</td>
-                                <td>黄鸿涛</td>
-                                <td>13086205025</td>
-                                <td>包裹提前送达了</td>
-                                <td style="background: red">等待</td>
-                            </tr>
-                            <tr>
-                                <td>NT0621000002X</td>
-                                <td>2021-06-03</td>
-                                <td>宋弘文</td>
-                                <td>13086205025</td>
-                                <td>包裹直接送到我家里面了，你不说我还没发现</td>
-                                <td style="background: greenyellow">完成</td>
-                            </tr>
-                        </table>
-                    </div>
-                </form>
+                    <%
+                        // 输出表单头
+                        if(user.getUser_type() < 2) {
+                            out.println("<div id=\"tabNew-3\" class=\"waitFixing\">\n" +
+                                    "                        <table>\n" +
+                                    "                            <tr>\n" +
+                                    "                                <th>运单</th>\n" +
+                                    "                                <th>创建时间</th>\n" +
+                                    "                                <th>联系人</th>\n" +
+                                    "                                <th>电话</th>\n" +
+                                    "                                <th>备注</th>\n" +
+                                    "                                <th>状态</th>\n" +
+                                    "                            </tr>");
+                            // 输出表单
+                            WorkOrder[] workOrders = workOrderService.getAddWOrder(Integer.parseInt(id));
+                            for (WorkOrder wd : workOrders) {
+                                out.println(htmls.workOrderTr(wd.getWorkOrder_orderId() == null ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endWay()));
+                            }
+                            // 输出表单尾
+                            out.println("\n" +
+                                    "                        </table>\n" +
+                                    "                    </div>");
+                        }
+                    %>
+                </div>
             </div>
             <!--运单处理页面-->
             <div id="tabs-5">
@@ -618,6 +623,51 @@
             document.getElementById("addressPop").style.visibility = "collapse";
         }
         return false;
+    }
+
+    function getOrderInfo(oid) {
+        if(oid === "" || oid == null) {
+            document.getElementById("search_box").style.display = "none"
+        }
+        // 获取 cookie 中的用户信息
+        let id = null;
+        let token = null;
+        const ca = document.cookie.split(';');
+        for(let i=0; i<ca.length; i++)
+        {
+            const c = ca[i].trim();
+            if(c.split('=')[0] === "id")
+                id = c.split('=')[1]
+            if(c.split('=')[0] === "token")
+                token = c.split('=')[1]
+        }
+        // 请求 API
+        fetch('/GetOrder?uid=' + id + "&token=" + token + "&oid=" + oid)
+            .then(response => response.json())
+            .then(data => {
+                if(data.stat === 200) {
+                    // 请求正常
+                    document.getElementById("search_id").innerHTML = oid
+                    document.getElementById("search_deliveryMan").innerHTML = data.deliveryMan
+                    document.getElementById("search_create").innerHTML = data.createDate
+                    document.getElementById("search_send").innerHTML = data.sendDate
+                    document.getElementById("search_delivery").innerHTML = data.deliveryDate
+                    document.getElementById("search_sendAdd").innerHTML = data.sendAddress
+                    document.getElementById("search_deliveryAdd").innerHTML = data.deliveryAddress
+                    document.getElementById("search_type").innerHTML = data.orderType
+                    document.getElementById("search_marks").innerHTML = data.orderMarks
+
+                    document.getElementById("search_box").style.display = "unset"
+                } else if(data.stat === 404) {
+                    // 运单不存在
+                    document.getElementById("search_box").style.display = "none"
+
+                    document.getElementById("search_order").style.border = "1px #e60000 solid"
+                    document.getElementById("search_order").style.color = "#f00"
+                    document.getElementById("search_order").value = "运单不存在"
+                }
+            })
+            .catch(console.error)
     }
 </script>
 

@@ -3,6 +3,7 @@ package com.chuhelan.netex.controller;
 import com.chuhelan.netex.domain.Address;
 import com.chuhelan.netex.service.AddressService;
 import com.chuhelan.netex.service.OrderService;
+import com.chuhelan.netex.service.WorkOrderService;
 import com.chuhelan.netex.util.*;
 
 import java.nio.charset.StandardCharsets;
@@ -36,6 +37,8 @@ public class UserController {
     OrderService orderService;
     @Autowired
     AddressService addressService;
+    @Autowired
+    WorkOrderService workOrderService;
 
     // 以下 API 功能仅用于测试
     @RequestMapping("/UserById")
@@ -180,6 +183,7 @@ public class UserController {
             model.addAttribute("UserService", userService);
             model.addAttribute("OrderService", orderService);
             model.addAttribute("AddressService", addressService);
+            model.addAttribute("WorkOrderService", workOrderService);
             model.addAttribute("run", "reLoad");
             return "user_center";
         } else {

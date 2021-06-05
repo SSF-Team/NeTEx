@@ -67,9 +67,6 @@ body {
     border-radius: 7px;
     margin-bottom: 20px;
     padding: 15px;
-    -moz-box-shadow: 0 0 10px #dfdfdf5c;
-    -webkit-box-shadow: 0 0 10px #dfdfdf5c;
-    box-shadow: 0 0 10px #dfdfdf5c;
 }
 
 .name-card {
@@ -168,15 +165,30 @@ body {
     border-radius: 30px;
     background: transparent;
 }
-
 .user-info #user-info-box p {
     width: 50%;
     height: 30px;
     margin: 0 0 30px;
     float: left;
 }
-
 .user-info #user-info-box p > em {
+    display: inline-block;
+    width: 30%;
+    font-style: normal;
+}
+
+.two_list {
+    padding: 15px;
+    text-align: left;
+    font-size: 15px;
+}
+.two_list p {
+    width: 50%;
+    height: 30px;
+    margin: 0 0 30px;
+    float: left;
+}
+.two_list p > em {
     display: inline-block;
     width: 30%;
     font-style: normal;
@@ -239,24 +251,22 @@ body {
 }
 
 .user-addresses > table {
-    border: 1px #00000024 solid;
     font-size: 13px;
 }
-
 .user-addresses > table > thead {
     font-weight: 550;
 }
-
 .user-addresses > table td {
-    border: 1px #00000024 solid;
     padding: 10px;
 }
-
+.user-addresses > table > tbody > tr:hover {
+    background-color: #efefef;
+    cursor: pointer;
+}
 .user-addresses > table svg {
     height: 16px;
     color: #00000059;
 }
-
 .user-addresses > table button {
     margin-left: 5px;
     background: transparent;
@@ -264,7 +274,6 @@ body {
     outline: none;
     border-radius: 99px;
 }
-
 .user-addresses > table button:hover svg {
     color: #0000009e;
 }
@@ -471,7 +480,6 @@ body {
 
 .createOrder div {
     margin-bottom: 20px;
-    text-align: center;
 }
 
 .createOrder input {
@@ -485,6 +493,7 @@ body {
 }
 .createOrder input:focus:not(:read-only) {
     border: 1px solid #8a8a8a;
+    pointer-events: none;
 }
 
 .createOrder textarea {
@@ -533,8 +542,7 @@ body {
     word-wrap: break-word;
 }
 .waitFixing table td {
-    border: 1px #00000024 solid;
-    padding: 0 10px;
+    padding: 10px;
 }
 
 .waitFixing table th {
@@ -542,7 +550,6 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border: 1px #00000024 solid;
     padding: 10px;
 }
 

@@ -5,6 +5,7 @@ import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.AddressService;
 import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.service.UserService;
+import com.chuhelan.netex.service.WorkOrderService;
 import com.chuhelan.netex.util.legality;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -35,6 +36,8 @@ public class AddressController {
     OrderService orderService;
     @Autowired
     AddressService addressService;
+    @Autowired
+    WorkOrderService workOrderService;
 
     // 实际功能 API
     @GetMapping("/DeleteAdd")
@@ -65,6 +68,7 @@ public class AddressController {
             model.addAttribute("UserService", userService);
             model.addAttribute("OrderService", orderService);
             model.addAttribute("AddressService", addressService);
+            model.addAttribute("WorkOrderService", workOrderService);
             model.addAttribute("run", "reLoad");
             return "user_center";
         } else {
