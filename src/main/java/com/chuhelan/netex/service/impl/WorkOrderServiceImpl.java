@@ -47,4 +47,28 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public WorkOrder[] getAddWOrder(Integer id) {
         return workOrderDao.getAllWOrderByUID(id);
     }
+
+    /**
+     * @Author Stapxs
+     * @Description 获取所有没有处理的工单
+     * @Date 上午 11:49 2021/6/6
+     * @Param []
+     * @return com.chuhelan.netex.domain.WorkOrder[]
+    **/
+    @Override
+    public WorkOrder[] getAllNoCloseOrder() {
+        return workOrderDao.getAllNoCloseOrder();
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 处理工单
+     * @Date 下午 02:05 2021/6/6
+     * @Param [die, backStr, serviceID]
+     * @return void
+    **/
+    @Override
+    public void detalWorkOrder(Integer workOrderID, Date die, String backStr, Integer serviceID, Integer way) {
+        workOrderDao.detalWorkOrder(workOrderID, die, backStr, serviceID, way);
+    }
 }

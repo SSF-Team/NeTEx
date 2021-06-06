@@ -24,7 +24,10 @@
     PointInfo[] points = null;
 
     // 全局变量
-    String login = userService.verificationToken(Integer.parseInt(id), token);
+    String login = "";
+    if(id != null && token != null) {
+        login = userService.verificationToken(Integer.parseInt(id), token);
+    }
 
     // 刷新 URL
     if(runCommand != null && runCommand.equals("reLoad")) {
@@ -41,6 +44,7 @@
         points = userService.getUserPoints(Integer.parseInt(id));
     } else {
         response.sendRedirect("/SignIn");
+        return;
     }
 %>
 
@@ -95,7 +99,7 @@
                     <span>我的积分</span>
                 </a>
             </li>
-            <li>
+            <li style="<%if(user.getUser_type() >= 2)out.print("display:none;");%>">
                 <a href="#tabs-1" class="list-group-item list-group-item-action">
                     <div></div>
                     <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="question-circle"
@@ -120,7 +124,7 @@
                     <span>工单中心</span>
                 </a>
             </li>
-            <li>
+            <li style="<%if(user.getUser_type() >= 2)out.print("display:none;");%>">
                 <a href="#tabs-5" class="list-group-item list-group-item-action">
                     <div></div>
                     <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="question-circle"
@@ -132,7 +136,7 @@
                     <span>运单处理</span>
                 </a>
             </li>
-            <li>
+            <li style="<%if(user.getUser_type() != 3)out.print("display:none;");%>">
                 <a href="#tabs-6" class="list-group-item list-group-item-action">
                     <div></div>
                     <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="question-circle"
@@ -174,7 +178,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="user-addresses">
+                <div class="user-addresses" style="<%if(user.getUser_type() >= 2)out.print("display:none;");%>">
                     <div style="height: 30px;line-height: 30px;position: absolute;">
                         <Span class="title">地址簿</Span>
                     </div>
@@ -345,58 +349,62 @@
                 <!--工单中心页面-->
                 <div id="tabNew" class="tabNew" style="padding: 0">
                     <ul>
-                        <li><a href="#tabNew-1">创建工单</a></li>
+                        <%if(user.getUser_type() < 2)out.println("<li><a href=\"#tabNew-1\">创建工单</a></li>");%>
                         <%if(user.getUser_type() == 2)out.println("<li><a href=\"#tabNew-2\">待处理</a></li>");%>
-                        <li><a href="#tabNew-3">我创建的</a></li>
+                        <%if(user.getUser_type() < 2)out.println("<li><a href=\"#tabNew-3\">我创建的</a></li>");%>
                     </ul>
                     <!--创建工单-->
-                    <div id="tabNew-1">
-                        <div class="createOrder user-info">
-                            <Span class="title">检索运单</Span>
-                            <div id="add-search" style="margin-bottom: 0">
-                                <input id="search_order" name="search" type="text" placeholder="输入订单号" oninput="this.style.border ='1px #00000024 solid';this.style.color = '#000'">
-                                <button onclick="getOrderInfo(document.getElementById('search_order').value);return false;">查找</button>
-                            </div>
-                            <div id="search_box" class="two_list" style="display: none;" name="search_order_box">
-                                <div class="hrs"></div>
-                                <p>
-                                    <em>订单号</em>
-                                    <span id="search_id">id</span>
-                                </p>
-                                <p>
-                                    <em>下单日期</em>
-                                    <span id="search_create">createDate</span>
-                                </p>
-                                <p>
-                                    <em>发件地址</em>
-                                    <span id="search_sendAdd">deliveryMan</span>
-                                </p>
-                                <p>
-                                    <em>收件地址</em>
-                                    <span id="search_deliveryAdd">deliveryMan</span>
-                                </p>
-                                <p>
-                                    <em>发件日期</em>
-                                    <span id="search_send">sendDate</span>
-                                </p>
-                                <p>
-                                    <em>送达日期</em>
-                                    <span id="search_delivery">deliveryDate</span>
-                                </p>
-                                <p>
-                                    <em>派送员</em>
-                                    <span id="search_deliveryMan">deliveryMan</span>
-                                </p>
-                                <p>
-                                    <em>运单类型</em>
-                                    <span id="search_type">orderType</span>
-                                </p>
-                                <p>
-                                    <em>运单备注</em>
-                                    <span id="search_marks">orderMarks</span>
-                                </p>
-                            </div>
-                        </div>
+                    <div id="tabNew-1" style="<%if(user.getUser_type() >= 2)out.print("display:none;");%>">
+                        <%
+                            if(user.getUser_type() < 2) {
+                                out.println("<div class=\"createOrder user-info\">\n" +
+                                        "                            <Span class=\"title\">检索运单</Span>\n" +
+                                        "                            <div id=\"add-search\" style=\"margin-bottom: 0\">\n" +
+                                        "                                <input id=\"search_order\" name=\"search\" type=\"text\" placeholder=\"输入订单号\" oninput=\"this.style.border ='1px #00000024 solid';this.style.color = '#000'\">\n" +
+                                        "                                <button onclick=\"getOrderInfo(document.getElementById('search_order').value);return false;\">查找</button>\n" +
+                                        "                            </div>\n" +
+                                        "                            <div id=\"search_box\" class=\"two_list\" style=\"display: none;\" name=\"search_order_box\">\n" +
+                                        "                                <div class=\"hrs\"></div>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>订单号</em>\n" +
+                                        "                                    <span id=\"search_id\">id</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>下单日期</em>\n" +
+                                        "                                    <span id=\"search_create\">createDate</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>发件地址</em>\n" +
+                                        "                                    <span id=\"search_sendAdd\">deliveryMan</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>收件地址</em>\n" +
+                                        "                                    <span id=\"search_deliveryAdd\">deliveryMan</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>发件日期</em>\n" +
+                                        "                                    <span id=\"search_send\">sendDate</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>送达日期</em>\n" +
+                                        "                                    <span id=\"search_delivery\">deliveryDate</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>派送员</em>\n" +
+                                        "                                    <span id=\"search_deliveryMan\">deliveryMan</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>运单类型</em>\n" +
+                                        "                                    <span id=\"search_type\">orderType</span>\n" +
+                                        "                                </p>\n" +
+                                        "                                <p>\n" +
+                                        "                                    <em>运单备注</em>\n" +
+                                        "                                    <span id=\"search_marks\">orderMarks</span>\n" +
+                                        "                                </p>\n" +
+                                        "                            </div>\n" +
+                                        "                        </div>");
+                            }
+                        %>
                         <div class="createOrder">
                             <form action="/CreateWorkOrder" method="post">
                                 <input name="uid" value="<%=id%>" style="display: none;">
@@ -420,6 +428,53 @@
                     <!--待处理的-->
                     <%
                         if(user.getUser_type() == 2) {
+                            // 检索运单
+                            out.println("<div class=\"createOrder user-info\">\n" +
+                                    "                            <Span class=\"title\">检索运单</Span>\n" +
+                                    "                            <div id=\"add-search\" style=\"margin-bottom: 0\">\n" +
+                                    "                                <input id=\"search_order\" name=\"search\" type=\"text\" placeholder=\"输入订单号\" oninput=\"this.style.border ='1px #00000024 solid';this.style.color = '#000'\">\n" +
+                                    "                                <button onclick=\"getOrderInfo(document.getElementById('search_order').value);return false;\">查找</button>\n" +
+                                    "                            </div>\n" +
+                                    "                            <div id=\"search_box\" class=\"two_list\" style=\"display: none;\" name=\"search_order_box\">\n" +
+                                    "                                <div class=\"hrs\"></div>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>订单号</em>\n" +
+                                    "                                    <span id=\"search_id\">id</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>下单日期</em>\n" +
+                                    "                                    <span id=\"search_create\">createDate</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>发件地址</em>\n" +
+                                    "                                    <span id=\"search_sendAdd\">deliveryMan</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>收件地址</em>\n" +
+                                    "                                    <span id=\"search_deliveryAdd\">deliveryMan</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>发件日期</em>\n" +
+                                    "                                    <span id=\"search_send\">sendDate</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>送达日期</em>\n" +
+                                    "                                    <span id=\"search_delivery\">deliveryDate</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>派送员</em>\n" +
+                                    "                                    <span id=\"search_deliveryMan\">deliveryMan</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>运单类型</em>\n" +
+                                    "                                    <span id=\"search_type\">orderType</span>\n" +
+                                    "                                </p>\n" +
+                                    "                                <p>\n" +
+                                    "                                    <em>运单备注</em>\n" +
+                                    "                                    <span id=\"search_marks\">orderMarks</span>\n" +
+                                    "                                </p>\n" +
+                                    "                            </div>\n" +
+                                    "                        </div>");
                             // 输出表单头
                             out.println("<div id=\"tabNew-2\" class=\"waitFixing\">\n" +
                                     "                        <table>\n" +
@@ -432,7 +487,10 @@
                                     "                                <th>状态</th>\n" +
                                     "                            </tr>");
                             // 输出表单
-
+                            WorkOrder[] workOrders = workOrderService.getAllNoCloseOrder();
+                            for (WorkOrder wd : workOrders) {
+                                out.println(htmls.workOrderTr(wd.getWorkOrder_orderId() == null ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endWay(), true, wd.getWorkOrder_id()));
+                            }
                             // 输出表单尾
                             out.println("\n" +
                                     "                        </table>\n" +
@@ -456,7 +514,7 @@
                             // 输出表单
                             WorkOrder[] workOrders = workOrderService.getAddWOrder(Integer.parseInt(id));
                             for (WorkOrder wd : workOrders) {
-                                out.println(htmls.workOrderTr(wd.getWorkOrder_orderId() == null ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endWay()));
+                                out.println(htmls.workOrderTr(wd.getWorkOrder_orderId() == null ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endWay(), false, null));
                             }
                             // 输出表单尾
                             out.println("\n" +
@@ -584,8 +642,7 @@
                             </tr>
                         </table>
                     </div>
-                </
-                >
+                </form>
             </div>
             <!--管理员入口-->
             <div id="tabs-6">
@@ -596,7 +653,7 @@
 </div>
 <!-- 弹窗 -->
 <div class="pop" id="addressPop" style="visibility: collapse;">
-    <div id="pop-main">
+    <div>
         <div>
             <button onclick="return openAddAddress(false)">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="76" viewBox="0 0 76.00 76.00" enable-background="new 0 0 76.00 76.00" xml:space="preserve">
@@ -607,6 +664,48 @@
         <div>
             <!-- 添加地址表单 -->
 
+        </div>
+    </div>
+</div>
+<div class="pop" id="workOrderPop" style="visibility: collapse;">
+    <div>
+        <div>
+            <button onclick="return openWorkOrder(false, null)">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="76" viewBox="0 0 76.00 76.00" enable-background="new 0 0 76.00 76.00" xml:space="preserve">
+	                <path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z "/>
+                </svg>
+            </button>
+        </div>
+        <div class="deal-order-main" style="text-align: center;">
+            <!-- 处理工单 -->
+            <form method="get" action="/DetalWorkOrder">
+                <input name="uid" value="<%=id%>" style="display: none;">
+                <input name="tid" value="<%=token%>" style="display: none;">
+                <input id="deal-order-woid" name="woid" value="" style="display: none;">
+                <div class="pop-title">
+                    <div>
+                        <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path></svg>
+                    </div>
+                    <span> 处理工单</span>
+                </div>
+                <div class="hrs" style="margin: auto;"></div>
+                <div class="deal-order">
+                    <span style="margin-top: 10px;"><i>*</i>处理工单</span>
+                    <div>
+                        <input id="item1" type="radio" name="way" value="ok">
+                        <label for="item1"><span>完成工单</span></label>
+                    </div>
+                    <div>
+                        <input id="item2" type="radio" name="way" value="no" checked>
+                        <label for="item2"><span>驳回工单</span></label>
+                    </div>
+                </div>
+                <div style="text-align: left;margin-top: 10px;margin-left: 20px;">
+                    <label><i>*</i> 回 执</label>
+                    <textarea name="str" placeholder="处理回执"></textarea>
+                </div>
+                <button type="submit">提&nbsp;&nbsp;&nbsp;交</button>
+            </form>
         </div>
     </div>
 </div>
@@ -621,6 +720,17 @@
             document.getElementById("addressPop").style.visibility = "visible";
         } else {
             document.getElementById("addressPop").style.visibility = "collapse";
+        }
+        return false;
+    }
+
+    function openWorkOrder(isOpen, id) {
+        if(isOpen) {
+            document.getElementById("deal-order-woid").value = id;
+            document.getElementById("workOrderPop").style.visibility = "visible";
+        } else {
+            document.getElementById("deal-order-woid").value = "";
+            document.getElementById("workOrderPop").style.visibility = "collapse";
         }
         return false;
     }

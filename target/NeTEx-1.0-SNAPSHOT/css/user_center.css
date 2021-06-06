@@ -369,7 +369,7 @@ body {
     align-items: center;
 }
 
-.pop #pop-main {
+.pop > div {
     width: 50%;
     min-height: 300px;
     background: #fff;
@@ -379,7 +379,7 @@ body {
     border-radius: 7px;
     pointer-events: all;
 }
-.pop #pop-main div:first-child > button {
+.pop > div div:first-child > button {
     float: right;
     width: 30px;
     height: 30px;
@@ -389,10 +389,35 @@ body {
     margin-right: 10px;
     margin-top: 10px;
 }
-.pop #pop-main div:first-child > button > svg {
+.pop > div div:first-child > button > svg {
     width: 40px;
     margin-top: -20px;
     margin-left: -14px;
+}
+
+.pop-title {
+    display: flex;
+}
+.pop-title > span {
+    margin-top: 17px;
+    margin-left: 5px;
+    font-weight: bolder;
+    font-size: 17px;
+}
+.pop-title > div {
+    width: 30px;
+    height: 30px;
+    margin: 15px;
+    padding: 10px;
+    background: #FE6600;
+    color: #fff;
+    border-radius: 20px;
+}
+.pop-title > div svg {
+    width: 15px;
+    height: 15px;
+    margin-top: -16px;
+    margin-left: -1px;
 }
 
 .tl-tag-active {
@@ -818,6 +843,62 @@ body {
     width: 150px;
     text-align: right;
 }
+
+.deal-order {
+    display: flex;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.deal-order-main textarea {
+    width: calc(100% - 90px);
+    height: 100px;
+    margin-left: 20px;
+    vertical-align: top;
+    border-radius: 7px;
+    border: 1px #cacaca solid;
+    padding: 10px;
+    max-height: 100px;
+    outline: none;
+}
+.deal-order-main textarea:focus {
+    border: 1px #515151 solid;
+}
+.deal-order-main button {
+    margin-top: 20px;
+    height: 40px;
+    width: 150px;
+    margin-bottom: 20px;
+    border-radius: 40px;
+    border: none;
+    background: #FE6600;
+    color: #fff;
+    font-size: 17px;
+    outline: none;
+}
+.deal-order-main button:hover {
+    background: #cd5200;
+}
+.deal-order input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+}
+.deal-order label {
+    width: 100px;
+    height: 40px;
+    border-radius: 40px;
+    line-height: 40px;
+    border: 1px solid #d6d6d6;
+    font-size: 15px;
+    font-weight: 500;
+}
+.deal-order input:checked+label {
+    background-color: #FE6600;
+    border: 1px solid #FE6600;
+    color: #fff;
+}
+
 
 @media (min-width: 1200px) {
     .main {
