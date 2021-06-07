@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Address {
     private Integer address_id;
+    private Integer address_userID;
     private String address_name;
     private String address_phone;
     private String address_content;
