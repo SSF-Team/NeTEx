@@ -3,8 +3,10 @@ package com.chuhelan.netex.controller;
 import com.chuhelan.netex.domain.Order;
 import com.chuhelan.netex.domain.OrderUser;
 import com.chuhelan.netex.domain.User;
+import com.chuhelan.netex.service.AddressService;
 import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.service.UserService;
+import com.chuhelan.netex.service.WorkOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,10 @@ public class OrderController {
     OrderService orderService;
     @Autowired
     UserService userService;
+    @Autowired
+    AddressService addressService;
+    @Autowired
+    WorkOrderService workOrderService;
 
     // 纯文本 API
     @GetMapping("/OrderBaseInfo")
@@ -81,6 +87,46 @@ public class OrderController {
             }
             back += "}";
             model.addAttribute("str", back);
+        }
+        return "api";
+    }
+    @GetMapping("/GetOrderAll")
+    public String getOrderAll(Integer uid, String token, String oid, Model model) throws ParseException {
+        System.out.println("操作 > 获取订单信息 > getOrderAll > " + oid);
+        // 验证 token
+        if(userService.verificationToken(uid, token).equals("ok")) {
+            // 验证订单权限
+            Order order = orderService.getOrder(oid);
+            if(order != null && (order.getOrder_createID().equals(uid) || order.getOrder_deliveryPhone().equals(userService.findUserById(uid).getUser_phone()) || order.getOrder_deliveryManID().equals(uid))) {
+                System.out.println(order.toString());
+                String back = "{";
+                // 组合订单信息
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                back += "\"stat\":200,";
+                back += "\"id\":\"" + order.getOrder_id() + "\",";
+                back += "\"deliveryMan\":\"" + userService.findUserById(order.getOrder_deliveryManID()).getUser_name() + "\",";
+                back += "\"createDate\":\"" + sdf.format(order.getOrder_date()) + "\",";
+                back += "\"sendDate\":\"" + (order.getOrder_sendDate() == null ? "null":sdf.format(order.getOrder_sendDate())) + "\",";
+                back += "\"deliveryDate\":\"" + (order.getOrder_deliveryDate() == null ? "null":sdf.format(order.getOrder_deliveryDate())) + "\",";
+                back += "\"sendName\":\"" + order.getOrder_sendName() + "\",";
+                back += "\"sendPhone\":\"" + order.getOrder_sendPhone() + "\",";
+                back += "\"sendAddress\":\"" + order.getOrder_sendAddress() + "\",";
+                back += "\"deliveryName\":\"" + order.getOrder_deliveryName() + "\",";
+                back += "\"deliveryPhone\":\"" + order.getOrder_deliveryPhone() + "\",";
+                back += "\"deliveryAddress\":\"" + order.getOrder_deliveryAddress() + "\",";
+                back += "\"orderType\":\"" + order.getOrder_type() + "\",";
+                back += "\"orderMarks\":\"" + order.getOrder_content() + "\"";
+                back += "}";
+                System.out.println(back);
+                model.addAttribute("str", back);
+            } else {
+                String back = "{";
+                back += "\"stat\":200,";
+                back += "\"msg\":\"订单不存在或无权访问！\"";
+                back += "}";
+                System.out.println(back);
+                model.addAttribute("str", back);
+            }
         }
         return "api";
     }
@@ -198,6 +244,59 @@ public class OrderController {
             model.addAttribute("str", "订单不存在或订单所有权错误！");
             return "err_page";
         }
+    }
+    @GetMapping("/CheckOrder")
+    public String checkOrder(String uid, String tid, String oid, Model model) throws ParseException {
+        System.out.println("操作 > cancelOrder > 确认订单 > " + uid + " / " + oid);
+        // 验证登录
+        if(userService.verificationToken(Integer.parseInt(uid), tid).equals("ok")) {
+            // 验证订单是否为本人所有
+            Order order = orderService.getOrder(oid);
+            User user = userService.findUserById(Integer.parseInt(uid));
+            if (order != null && (order.getOrder_createID() == Integer.parseInt(uid) || order.getOrder_deliveryManID() == Integer.parseInt(uid))) {
+                // 确认订单
+                orderService.checkOrder(oid);
+                model.addAttribute("msg", "提交成功");
+            } else {
+                model.addAttribute("str", "订单不存在或订单所有权错误！");
+                return "err_page";
+            }
+        } else {
+            model.addAttribute("err", "验证登陆失败！");
+            return "sign_in";
+        }
+        model.addAttribute("UserService", userService);
+        model.addAttribute("OrderService", orderService);
+        model.addAttribute("AddressService", addressService);
+        model.addAttribute("WorkOrderService", workOrderService);
+        model.addAttribute("run", "reLoad");
+        return "user_center";
+    }
+    @GetMapping("/NextOrder")
+    public String nextOrder(String uid, String tid, String oid, Model model) throws ParseException {
+        System.out.println("操作 > 继续运单 > nextOrder > " + uid + " / " + tid + " / " + oid);
+        // 验证登录
+        if(userService.verificationToken(Integer.parseInt(uid), tid).equals("ok")) {
+            // 验证订单是否为本人所有
+            Order order = orderService.getOrder(oid);
+            User user = userService.findUserById(Integer.parseInt(uid));
+            if (order != null && (order.getOrder_createID() == Integer.parseInt(uid) || order.getOrder_deliveryManID() == Integer.parseInt(uid))) {
+                // 通过订单
+                orderService.checkPassOrder(oid);
+            } else {
+                model.addAttribute("str", "订单不存在或订单所有权错误！");
+                return "err_page";
+            }
+        } else {
+            model.addAttribute("err", "验证登陆失败！");
+            return "sign_in";
+        }
+        model.addAttribute("UserService", userService);
+        model.addAttribute("OrderService", orderService);
+        model.addAttribute("AddressService", addressService);
+        model.addAttribute("WorkOrderService", workOrderService);
+        model.addAttribute("run", "reLoad");
+        return "user_center";
     }
 
 }

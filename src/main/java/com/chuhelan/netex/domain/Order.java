@@ -34,4 +34,5 @@ public class Order {
     private String order_deliveryAddress;
     private String order_type;
     private String order_content;
+    private Date order_pickDate;
 }

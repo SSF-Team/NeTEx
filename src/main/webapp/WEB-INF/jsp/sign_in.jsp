@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.chuhelan.netex.util.*" %>
 <%@ page import="com.chuhelan.netex.service.UserService" %>
-<%@ page import="com.chuhelan.netex.service.impl.UserServiceImpl" %>
 <%@ page import="java.text.ParseException" %>
 
 <%

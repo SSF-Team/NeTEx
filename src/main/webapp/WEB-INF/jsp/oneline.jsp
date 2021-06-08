@@ -157,8 +157,7 @@
     <div id="tabs">
         <ul class="main-tab list-group">
             <li>
-                <a href="#tabs-1" onclick="location.href='https://www.baidu.com/';" target="_blank"
-                   class="list-group-item list-group-item-action">
+                <a href="#tabs-1" onclick="location.href='/Shipping';" target="_blank" class="list-group-item list-group-item-action">
                     <div></div>
                     <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="paper-plane"
                          class="svg-inline--fa fa-paper-plane fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg"
@@ -201,8 +200,7 @@
                     <div>
                         <Span class="title">运单查询</Span>
                         <div class="hrs"></div>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert"
-                             style="border-radius: 50px;background: #DE002E;color: #fff;<%if(orderID != null || request.getParameter("id") == null)out.print("display:none;");%>">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 50px;background: #DE002E;color: #fff;<%if(orderID != null && request.getParameter("id") == null)out.print("display:none;");%>">
                             运单号不存在！
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -233,11 +231,10 @@
                         <div id="info-info">
                             <div>
                                 <div>
-                                    <em>寄件人</em>
-                                    <span><%if (back.equals("ok")) out.print(orderInfo.getOrder_sendName());%></span>
-                                    <em style="margin-left: 20%;">收件人</em>
-                                    <span><%
-                                        if (back.equals("ok")) out.print(orderInfo.getOrder_deliveryName());%></span>
+                                        <em>寄件人</em>
+                                        <span><%if(back.equals("ok") && orderID != null)out.print(orderInfo.getOrder_sendName());%></span>
+                                        <em style="margin-left: 20%;">收件人</em>
+                                        <span><%if(back.equals("ok") && orderID != null)out.print(orderInfo.getOrder_deliveryName());%></span>
                                 </div>
                             </div>
                             <div style="text-align: center;margin-top: 10px;">
