@@ -15,13 +15,15 @@
      没办法只能复用 Service 层方法来加快编写速度
     */
     UserService userService = (UserService) request.getAttribute("UserService");
-    OrderService orderService = (OrderService) request.getAttribute("PostService");
+    OrderService orderService = (OrderService) request.getAttribute("OrderService");
     AddressService addressService = (AddressService) request.getAttribute("AddressService");
     WorkOrderService workOrderService = (WorkOrderService) request.getAttribute("WorkOrderService");
     String runCommand = (String) request.getAttribute("run");
-    User user = new User();
-    Address[] addresses = null;
-    PointInfo[] points = null;
+    User user;
+    Address[] addresses;
+    PointInfo[] points;
+
+    System.out.println("页面 > 初始化 > UserCenter > " + userService + " / " + orderService + " / " + addressService + " / " + workOrderService);
 
     // 全局变量
     String login = "";
@@ -57,6 +59,7 @@
     <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../index.css">
     <link rel="stylesheet" href="../../css/user_center.css">
+    <link rel="stylesheet" href="../../css/order_verify.css">
     <script src="../../js/jquery-1.12.4.js"></script>
     <script src="../../js/jquery-ui.js"></script>
 </head>
@@ -72,7 +75,7 @@
     out.println(htmls.header());
 %>
 <!-- 主体 -->
-<div class="main" style="flex: 1 0 auto;">
+<div class="main-body" style="flex: 1 0 auto;">
     <div id="tabs">
         <ul class="main-tab list-group">
             <li>
@@ -99,7 +102,7 @@
                     <span>我的积分</span>
                 </a>
             </li>
-            <li style="<%if(user.getUser_type() >= 2)out.print("display:none;");%>">
+            <li style="<%if(user.getUser_type() >= 1)out.print("display:none;");%>">
                 <a href="#tabs-1" class="list-group-item list-group-item-action">
                     <div></div>
                     <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="question-circle"
@@ -178,7 +181,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="user-addresses" style="<%if(user.getUser_type() >= 2)out.print("display:none;");%>">
+                <div class="user-addresses" style="<%if(user.getUser_type() >= 1)out.print("display:none;");%>">
                     <div style="height: 30px;line-height: 30px;position: absolute;">
                         <Span class="title">地址簿</Span>
                     </div>
@@ -253,9 +256,9 @@
                         <div class="pointList">
                             <table>
                                 <tr>
-                                    <td>+50</td>
-                                    <td>注册获取</td>
-                                    <td>2021-06-01</td>
+                                    <td style="padding: 0;">+50</td>
+                                    <td style="padding: 0;">注册获取</td>
+                                    <td style="padding: 0;">2021-06-01</td>
                                 </tr>
                                 <%
                                     for(PointInfo info : points) {
@@ -489,7 +492,7 @@
                             // 输出表单
                             WorkOrder[] workOrders = workOrderService.getAllNoCloseOrder();
                             for (WorkOrder wd : workOrders) {
-                                out.println(htmls.workOrderTr(wd.getWorkOrder_orderId() == null ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endWay(), true, wd.getWorkOrder_id()));
+                                out.println(htmls.workOrderTr((wd.getWorkOrder_orderId() == null || wd.getWorkOrder_orderId().equals("")) ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endContent(), wd.getWorkOrder_endWay(), true, wd.getWorkOrder_id()));
                             }
                             // 输出表单尾
                             out.println("\n" +
@@ -514,7 +517,7 @@
                             // 输出表单
                             WorkOrder[] workOrders = workOrderService.getAddWOrder(Integer.parseInt(id));
                             for (WorkOrder wd : workOrders) {
-                                out.println(htmls.workOrderTr(wd.getWorkOrder_orderId() == null ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endWay(), false, null));
+                                out.println(htmls.workOrderTr((wd.getWorkOrder_orderId() == null || wd.getWorkOrder_orderId().equals("")) ? "无" : wd.getWorkOrder_orderId(), wd.getWorkOrder_date(), user.getUser_name(), user.getUser_phone(), wd.getWorkOrder_content(), wd.getWorkOrder_endContent(), wd.getWorkOrder_endWay(), false, null));
                             }
                             // 输出表单尾
                             out.println("\n" +
@@ -534,112 +537,74 @@
                 <form id="delivery" class="tabNew">
                     <ul>
                         <li><a href="#delivery-1">待配送</a></li>
-                        <li><a href="#delivery-2">已送达</a></li>
-                        <li><a href="#delivery-3">待取件</a></li>
+                        <%if(user.getUser_type() == 0)out.println("<li><a href=\"#delivery-2\">运输中</a></li>");%>
+                        <%if(user.getUser_type() == 0)out.println("<li><a href=\"#delivery-3\">已送达</a></li>");%>
                     </ul>
                     <div id="delivery-1" class="waitDelivering">
                         <table>
+                            <%
+                                if(user.getUser_type() == 0) {
+                                    out.println("\n" +
+                                            "                            <tr>\n" +
+                                            "                                <th>快递单号</th>\n" +
+                                            "                                <th>类型</th>\n" +
+                                            "                                <th>收货地址</th>\n" +
+                                            "                                <th>备注</th>\n" +
+                                            "                            </tr>");
+                                    Order[] orders = orderService.getOrderByType(user, "wait");
+                                    for(Order order:orders) {
+                                        out.print(htmls.orderTr(order, user, "wait", userService));
+                                    }
+                                } else if(user.getUser_type() == 1) {
+                                    out.println("\n" +
+                                            "                            <tr>\n" +
+                                            "                                <th>快递单号</th>\n" +
+                                            "                                <th>类型</th>\n" +
+                                            "                                <th>收货地址</th>\n" +
+                                            "                                <th>状态</th>\n" +
+                                            "                            </tr>");
+                                    Order[] orders = orderService.getOrderNotSend(Integer.parseInt(id));
+                                    for(Order order:orders) {
+                                        out.print(htmls.orderTr(order, user, "waitsend", userService));
+                                    }
+                                }
+                            %>
+                        </table>
+                    </div>
+                    <div id="delivery-2" class="waitDelivering" <%if(user.getUser_type() > 0)out.print("Style=\"display:none;\"");%>>
+                        <table>
                             <tr>
                                 <th>快递单号</th>
                                 <th>类型</th>
-                                <th>地址</th>
-                                <th>联系人</th>
-                                <th>电话</th>
-                                <th>备注</th>
-                                <th>操作</th>
+                                <th>收货地址</th>
+                                <th>派送员</th>
                             </tr>
-                            <tr>
-                                <td>NT0521000001A</td>
-                                <td>文件票件</td>
-                                <td>江苏省无锡市江阴市文林社区孙七房81号</td>
-                                <td>林小槐</td>
-                                <td>18961655803</td>
-                                <td>请快点送达！</td>
-                                <td>
-                                    <button>签收</button>
-                                    <button>拒收</button>
-                                    <button>退回</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>NT0621000002X</td>
-                                <td>贵重物品</td>
-                                <td>江苏省南京市栖霞区羊山北路1号南京工业职业技术大学</td>
-                                <td>初荷岚</td>
-                                <td>18761882997</td>
-                                <td>易碎，注意：此面朝上！</td>
-                                <td>
-                                    <button>签收</button>
-                                    <button>拒收</button>
-                                    <button>退回</button>
-                                </td>
-                            </tr>
+                            <%
+                                if(user.getUser_type() <= 2) {
+                                    Order[] orders = orderService.getOrderByType(user, "run");
+                                    for(Order order:orders) {
+                                        out.print(htmls.orderTr(order, user, "run", userService));
+                                    }
+                                }
+                            %>
                         </table>
                     </div>
-                    <div id="delivery-2" class="waitDelivering">
+                    <div id="delivery-3" class="waitDelivering" <%if(user.getUser_type() > 0)out.print("Style=\"display:none;\"");%>>
                         <table>
                             <tr>
                                 <th>快递单号</th>
                                 <th>类型</th>
                                 <th>地址</th>
-                                <th>联系人</th>
-                                <th>电话</th>
-                                <th>备注</th>
                                 <th>状态</th>
                             </tr>
-                            <tr>
-                                <td>NT0521000001A</td>
-                                <td>文件票件</td>
-                                <td>江苏省无锡市江阴市文林社区孙七房81号</td>
-                                <td>林小槐</td>
-                                <td>18961655803</td>
-                                <td>请快点送达！</td>
-                                <td style="background: green;color:#fff;height: 60px">已送达</td>
-                            </tr>
-                            <tr>
-                                <td>NT0621000002X</td>
-                                <td>贵重物品</td>
-                                <td>江苏省南京市栖霞区羊山北路1号南京工业职业技术大学</td>
-                                <td>初荷岚</td>
-                                <td>18761882997</td>
-                                <td>易碎，注意：此面朝上！</td>
-                                <td style="background: green;color:#fff;height: 60px">已送达</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div id="delivery-3" class="waitDelivering">
-                        <table>
-                            <tr>
-                                <th>快递单号</th>
-                                <th>类型</th>
-                                <th>地址</th>
-                                <th>联系人</th>
-                                <th>电话</th>
-                                <th>备注</th>
-                                <th>操作</th>
-                            </tr>
-                            <tr>
-                                <td>NT0521000001A</td>
-                                <td>文件票件</td>
-                                <td>江苏省无锡市江阴市文林社区孙七房81号</td>
-                                <td>林小槐</td>
-                                <td>18961655803</td>
-                                <td>请快点送达！</td>
-                                <td>
-                                    <button style="height: 60px">已取件</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>NT0621000002X</td>
-                                <td>贵重物品</td>
-                                <td>江苏省南京市栖霞区羊山北路1号南京工业职业技术大学</td>
-                                <td>初荷岚</td>
-                                <td>18761882997</td>
-                                <td>易碎，注意：此面朝上！</td>
-                                <td>
-                                    <button style="height: 60px">已取件</button>
-                                </td>
-                            </tr>
+                            <%
+                                if(user.getUser_type() <= 2) {
+                                    Order[] orders = orderService.getOrderByType(user, "stay");
+                                    for(Order order:orders) {
+                                        out.print(htmls.orderTr(order, user, "stay", userService));
+                                    }
+                                }
+                            %>
                         </table>
                     </div>
                 </form>
@@ -709,6 +674,122 @@
         </div>
     </div>
 </div>
+<div class="pop" id="workOrderBackPop" style="visibility: collapse;">
+    <div style="min-height: auto;width: 30%;">
+        <div>
+            <button onclick="return openWorkOrderBack(false, null)">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="76" viewBox="0 0 76.00 76.00" enable-background="new 0 0 76.00 76.00" xml:space="preserve">
+	                <path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z "/>
+                </svg>
+            </button>
+        </div>
+        <div class="deal-order-main" style="text-align: center;">
+            <!-- 处理工单 -->
+            <div class="pop-title">
+                <div>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="info" class="svg-inline--fa fa-info fa-w-6" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512"><path fill="currentColor" d="M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235 24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"></path></svg>                </div>
+                <span> 处理结果</span>
+            </div>
+            <div class="hrs" style="margin: auto;"></div>
+            <div style="margin-top: 20px;"><span id="work-order-endWay"></span></div>
+            <button onclick="return openWorkOrderBack(false, null)">确&nbsp;&nbsp;&nbsp;定</button>
+        </div>
+    </div>
+</div>
+<div class="pop" id="orderRunPop" style="visibility: collapse;">
+    <div style="width: 35%;">
+        <div>
+            <button onclick="return openSendControl(false, null, null)">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="76" viewBox="0 0 76.00 76.00" enable-background="new 0 0 76.00 76.00" xml:space="preserve">
+	                <path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z "/>
+                </svg>
+            </button>
+        </div>
+        <div class="deal-order-main" style="text-align: center;">
+            <!-- 处理工单 -->
+            <div class="pop-title">
+                <div>
+                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path></svg>
+                </div>
+                <span> 更新运单状态</span>
+            </div>
+            <div class="hrs" style="margin: auto;"></div>
+            <div style="display: flex;">
+                <span style="margin-top: 25px;margin-left: 20px;margin-right: 20px;">运单信息</span>
+                <button id="order-info-s" style="height: 35px;width: 100px;font-size: 13px;" onclick="return false">运单信息</button>
+                <button style="height: 35px;width: 100px;font-size: 13px;margin-left: 15px;" onclick="return false">打印票面</button>
+            </div>
+            <div style="display: flex;">
+                <span style="margin-top: 25px;margin-left: 20px;margin-right: 20px;">操作运单</span>
+                <form action="/NextOrder" method="get">
+                    <input name="uid" value="<%=id%>" style="display: none;">
+                    <input name="tid" value="<%=token%>" style="display: none;">
+                    <input id="deal-order-next" name="oid" style="display: none;">
+                    <button style="height: 35px;width: 150px;font-size: 13px;">结束当前流程</button>
+                </form>
+            </div>
+            <div style="padding: 20px 40px;font-size: 15px;">
+                <span>* 结束当前流程将会将运单标记为下一步，如运单当前“未派送”将更新为“派送中”。</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pop" id="orderInfoPop" style="visibility: collapse;">
+    <div style="background: transparent;-moz-box-shadow: 0 0 0 #dfdfdf00;-webkit-box-shadow: 0 0 0 #dfdfdf00;box-shadow: 0 0 0 #dfdfdf00;">
+        <div class="envelope">
+            <h2>订单信息</h2>
+            <h6></h6>
+            <div style="border-top: 1px dashed #c2c2c2;margin-top: 20px;">
+                <p>下单日期：<span id="oif_createDate"></span></p>
+                <p>派送日期：<span id="oif_sendDate"></span></p>
+                <p>送达日期：<span id="oif_endDate"></span></p>
+            </div>
+            <div style="border-top: 1px dashed #c2c2c2;margin-top: 20px;">
+                <p>寄件人：<span id="oif_sendName"></span></p>
+                <p>联系方式：<span id="oif_sendPhone"></span></p>
+                <p>地址：<span id="oif_sendAddress"></span></p>
+            </div>
+            <div style="border-top: 1px dashed #c2c2c2;margin-top: 20px;">
+                <p>收件人：<span id="oif_getName"></span></p>
+                <p>联系方式：<span id="oif_getPhone"></span></p>
+                <p>地址：<span id="oif_getAddress"></span></p>
+            </div>
+            <div style="border-top: 1px dashed #c2c2c2;margin-top: 20px;">
+                <p>派送员：<span id="oif_sendMan"></span></p>
+            </div>
+            <div class="end-button">
+                <button onclick="openOrderInfo(false, null)">确认</button>
+            </div>
+        </div>
+        <div style="margin: 0 auto;" class="envelope-png"></div>
+    </div>
+</div>
+<div class="pop" id="orderCheckPop" style="visibility: collapse;">
+    <div style="min-height: 250px;">
+        <div>
+            <button onclick="return openOrderCheck(false, null)">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="76" height="76" viewBox="0 0 76.00 76.00" enable-background="new 0 0 76.00 76.00" xml:space="preserve">
+	                <path fill="#000000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z "/>
+                </svg>
+            </button>
+        </div>
+        <div class="deal-order-main" style="text-align: center;">
+            <!-- 处理工单 -->
+            <form method="get" action="/CheckOrder">
+                <input name="uid" value="<%=id%>" style="display: none;">
+                <input name="tid" value="<%=token%>" style="display: none;">
+                <input id="deal-order-oid" name="oid" value="" style="display: none;">
+                <div class="pop-title">
+                    <div><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="archive" class="svg-inline--fa fa-archive fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 448c0 17.7 14.3 32 32 32h384c17.7 0 32-14.3 32-32V160H32v288zm160-212c0-6.6 5.4-12 12-12h104c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-8zM480 32H32C14.3 32 0 46.3 0 64v48c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V64c0-17.7-14.3-32-32-32z"></path></svg>                    </div>
+                    <span> 确认运单</span>
+                </div>
+                <div class="hrs" style="margin: auto;"></div>
+                <div style="padding: 20px 50px;"><span>点击下方按钮将此运单标记为已收件，如有必要请在快递员当面检验快递完整性，确保无误后进行操作。</span></div>
+                <button type="submit">确认收件</button>
+            </form>
+        </div>
+    </div>
+</div>
 <!-- 底栏 -->
 <%
     out.println(htmls.footer());
@@ -724,6 +805,72 @@
         return false;
     }
 
+    function openOrderCheck(isOpen, id) {
+        if(isOpen) {
+            document.getElementById("deal-order-oid").value = id;
+            document.getElementById("orderCheckPop").style.visibility = "visible";
+        } else {
+            document.getElementById("deal-order-oid").value = "";
+            document.getElementById("orderCheckPop").style.visibility = "collapse";
+        }
+        return false;
+    }
+
+    function openOrderInfo(isOpen, oid) {
+        if(isOpen) {
+            if(oid === "" || oid == null) {
+                document.getElementById("search_box").style.display = "none"
+            }
+            // 获取 cookie 中的用户信息
+            let id = null;
+            let token = null;
+            const ca = document.cookie.split(';');
+            for(let i=0; i<ca.length; i++)
+            {
+                const c = ca[i].trim();
+                if(c.split('=')[0] === "id")
+                    id = c.split('=')[1]
+                if(c.split('=')[0] === "token")
+                    token = c.split('=')[1]
+            }
+            // 请求 API
+            fetch('/GetOrderAll?uid=' + id + "&token=" + token + "&oid=" + oid)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.stat === 200) {
+                        // 请求正常
+                        document.getElementById("oif_createDate").innerHTML = data.createDate;
+                        document.getElementById("oif_sendDate").innerHTML = data.sendDate === "null"?"未派送":data.sendDate;
+                        document.getElementById("oif_endDate").innerHTML = data.deliveryDate === "null"?"未送达":data.deliveryDate;
+                        document.getElementById("oif_sendName").innerHTML = data.sendName;
+                        document.getElementById("oif_sendPhone").innerHTML = data.sendPhone;
+                        document.getElementById("oif_sendAddress").innerHTML = data.sendAddress;
+                        document.getElementById("oif_getName").innerHTML = data.deliveryName;
+                        document.getElementById("oif_getPhone").innerHTML = data.deliveryPhone;
+                        document.getElementById("oif_getAddress").innerHTML = data.deliveryAddress;
+                        document.getElementById("oif_sendMan").innerHTML = data.deliveryMan;
+                    }
+                })
+                .catch(console.error)
+
+            document.getElementById("orderInfoPop").style.visibility = "visible";
+        } else {
+            document.getElementById("oif_createDate").innerHTML = "";
+            document.getElementById("oif_sendDate").innerHTML = "";
+            document.getElementById("oif_endDate").innerHTML = "";
+            document.getElementById("oif_sendName").innerHTML = "";
+            document.getElementById("oif_sendPhone").innerHTML = "";
+            document.getElementById("oif_sendAddress").innerHTML = "";
+            document.getElementById("oif_getName").innerHTML = "";
+            document.getElementById("oif_getPhone").innerHTML = "";
+            document.getElementById("oif_getAddress").innerHTML = "";
+            document.getElementById("oif_sendMan").innerHTML = "";
+
+            document.getElementById("orderInfoPop").style.visibility = "collapse";
+        }
+        return false
+    }
+
     function openWorkOrder(isOpen, id) {
         if(isOpen) {
             document.getElementById("deal-order-woid").value = id;
@@ -733,6 +880,16 @@
             document.getElementById("workOrderPop").style.visibility = "collapse";
         }
         return false;
+    }
+
+    function openWorkOrderBack(isOpen, info) {
+        if(isOpen && info != null && info !== "") {
+            document.getElementById("work-order-endWay").innerHTML = info;
+            document.getElementById("workOrderBackPop").style.visibility = "visible";
+        } else {
+            document.getElementById("work-order-endWay").innerHTML = "";
+            document.getElementById("workOrderBackPop").style.visibility = "collapse";
+        }
     }
 
     function getOrderInfo(oid) {
@@ -778,6 +935,24 @@
                 }
             })
             .catch(console.error)
+    }
+
+    function openSendControl(isOpen, oid, ods) {
+        if(isOpen) {
+            console.log(oid);
+            document.getElementById("deal-order-next").value = oid;
+            document.getElementById("orderRunPop").style.visibility = "visible";
+            document.getElementById("order-info-s").onclick = function()
+            {
+                console.log(oid)
+                openOrderInfo(true, oid)
+                return false
+            };
+        } else {
+            document.getElementById("deal-order-next").value = "";
+            document.getElementById("orderRunPop").style.visibility = "collapse";
+            document.getElementById("order-info-s").onclick = function(){};
+        }
     }
 </script>
 

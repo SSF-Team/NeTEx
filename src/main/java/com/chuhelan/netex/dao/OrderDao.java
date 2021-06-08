@@ -20,6 +20,21 @@ public interface OrderDao {
 
     @Select("select * from netex_order where order_id=#{orderID}")
     public Order getOrderInfo(String orderID);
+    @Select("select * from netex_order where order_deliveryManID=#{uid} and ( order_sendDate is null or order_deliveryDate is null)")
+    public Order[] getOrderNotSend(Integer uid);
+
+    @Select("select * from netex_order where order_createID=#{uid} and order_sendDate is null")
+    public Order[] getOrderByTypeUID(Integer uid);
+    @Select("select * from netex_order where order_deliveryPhone=#{dPhone} and order_sendDate is null")
+    public Order[] getOrderByTypePhone(String dPhone);
+    @Select("select * from netex_order where order_createID=#{uid} and order_deliveryDate is null and order_sendDate is not null")
+    public Order[] getOrderByTypeUID1(Integer uid);
+    @Select("select * from netex_order where order_deliveryPhone=#{dPhone} and order_deliveryDate is null and order_sendDate is not null")
+    public Order[] getOrderByTypePhone1(String dPhone);
+    @Select("select * from netex_order where order_createID=#{uid} and order_deliveryDate is not null and order_sendDate is not null")
+    public Order[] getOrderByTypeUID2(Integer uid);
+    @Select("select * from netex_order where order_deliveryPhone=#{dPhone} and order_deliveryDate is not null and order_sendDate is not null")
+    public Order[] getOrderByTypePhone2(String dPhone);
 
     // Insert
 
@@ -30,6 +45,13 @@ public interface OrderDao {
 
     @Update("update netex_order set order_deliveryManID=#{cid} where order_id=#{oid}")
     public void assignCourier(@Param("oid") String oid, @Param("cid") Integer cid);
+    @Update("update netex_order set order_pickDate=#{date} where order_id=#{oid}")
+    public void checkOrder(@Param("oid") String oid, @Param("date") Date date);
+
+    @Update("update netex_order set order_sendDate=#{date} where order_id=#{oid}")
+    public void setOrderSendDate(@Param("oid") String oid, @Param("date") Date date);
+    @Update("update netex_order set order_deliveryDate=#{date} where order_id=#{oid}")
+    public void setOrderEndDate(@Param("oid") String oid, @Param("date") Date date);
 
     // Delete
 

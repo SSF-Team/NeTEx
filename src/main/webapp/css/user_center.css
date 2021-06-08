@@ -9,7 +9,7 @@ body {
     height: 100%;
 }
 
-.main {
+.main-body {
     margin: 30px 30px;
 }
 
@@ -370,7 +370,7 @@ body {
 }
 
 .pop > div {
-    width: 50%;
+    width: 100%;
     min-height: 300px;
     background: #fff;
     -moz-box-shadow: 0 0 10px #dfdfdf5c;
@@ -378,6 +378,7 @@ body {
     box-shadow: 0 0 10px #dfdfdf5c;
     border-radius: 7px;
     pointer-events: all;
+    margin: 0 20px;
 }
 .pop > div div:first-child > button {
     float: right;
@@ -662,7 +663,7 @@ body {
     background: #fff;
     box-shadow: 0 0 10px #dfdfdf5c;
     padding: 25px;
-    width: 900px;
+    width: 100%;
     height: auto;
 
 }
@@ -675,7 +676,7 @@ body {
     word-wrap: break-word;
 }
 .waitDelivering th,td {
-    padding: 0 10px;
+    padding: 10px;
 }
 
 .waitDelivering table th {
@@ -792,6 +793,7 @@ body {
 
 .waitDelivering table tr:hover:not(:first-child) {
     background-color: #ececec;
+    cursor: pointer;
 }
 
 .redemption {
@@ -898,10 +900,29 @@ body {
     border: 1px solid #FE6600;
     color: #fff;
 }
-
+.end-button {
+    text-align: center;
+    margin-top: 44px;
+}
+.end-button > button {
+    text-decoration: none;
+    color: #fff;
+    background-color: #f90;
+    padding: 5px 20px;
+    border-radius: 4px;
+    position: absolute;
+    border: none;
+    height: 40px;
+    margin-left: -55px;
+    width: 100px;
+    outline: none;
+}
+.end-button > button:hover {
+    background-color: #cd7c00;
+}
 
 @media (min-width: 1200px) {
-    .main {
+    .main-body {
         margin: 30px 20%;
     }
 
@@ -944,5 +965,16 @@ body {
         -moz-box-shadow: 0 0 10px #dfdfdf5c;
         -webkit-box-shadow: 0 0 10px #dfdfdf5c;
         box-shadow: 0 0 10px #dfdfdf5c;
+    }
+
+    .pop > div {
+        width: 50%;
+        min-height: 300px;
+        background: #fff;
+        -moz-box-shadow: 0 0 10px #dfdfdf5c;
+        -webkit-box-shadow: 0 0 10px #dfdfdf5c;
+        box-shadow: 0 0 10px #dfdfdf5c;
+        border-radius: 7px;
+        pointer-events: all;
     }
 }

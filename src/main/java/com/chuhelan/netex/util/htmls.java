@@ -1,11 +1,11 @@
 package com.chuhelan.netex.util;
 
-import com.chuhelan.netex.controller.UserController;
 import com.chuhelan.netex.domain.Address;
+import com.chuhelan.netex.domain.Order;
 import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.UserService;
+import com.chuhelan.netex.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,7 +46,7 @@ public class htmls {
                 "              <a class=\"nav-link active\" href=\"/\">首页</a>\n" +
                 "            </li>\n" +
                 "            <li class=\"nav-item active\">\n" +
-                "              <a class=\"nav-link active\" href=\"/Shipping\">物流服务</a>\n" +
+                "              <a class=\"nav-link active\" href=\"/Order\">快速查询</a>\n" +
                 "            </li>\n" +
 //                "              <a class=\"nav-link dropdown-toggle active\" href=\"#\" id=\"DpdSevice\" data-toggle=\"dropdown\"\n" +
 //                "                 aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
@@ -60,6 +60,9 @@ public class htmls {
 //                "                <a class=\"dropdown-item\" href=\"#\">星际速递</a>\n" +
 //                "              </div>\n" +
 //                "            </li>\n" +
+                "            <li class=\"nav-item active\">\n" +
+                "              <a class=\"nav-link active\" href=\"/Shipping\">快速下单</a>\n" +
+                "            </li>\n" +
                 "          </ul>\n" +
                 "        </div>\n" +
                 "        <div class=\"form-inline\">\n" +
@@ -175,9 +178,9 @@ public class htmls {
     public static String pointDetail(Integer change, String info, Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return "<tr>\n" +
-                "                                    <td>" + (change > 0 ? "+" : "-") + change + "</td>\n" +
-                "                                    <td>" + info + "</td>\n" +
-                "                                    <td>" + sdf.format(date) + "</td>\n" +
+                "                                    <td style=\"padding:0;\">" + (change > 0 ? "+" : "-") + change + "</td>\n" +
+                "                                    <td style=\"padding:0;\">" + info + "</td>\n" +
+                "                                    <td style=\"padding:0;\">" + sdf.format(date) + "</td>\n" +
                 "                                </tr>";
     }
 
@@ -188,7 +191,7 @@ public class htmls {
      * @Param [orderID, date, name, phone, str, nowWay]
      * @return java.lang.String
     **/
-    public static String workOrderTr(String orderID, Date date, String name, String phone, String str, Integer nowWay, boolean isSev, Integer workOrderrID) {
+    public static String workOrderTr(String orderID, Date date, String name, String phone, String str, String backStr, Integer nowWay, boolean isSev, Integer workOrderID) {
         /*
          工单状态
          0 - 待处理
@@ -202,7 +205,7 @@ public class htmls {
             way = new String[] {"驳回", "red", "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z"};
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return "<tr title=\"" + way[0] + "\" onclick=\"" + (isSev ? "openWorkOrder(true, " + workOrderrID + ")" : "") + "\">\n" +
+        return "<tr title=\"" + way[0] + "\" onclick=\"" + (isSev ? "openWorkOrder(true, " + workOrderID + ")" : "openWorkOrderBack(true, '" + backStr + "')") + "\">\n" +
                 "                                <td>" + orderID + "</td>\n" +
                 "                                <td>" + sdf.format(date) + "</td>\n" +
                 "                                <td>" + name + "</td>\n" +
@@ -214,5 +217,68 @@ public class htmls {
                 "                                   </svg>" +
                 "                                </td>\n" +
                 "                            </tr>";
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 输出运单列表
+     * @Date 下午 07:59 2021/6/6
+     * @Param [order, user]
+     * @return java.lang.String
+    **/
+    public static String orderTr(Order order, User user, String OutType, UserService userService) {
+        switch (OutType) {
+            case "wait": {
+                String clickFun = user.getUser_type() == 2 ? "" : "openOrderInfo(true, '" + order.getOrder_id().trim() + "')";
+                return "<tr onclick=\"" + clickFun + "\">\n" +
+                        "                                <td>" + order.getOrder_id() + "</td>\n" +
+                        "                                <td>" + order.getOrder_type() + "</td>\n" +
+                        "                                <td>" + order.getOrder_deliveryAddress() + "</td>\n" +
+                        "                                <td>" + order.getOrder_content() + "</td>\n" +
+                        "                            </tr>";
+            }
+            case "waitsend": {
+                String orderNow = "";
+                String icon = "";
+                if(order.getOrder_deliveryDate() == null) {
+                    orderNow = "2";
+                    icon = "M544 192h-16L419.22 56.02A64.025 64.025 0 0 0 369.24 32H155.33c-26.17 0-49.7 15.93-59.42 40.23L48 194.26C20.44 201.4 0 226.21 0 256v112c0 8.84 7.16 16 16 16h48c0 53.02 42.98 96 96 96s96-42.98 96-96h128c0 53.02 42.98 96 96 96s96-42.98 96-96h48c8.84 0 16-7.16 16-16v-80c0-53.02-42.98-96-96-96zM160 432c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48zm72-240H116.93l38.4-96H232v96zm48 0V96h89.24l76.8 96H280zm200 240c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48z";
+                }
+                if(order.getOrder_sendDate() == null) {
+                    orderNow = "1";
+                    icon = "M32 448c0 17.7 14.3 32 32 32h384c17.7 0 32-14.3 32-32V160H32v288zm160-212c0-6.6 5.4-12 12-12h104c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-8zM480 32H32C14.3 32 0 46.3 0 64v48c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V64c0-17.7-14.3-32-32-32z";
+                }
+                String clickFun = "openSendControl(true, '" + order.getOrder_id().trim() + "', '" + orderNow + "')";
+                return "<tr onclick=\"" + clickFun + "\">\n" +
+                        "                                <td>" + order.getOrder_id() + "</td>\n" +
+                        "                                <td>" + order.getOrder_type() + "</td>\n" +
+                        "                                <td>" + order.getOrder_deliveryAddress() + "</td>\n" +
+                        "                                <td style=\"color:#000;\">\n" +
+                        "                                   <svg style=\"width: 20px;\" aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\" data-icon=\"check-circle\" class=\"svg-inline--fa fa-check-circle fa-w-16\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path fill=\"currentColor\" d=\"" + icon + "\"></path></svg>\n" +
+                        "                                </td>\n" +
+                        "                            </tr>";
+            }
+            case "run": {
+                String clickFun = "openOrderInfo(true, '" + order.getOrder_id().trim() + "')";
+                return "<tr onclick=\"" + clickFun + "\">\n" +
+                        "                                <td>" + order.getOrder_id() + "</td>\n" +
+                        "                                <td>" + order.getOrder_type() + "</td>\n" +
+                        "                                <td>" + order.getOrder_deliveryAddress() + "</td>\n" +
+                        "                                <td>" + userService.findUserById(order.getOrder_deliveryManID()).getUser_name() + "</td>\n" +
+                        "                            </tr>";
+            }
+            case "stay": {
+                String clickFun = order.getOrder_pickDate() == null ? "openOrderCheck(true, '" + order.getOrder_id().trim() + "')":"";
+                return "<tr onclick=\"" + clickFun + "\">\n" +
+                        "                                <td>" + order.getOrder_id() + "</td>\n" +
+                        "                                <td>" + order.getOrder_type() + "</td>\n" +
+                        "                                <td>" + order.getOrder_deliveryAddress() + "</td>\n" +
+                        "                                <td style=\"color:" + (order.getOrder_pickDate() == null ? "red" : "green") + ";\">\n" +
+                        "                                   <svg style=\"width: 20px;\" aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\" data-icon=\"check-circle\" class=\"svg-inline--fa fa-check-circle fa-w-16\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path fill=\"currentColor\" d=\"M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z\"></path></svg>\n" +
+                        "                                </td>\n" +
+                        "                            </tr>";
+            }
+        }
+        return "";
     }
 }
