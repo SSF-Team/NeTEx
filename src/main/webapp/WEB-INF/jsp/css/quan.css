@@ -1,0 +1,47 @@
+body {
+    background: #fff;
+}
+
+.card {
+    background: #F0F4F7;
+    padding: 30px;
+    border-radius: 30px;
+    width: 550px;
+    margin-bottom: 20px;
+}
+
+.card:hover{
+    background: #b8dcf6;
+    cursor: pointer;
+}
+
+.card_bar {
+    height: 100px;
+    width: 330px;
+}
+
+.card img {
+    border-radius: 50%;
+    height: 100px;
+}
+
+.card_name{
+    float: right;
+    margin-top: 25px;
+}
+
+.card_name div:nth-child(1) {
+    color: #4D9CC9;
+    font-weight: bolder;
+    margin-bottom: 10px;
+}
+
+.card_name div:nth-child(2) {
+    color: gray;
+    font-weight: bold;
+}
+
+.card_content {
+    margin-top: 20px;
+    font-family: "SimHei";
+}
