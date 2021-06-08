@@ -65,7 +65,8 @@ public class FileUploadController {
     }
 
     @RequestMapping("file")
-    public String filePage(){
+    public String filePage() {
         return "file";
     }
+
 }
