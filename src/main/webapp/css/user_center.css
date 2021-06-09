@@ -1007,6 +1007,54 @@ body {
     background: #d06317;
 }
 
+.addpop-add {
+     padding: 15px;
+     text-align: left;
+     font-size: 15px;
+ }
+.addpop-add p {
+    width: 50%;
+    height: 30px;
+    margin: 0 0 30px;
+    float: left;
+}
+.addpop-add p > em {
+    display: inline-block;
+    width: 30%;
+    font-style: normal;
+}
+.addpop-add input {
+     width: 200px;
+     height: 30px;
+     border-radius: 30px;
+     border: 1px #00000024 solid;
+     margin-right: 10px;
+     outline: none;
+     padding: 0 15px;
+     font-size: 13px;
+ }
+.addpop-add input:focus {
+    border: 1px #00000061 solid;
+}
+
+.ok-button {
+    height: 40px;
+    width: 150px;
+    margin-bottom: 20px;
+    border-radius: 40px;
+    border: none;
+    background: #FE6600;
+    color: #fff;
+    font-size: 17px;
+    outline: none;
+    position: absolute;
+    left: calc(50% - 75px);
+    margin-top: 100px;
+}
+.ok-button:hover {
+    background: #d45200;
+}
+
 @media (min-width: 1200px) {
     .main-body {
         margin: 30px 20%;

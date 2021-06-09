@@ -55,6 +55,8 @@ public interface UserDao {
     public void regUser(@Param("name") String name, @Param("mail") String mail, @Param("password") String password, @Param("phone") String phone);
     @Insert("insert into netex_points ( points_userId, points_time, points_change, points_content ) values ( #{id}, #{time}, #{num}, #{info} )")
     public void addPointInfo(@Param("id") Integer id, @Param("time") Date time, @Param("num") Integer num, @Param("info") String info);
+    @Insert("insert into netex_address ( address_userID, address_name, address_phone, address_content ) values ( #{uid}, #{name}, #{phone}, #{address} )")
+    public void addAddress(@Param("uid") Integer uid, @Param("name") String name, @Param("phone") String phone, @Param("address") String address);
 
     // Delete
 

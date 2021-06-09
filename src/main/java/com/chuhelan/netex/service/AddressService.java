@@ -16,4 +16,5 @@ public interface AddressService {
     public Address[] getAddresses(Integer id, String token) throws ParseException;
     public Address findAddressByID(Integer id);
     public void deleteAddress(Integer id);
+    public void addAddress(Integer uid, String name, String phone, String address);
 }
