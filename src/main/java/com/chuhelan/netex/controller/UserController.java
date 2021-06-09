@@ -190,5 +190,44 @@ public class UserController {
             return "api";
         }
     }
+    @GetMapping("/ChangeUInfo")
+    public String changeUserInfo(Integer uid, String tid, String name, String gender, String mail, String phone, String back, Model model) throws ParseException {
+        System.out.println("操作 > 修改个人信息 > ChangeUserInfo > " + uid + " / " + name + " / " + gender + " / " + mail + " / " + phone);
+        // 验证 token
+        if(userService.verificationToken(uid, tid).equals("ok")) {
+            // 保存
+            if(name != null && gender != null && mail != null && phone != null) {
+                userService.updateUserInfo(uid, name, gender, mail, phone);
+                if(back == null) {
+                    model.addAttribute("msg", "操作成功");
+                } else {
+                    model.addAttribute("msg", "{\"stat\":403, \"msg\":\"操作成功\"}");
+                }
+            } else {
+                System.out.println("表单不完整。");
+                if(back == null) {
+                    model.addAttribute("err", "请检查表单");
+                } else {
+                    model.addAttribute("str", "{\"stat\":403, \"msg\":\"请检查表单\"}");
+                }
+            }
+        } else {
+            if(back == null) {
+                model.addAttribute("err", "验证登陆失败");
+            } else {
+                model.addAttribute("str", "{\"stat\":403, \"msg\":\"验证登陆失败\"}");
+            }
+        }
+        if(back == null) {
+            model.addAttribute("UserService", userService);
+            model.addAttribute("OrderService", orderService);
+            model.addAttribute("AddressService", addressService);
+            model.addAttribute("WorkOrderService", workOrderService);
+            model.addAttribute("run", "reLoad");
+            return "user_center";
+        } else {
+            return "api";
+        }
+    }
 
 }

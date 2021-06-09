@@ -6,11 +6,9 @@ import com.chuhelan.netex.domain.OrderUser;
 import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.OrderService;
 import com.chuhelan.netex.util.Other;
-import org.apache.logging.log4j.core.util.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.security.util.ArrayUtil;
 
 import java.util.ArrayList;
 import java.util.Date;

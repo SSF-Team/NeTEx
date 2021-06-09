@@ -156,18 +156,29 @@
         <div class="right-view">
             <div id="tabs-3">
                 <div class="name-card">
-                    <div id="avatar" style="background-image: <%out.print("url(" + user.getUser_profile().replace("/", "/") + ")");%>;"></div>
+                    <div id="avatar" style="background-image: <%out.print("url(" + user.getUser_profile().replace("/", "/") + ")");%>;" onclick="document.getElementById('upload-avatar').click();"></div>
+                    <form id="upload-avatar-form" action="/ChangeAvatar" method="post" enctype="multipart/form-data" style="position: absolute;top: -100px;">
+                        <input type="file" name="upload" id="upload-avatar" accept="image/*"/>
+                    </form>
+                    <script>
+                        document.getElementById("upload-avatar").onchange = function() {
+                            document.getElementById("upload-avatar-form").submit();
+                        };
+                    </script>
                     <span><%out.print(user.getUser_name());%></span>
                 </div>
                 <div class="user-info">
                     <Span class="title">个人信息</Span>
+                    <div style="float: right;display: flex;">
+                        <button class="title-button" onclick="showChangeInfo();return false">修改</button>
+                    </div>
                     <div class="hrs"></div>
-                    <div id="user-info-box">
+                    <div id="user-info-box-a">
                         <p>
                             <em>姓名</em>
                             <span><%out.print(user.getUser_name());%></span>
                         </p>
-                        <p>
+                        <p style="margin-top: -20px;">
                             <em>性别</em>
                             <span><%out.print(user.getUser_gender());%></span>
                         </p>
@@ -180,6 +191,29 @@
                             <span><%out.print(user.getUser_phone());%></span>
                         </p>
                     </div>
+                    <form method="get" action="/ChangeUInfo">
+                        <input name="uid" value="<%=id%>" style="display: none;">
+                        <input name="tid" value="<%=token%>" style="display: none;">
+                        <div id="user-info-box-ex" style="display: none;">
+                            <p>
+                                <em>姓名</em>
+                                <input name="name" value="<%out.print(user.getUser_name());%>">
+                            </p>
+                            <p style="margin-top: -20px;">
+                                <em>性别</em>
+                                <input name="gender" value="<%out.print(user.getUser_gender());%>">
+                            </p>
+                            <p>
+                                <em>邮箱</em>
+                                <input name="mail" value="<%out.print(user.getUser_email());%>">
+                            </p>
+                            <p>
+                                <em>手机</em>
+                                <input name="phone" value="<%out.print(user.getUser_phone());%>">
+                            </p>
+                        </div>
+                        <button id="user-info-box-ex-b" class="title-button" type="submit" style="display: none;float: right;margin-top: -193px;margin-right: 70px;">保存</button>
+                    </form>
                 </div>
                 <div class="user-addresses" style="<%if(user.getUser_type() >= 1)out.print("display:none;");%>">
                     <div style="height: 30px;line-height: 30px;position: absolute;">
@@ -952,6 +986,18 @@
             document.getElementById("deal-order-next").value = "";
             document.getElementById("orderRunPop").style.visibility = "collapse";
             document.getElementById("order-info-s").onclick = function(){};
+        }
+    }
+
+    function showChangeInfo() {
+        if(document.getElementById("user-info-box-a").style.display === "none") {
+            document.getElementById("user-info-box-a").style.display = "unset";
+            document.getElementById("user-info-box-ex").style.display = "none";
+            document.getElementById("user-info-box-ex-b").style.display = "none";
+        } else {
+            document.getElementById("user-info-box-a").style.display = "none";
+            document.getElementById("user-info-box-ex").style.display = "unset";
+            document.getElementById("user-info-box-ex-b").style.display = "unset";
         }
     }
 </script>
