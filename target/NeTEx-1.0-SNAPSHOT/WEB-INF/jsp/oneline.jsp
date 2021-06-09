@@ -276,40 +276,43 @@
                 </div>
             </div>
             <div id="tabs-2">
-                <div class="main-card">
+                <div class="main-card" style="overflow: hidden;">
                     <div>
                         <Span class="title">运费查询</Span>
                         <div class="hrs"></div>
-                        <h6>始发地</h6>
-                        <div class="area_info">
-                            <div>
-                                <select id="s_province" name="s_province"></select>
-                                <select id="s_city" name="s_city"></select>
-                                <select id="s_county" name="s_county"></select>
-                                <script type="text/javascript">_init_area();</script>
-                            </div>
-                            <div id="show"></div>
-                        </div>
-                        <h6>目的地</h6>
-                        <div class="area_info">
-                            <div>
-                                <select id="b_province" name="b_province"></select>
-                                <select id="b_city" name="b_city"></select>
-                                <select id="b_county" name="b_county"></select>
-                                <script type="text/javascript">_init_area1();</script>
-                            </div>
-                            <div id="show2"></div>
-                        </div>
+<%--                        <h6>始发地</h6>--%>
+<%--                        <div class="area_info">--%>
+<%--                            <div>--%>
+<%--                                <select id="s_province" name="s_province"></select>--%>
+<%--                                <select id="s_city" name="s_city"></select>--%>
+<%--                                <select id="s_county" name="s_county"></select>--%>
+<%--                                <script type="text/javascript">_init_area();</script>--%>
+<%--                            </div>--%>
+<%--                            <div id="show"></div>--%>
+<%--                        </div>--%>
+<%--                        <h6>目的地</h6>--%>
+<%--                        <div class="area_info">--%>
+<%--                            <div>--%>
+<%--                                <select id="b_province" name="b_province"></select>--%>
+<%--                                <select id="b_city" name="b_city"></select>--%>
+<%--                                <select id="b_county" name="b_county"></select>--%>
+<%--                                <script type="text/javascript">_init_area1();</script>--%>
+<%--                            </div>--%>
+<%--                            <div id="show2"></div>--%>
+<%--                        </div>--%>
                         <div class="calWeight">
-                            <input type="text" placeholder="请输入包裹的重量">
+                            <h6>始发地</h6>
+                            <input id="start" type="text" placeholder="请输入完整地址" style="width: 100%;">
+                            <h6>目的地</h6>
+                            <input id="end" type="text" placeholder="请输入完整地址" style="width: 100%;">
+                            <input id="zl" type="text" placeholder="请输入包裹的重量">
                             <span>kg</span>
-                        </div>
-                        <input type="button" class="calMoney" value="计&nbsp;&nbsp;算">
-                        <div class="calWeight">
-                            <input type="text" value="0" id="lastMoney">
+                            <input id="money" type="text" value="0" id="lastMoney" style="margin-left: 50px;">
                             <span>(人民币)</span>
                         </div>
-
+                        <input type="button" class="calMoney" value="计&nbsp;&nbsp;算" onclick="getMoney()">
+                        <div class="calWeight">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -338,6 +341,35 @@
     var driving = new BMapGL.DrivingRoute(map, {renderOptions: {map: map, autoViewport: true}});
     map.enableScrollWheelZoom(true);
     driving.search(p1, p2);
+</script>
+<script>
+    function getMoney() {
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
+
+        var startPointX = "";
+        var endPointX = "";
+        var startPointY = "";
+        var endPointY = "";
+
+        // 请求 API
+        fetch("http://api.map.baidu.com/geocoding/v3/?address=" + start + "&output=json&ak=62WAvGClEExBObY1zU4ZuMMEYxVRmWdF")
+            .then(response => response.json())
+            .then(data => {
+                startPointX = data.result.location.lng;
+                startPointY = data.result.location.lat;
+            })
+            .catch(console.error)
+        fetch("http://api.map.baidu.com/geocoding/v3/?address=" + end + "&output=json&ak=62WAvGClEExBObY1zU4ZuMMEYxVRmWdF")
+            .then(response => response.json())
+            .then(data => {
+                endPointX = data.result.location.lng;
+                endPointY = data.result.location.lat;
+            })
+            .catch(console.error)
+        let long = Math.sqrt(Math.pow((startPointX - endPointX), 2) + Math.pow((startPointY - endPointY), 2));
+        document.getElementById("money").value = long.toFixed(0) * 0.1 * document.getElementById("zl").value * 2 + 20;
+    }
 </script>
 <script src="../../bootstrap/bootstrap.min.js"></script>
 </body>
