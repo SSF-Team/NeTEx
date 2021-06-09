@@ -14,6 +14,7 @@ public interface UserService {
     public User findUserByMail(String email);
     public User findUserByPhone(String phone);
     public User getUserInfoByToken(Integer id, String token) throws ParseException;
+    public void updateUserInfo(Integer uid, String name, String gender, String mail, String phone);
 
     public User getOneCourier();
 
@@ -25,4 +26,6 @@ public interface UserService {
     public void ChangePoint(Integer id, Integer num);
     public PointInfo getPointByTime(Integer id, Date date);
     public void addPointInfo(Integer id, Date date, Integer num, String info);
+
+    public void updateProfile(Integer id ,String address);
 }

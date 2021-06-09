@@ -194,6 +194,18 @@ public class UserServiceImpl implements UserService {
         userDao.addPointInfo(id, date, num, info);
     }
 
+    /**
+     * @Author Stapxs
+     * @Description 更新用户头像
+     * @Date 上午 09:23 2021/6/9
+     * @Param [id, address]
+     * @return void
+    **/
+    @Override
+    public void updateProfile(Integer id, String address) {
+        userDao.updateProfile(id, address);
+    }
+
     @Override
     public User getUserInfoByToken(Integer id, String token) throws ParseException {
         System.out.println("getUserInfoByToken");
@@ -211,6 +223,18 @@ public class UserServiceImpl implements UserService {
             }
         }
         return null;
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 更新个人信息
+     * @Date 上午 10:25 2021/6/8
+     * @Param [name, gender, mail, phone]
+     * @return void
+    **/
+    @Override
+    public void updateUserInfo(Integer uid, String name, String gender, String mail, String phone) {
+        userDao.updateUserInfo(uid, name, gender, mail, phone);
     }
 
 }

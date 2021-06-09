@@ -89,6 +89,7 @@ body {
     background-position-y: center;
     background-repeat: no-repeat;
     background-size: cover;
+    cursor: pointer;
 }
 
 .name-card > span {
@@ -172,6 +173,75 @@ body {
     float: left;
 }
 .user-info #user-info-box p > em {
+    display: inline-block;
+    width: 30%;
+    font-style: normal;
+}
+
+.user-info #user-info-box-ex {
+    padding: 15px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.user-info #user-info-box-ex button {
+    width: 100%;
+    height: 30px;
+    margin-left: 10px;
+    outline: none;
+    border: none;
+    border-radius: 30px;
+    background: transparent;
+}
+.user-info #user-info-box-ex p {
+    width: 50%;
+    height: 30px;
+    margin: 0 0 30px;
+    float: left;
+}
+.user-info #user-info-box-ex p > em {
+    display: inline-block;
+    width: 30%;
+    font-style: normal;
+}
+
+.user-info #user-info-box-ex input {
+    width: 200px;
+    height: 30px;
+    border-radius: 30px;
+    border: 1px #00000024 solid;
+    margin-right: 10px;
+    outline: none;
+    padding: 0 15px;
+    font-size: 13px;
+}
+
+.user-info #user-info-box-ex input:focus {
+    border: 1px #00000061 solid;
+}
+
+.user-info #user-info-box-a {
+    padding: 15px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.user-info #user-info-box-a button {
+    width: 100%;
+    height: 30px;
+    margin-left: 10px;
+    outline: none;
+    border: none;
+    border-radius: 30px;
+    background: transparent;
+}
+.user-info #user-info-box-a p {
+    width: 50%;
+    height: 30px;
+    margin: 0 0 30px;
+    float: left;
+}
+.user-info #user-info-box-a p > em {
     display: inline-block;
     width: 30%;
     font-style: normal;
@@ -919,6 +989,70 @@ body {
 }
 .end-button > button:hover {
     background-color: #cd7c00;
+}
+
+.title-button {
+    outline: none;
+    border: none;
+    background: #F9893C;
+    color: #fff;
+    height: 30px;
+    border-radius: 30px;
+    width: 60px;
+    font-size: 13px;
+    padding-bottom: 2px;
+}
+
+.title-button:hover {
+    background: #d06317;
+}
+
+.addpop-add {
+     padding: 15px;
+     text-align: left;
+     font-size: 15px;
+ }
+.addpop-add p {
+    width: 50%;
+    height: 30px;
+    margin: 0 0 30px;
+    float: left;
+}
+.addpop-add p > em {
+    display: inline-block;
+    width: 30%;
+    font-style: normal;
+}
+.addpop-add input {
+     width: 200px;
+     height: 30px;
+     border-radius: 30px;
+     border: 1px #00000024 solid;
+     margin-right: 10px;
+     outline: none;
+     padding: 0 15px;
+     font-size: 13px;
+ }
+.addpop-add input:focus {
+    border: 1px #00000061 solid;
+}
+
+.ok-button {
+    height: 40px;
+    width: 150px;
+    margin-bottom: 20px;
+    border-radius: 40px;
+    border: none;
+    background: #FE6600;
+    color: #fff;
+    font-size: 17px;
+    outline: none;
+    position: absolute;
+    left: calc(50% - 75px);
+    margin-top: 100px;
+}
+.ok-button:hover {
+    background: #d45200;
 }
 
 @media (min-width: 1200px) {

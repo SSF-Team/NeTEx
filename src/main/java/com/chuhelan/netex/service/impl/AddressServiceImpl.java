@@ -78,4 +78,16 @@ public class AddressServiceImpl implements AddressService {
     public void deleteAddress(Integer id) {
         userDao.deleteAddress(id);
     }
+
+    /**
+     * @Author Stapxs
+     * @Description 添加地址
+     * @Date 上午 10:28 2021/6/9
+     * @Param [uid, name, phone, address]
+     * @return void
+    **/
+    @Override
+    public void addAddress(Integer uid, String name, String phone, String address) {
+        userDao.addAddress(uid, name, phone, address);
+    }
 }

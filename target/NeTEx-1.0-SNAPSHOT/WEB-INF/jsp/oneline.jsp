@@ -135,7 +135,7 @@
     <link rel="stylesheet" href="../../css/online.css">
     <script src="../../js/jquery-1.12.4.js"></script>
     <script src="../../js/jquery-ui.js"></script>
-    <script src="../../js/area.js" type="text/javascript"></script>
+    <script class="resources library" src="../../js/area.js" type="text/javascript"></script>
     <!-- 百度地图 js -->
     <script type="text/javascript"
             src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=62WAvGClEExBObY1zU4ZuMMEYxVRmWdF"></script>
@@ -286,9 +286,6 @@
                                 <select id="s_province" name="s_province"></select>
                                 <select id="s_city" name="s_city"></select>
                                 <select id="s_county" name="s_county"></select>
-                                <script class="resources library"
-                                        src="../../js/area.js"
-                                        type="text/javascript"></script>
                                 <script type="text/javascript">_init_area();</script>
                             </div>
                             <div id="show"></div>
@@ -296,13 +293,10 @@
                         <h6>目的地</h6>
                         <div class="area_info">
                             <div>
-                                <select id="b_province" name="s_province"></select>
-                                <select id="b_city" name="s_city"></select>
-                                <select id="b_county" name="s_county"></select>
-                                <script class="resources library"
-                                        src="../../js/area.js"
-                                        type="text/javascript"></script>
-                                <script type="text/javascript">_init_area2();</script>
+                                <select id="b_province" name="b_province"></select>
+                                <select id="b_city" name="b_city"></select>
+                                <select id="b_county" name="b_county"></select>
+                                <script type="text/javascript">_init_area1();</script>
                             </div>
                             <div id="show2"></div>
                         </div>
@@ -310,21 +304,12 @@
                             <input type="text" placeholder="请输入包裹的重量">
                             <span>kg</span>
                         </div>
-                        <input type="button" class="calMoney" value="金额为">
+                        <input type="button" class="calMoney" value="计&nbsp;&nbsp;算">
                         <div class="calWeight">
                             <input type="text" value="0" id="lastMoney">
                             <span>(人民币)</span>
                         </div>
 
-                        <script type="text/javascript">
-                            var Gid = document.getElementById;
-                            var showArea = function () {
-                                Gid('show2').innerHTML = "<h3>省" + Gid('b_province').value + " - 市" +
-                                    Gid('b_city').value + " - 县/区" +
-                                    Gid('b_county').value + "</h3>"
-                            }
-                            Gid('s_county').setAttribute('onchange', 'showArea()');
-                        </script>
                     </div>
                 </div>
             </div>

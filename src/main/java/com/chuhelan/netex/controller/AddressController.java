@@ -75,6 +75,31 @@ public class AddressController {
             return "api";
         }
     }
+    @GetMapping("/AddAdd")
+    public String addAddress(Integer uid, String tid, String name, String phone, String address, String back, Model model) throws ParseException {
+        System.out.println("操作 > 添加地址 > addAddress > " + uid);
+        // 验证 token
+        if(userService.verificationToken(uid, tid).equals("ok")) {
+            // 添加
+            addressService.addAddress(uid, name, phone, address);
+        } else {
+            if(back == null) {
+                model.addAttribute("err", "验证登陆失败");
+            } else {
+                model.addAttribute("str", "{\"stat\":403, \"msg\":\"验证登陆失败\"}");
+            }
+        }
+        if(back == null) {
+            model.addAttribute("UserService", userService);
+            model.addAttribute("OrderService", orderService);
+            model.addAttribute("AddressService", addressService);
+            model.addAttribute("WorkOrderService", workOrderService);
+            model.addAttribute("run", "reLoad");
+            return "user_center";
+        } else {
+            return "api";
+        }
+    }
 
     // 纯文本 API
     @GetMapping("/UserAddress")
