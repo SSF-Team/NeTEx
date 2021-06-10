@@ -31,7 +31,7 @@ public class htmls {
     public static String header(Cookie[] cookies) {
         return header(cookies, false);
     }
-    public static String header(Cookie[] cookies, boolean index) {
+    public static String header(Cookie[] cookies, boolean userCenter) {
         String id = "";
         String token = "";
         for(Cookie cookie:cookies) {
@@ -42,7 +42,7 @@ public class htmls {
         }
         boolean logined = id != null && !id.equals("") && token != null && !token.equals("");
 
-        if(index)
+        if(!userCenter)
             logined = false;
 
         // 为了在所有页面统一显示顶栏，我们使用方法来返回顶栏的内容

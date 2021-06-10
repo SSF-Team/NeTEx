@@ -72,7 +72,7 @@
 <body>
 <!-- 顶栏 -->
 <%
-    out.println(htmls.header(request.getCookies()));
+    out.println(htmls.header(request.getCookies(), true));
 %>
 <!-- 主体 -->
 <div class="main-body" style="flex: 1 0 auto;">
