@@ -36,7 +36,7 @@
 <body>
 <!-- 顶栏 -->
 <%
-    out.println(htmls.header());
+    out.println(htmls.header(request.getCookies()));
 %>
 <!--主体-->
 <div class="main">

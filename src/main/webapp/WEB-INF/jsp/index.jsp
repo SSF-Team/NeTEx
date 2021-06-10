@@ -16,7 +16,7 @@
 <body>
     <!-- 顶栏 -->
     <%
-      out.println(htmls.header());
+      out.println(htmls.header(request.getCookies(), true));
     %>
 
       <!-- 轮播图和查单搜索框-->

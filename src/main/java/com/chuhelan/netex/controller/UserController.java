@@ -20,6 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.jws.WebParam;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -137,6 +139,21 @@ public class UserController {
                 return "api";
             }
         }
+    }
+    @GetMapping("/LoginOut")
+    public String logOut(HttpServletRequest request, Model model) {
+        int id = -1;
+        for(Cookie cookie:request.getCookies()) {
+            if(cookie.getName().equals("id")) {
+                id = Integer.parseInt(cookie.getValue());
+            }
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("yyyyMMdd");
+        // 写数据库
+        userService.loginUser(new User(id),"", sdf.format(new Date()));
+        model.addAttribute("err", "登出");
+        return "sign_in";
     }
   
     // 纯文本 API

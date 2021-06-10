@@ -72,7 +72,7 @@
 <body>
 <!-- 顶栏 -->
 <%
-    out.println(htmls.header());
+    out.println(htmls.header(request.getCookies()));
 %>
 <!-- 主体 -->
 <div class="main-body" style="flex: 1 0 auto;">
@@ -156,7 +156,12 @@
         <div class="right-view">
             <div id="tabs-3">
                 <div class="name-card">
-                    <div id="avatar" style="background-image: <%out.print("url(" + user.getUser_profile().replace("/", "/") + ")");%>;" onclick="document.getElementById('upload-avatar').click();"></div>
+                    <div id="avatar" style="background-image: url(<%
+                    if(!user.getUser_profile().equals(""))
+                        out.print(user.getUser_profile().replace("/", "/"));
+                    else
+                        out.print("/img/default.png");
+                    %>);" onclick="document.getElementById('upload-avatar').click();"></div>
                     <form id="upload-avatar-form" action="/ChangeAvatar" method="post" enctype="multipart/form-data" style="position: absolute;top: -100px;">
                         <input type="file" name="upload" id="upload-avatar" accept="image/*"/>
                     </form>

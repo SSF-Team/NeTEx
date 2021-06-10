@@ -226,6 +226,7 @@ footer {
     background: #4D148C;
     color: #fff;
     font-size: 13px;
+    padding: 0 40px;
 }
 .buton a:link,
 .buton a:visited {
@@ -235,6 +236,10 @@ footer {
 .info {
     height: calc(200px - 45px);
     display: flex;
+}
+.info #info-main {
+    width: 100%;
+    margin: 40px;
 }
 .info #title {
     font-weight: bold;
@@ -253,6 +258,9 @@ footer {
 .info #findus svg {
     width: 30px;
 }
+.info #find-us {
+    display: none;
+}
 
 @media (min-width: 992px) {
     .buton {
@@ -270,5 +278,12 @@ footer {
     }
     .info #sevlink > a {
         margin-left: 50px;
+    }
+    .info #info-main {
+        width: calc(100% - 500px);
+        margin: 0;
+    }
+    .info #find-us {
+        display: unset;
     }
 }

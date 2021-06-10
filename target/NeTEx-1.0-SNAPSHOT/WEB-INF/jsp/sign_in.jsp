@@ -10,14 +10,10 @@
         cookie.set(response, "token", request.getAttribute("token").toString(), 60 * 60 * 24 * 6);
     }
     if (request.getAttribute("err") != null) {
-        switch (request.getAttribute("err").toString()) {
-            case "账号或密码错误":
-            case "验证登陆失败": {
-                // 删除 cookie
-                cookie.remove(response, "id");
-                cookie.remove(response, "token");
-            }
-        }
+        // 删除 cookie
+        cookie.remove(response, "id");
+        cookie.remove(response, "token");
+        response.sendRedirect("/SignIn");
     }
 
     String id = cookie.get(request, "id");
@@ -57,7 +53,7 @@
 <body>
 <!-- 顶栏 -->
 <%
-    out.println(htmls.header());
+    out.println(htmls.header(request.getCookies()));
 %>
 <!--这边开始写代码-->
 
