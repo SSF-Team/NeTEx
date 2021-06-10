@@ -52,8 +52,10 @@ Java 项目使用的是 IntelliJ IDEA 2020.3.2 (Ultimate Edition)，请在运行
 
 ## 作者
 [Stapx Steve](https://github.com/Stapxs)
+
 [Chuhelan](https://github.com/chuhelan)
 
 ## 协助
 [AC_Farther](https://github.com/ACFather)
+
 [YY805](https://github.com/YY805)
