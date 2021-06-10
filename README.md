@@ -3,12 +3,31 @@
 ~~~
 
 # NeTEx
-Java 企业级框架开发实训作业 - NeTEx 物流管理系统
+Java 企业级框架开发实训作业 - NeTEx （神系星际）物流社交管理系统
 
 ## 简介
 这是个实训作业，一个后端基于 Spring + Spring MVC + Mybatis，前端使用 Bootstrap + JQueryUI 的简易物流管理系统。
 
 代码并不是特别好，有不少考虑不当，不符合规范的地方。还有一些小 BUG 和毛病。
+
+## 为什么是神系星际物流社交管理系统
+#### 因为一开始我们在构思功能的时候：
+
+[Chuhelan](https://github.com/chuhelan) ：我们有仓储服务、大件服务、冷链服务还有啥？
+
+[AC_Farther](https://github.com/ACFather) ： （写思维导图）空间站
+
+[Stapx Steve](https://github.com/Stapxs)：好，加上
+
+#### 然后在制作功能的时候：
+
+[AC_Farther](https://github.com/ACFather) ： 我们用啥管理用户
+
+[Stapx Steve](https://github.com/Stapxs)：我们没有管理员（注：当初构思并没有管理员账户）
+
+[AC_Farther](https://github.com/ACFather) ： 是上帝！
+
+[Stapx Steve](https://github.com/Stapxs)：好，加上
 
 ## 功能
 - [x] 登录注册
