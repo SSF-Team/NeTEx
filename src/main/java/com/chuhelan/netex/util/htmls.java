@@ -6,7 +6,9 @@ import com.chuhelan.netex.domain.User;
 import com.chuhelan.netex.service.UserService;
 import com.chuhelan.netex.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 
+import javax.servlet.http.Cookie;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,7 +28,23 @@ public class htmls {
      * @Param []
      * @return void
     **/
-    public static String header() {
+    public static String header(Cookie[] cookies) {
+        return header(cookies, false);
+    }
+    public static String header(Cookie[] cookies, boolean index) {
+        String id = "";
+        String token = "";
+        for(Cookie cookie:cookies) {
+            if(cookie.getName().equals("id"))
+                id = cookie.getValue();
+            if(cookie.getName().equals("token"))
+                token = cookie.getValue();
+        }
+        boolean logined = id != null && !id.equals("") && token != null && !token.equals("");
+
+        if(index)
+            logined = false;
+
         // 为了在所有页面统一显示顶栏，我们使用方法来返回顶栏的内容
         return "<header style=\"flex: 0 0 auto;\">\n" +
                 "      <nav class=\"navbar navbar-expand-lg navbar-dark topbar\">\n" +
@@ -67,12 +85,15 @@ public class htmls {
                 "        </div>\n" +
                 "        <div class=\"form-inline\">\n" +
                 "          <div class=\"dropdown\">\n" +
-                "            <button class=\"btn barbtn\" type=\"button\" onclick=\"window.location.href='/SignIn'\">\n" +
+                "            <button class=\"btn barbtn\" type=\"button\" onclick=\"window.location.href='" + (logined ? "/LoginOut" : "/SignIn") + "'\">\n" +
                 "              <svg aria-hidden=\"true\" focusable=\"false\" data-prefix=\"far\" data-icon=\"user-circle\"\n" +
                 "                   class=\"svg-inline--fa fa-user-circle fa-w-16\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
                 "                   viewBox=\"0 0 496 512\">\n" +
                 "                <path fill=\"currentColor\"\n" +
-                "                      d=\"M248 104c-53 0-96 43-96 96s43 96 96 96 96-43 96-96-43-96-96-96zm0 144c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm0-240C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-49.7 0-95.1-18.3-130.1-48.4 14.9-23 40.4-38.6 69.6-39.5 20.8 6.4 40.6 9.6 60.5 9.6s39.7-3.1 60.5-9.6c29.2 1 54.7 16.5 69.6 39.5-35 30.1-80.4 48.4-130.1 48.4zm162.7-84.1c-24.4-31.4-62.1-51.9-105.1-51.9-10.2 0-26 9.6-57.6 9.6-31.5 0-47.4-9.6-57.6-9.6-42.9 0-80.6 20.5-105.1 51.9C61.9 339.2 48 299.2 48 256c0-110.3 89.7-200 200-200s200 89.7 200 200c0 43.2-13.9 83.2-37.3 115.9z\"></path>\n" +
+                ( !logined ?
+                        "                      d=\"M248 104c-53 0-96 43-96 96s43 96 96 96 96-43 96-96-43-96-96-96zm0 144c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm0-240C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-49.7 0-95.1-18.3-130.1-48.4 14.9-23 40.4-38.6 69.6-39.5 20.8 6.4 40.6 9.6 60.5 9.6s39.7-3.1 60.5-9.6c29.2 1 54.7 16.5 69.6 39.5-35 30.1-80.4 48.4-130.1 48.4zm162.7-84.1c-24.4-31.4-62.1-51.9-105.1-51.9-10.2 0-26 9.6-57.6 9.6-31.5 0-47.4-9.6-57.6-9.6-42.9 0-80.6 20.5-105.1 51.9C61.9 339.2 48 299.2 48 256c0-110.3 89.7-200 200-200s200 89.7 200 200c0 43.2-13.9 83.2-37.3 115.9z\"></path>\n":
+                        "                      d=\"M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z\"></path>\n"
+                )+
                 "              </svg>\n" +
                 "            </button>\n" +
                 "          </div>\n" +
@@ -83,7 +104,7 @@ public class htmls {
                 "                   class=\"svg-inline--fa fa-search fa-w-16\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
                 "                   viewBox=\"0 0 512 512\">\n" +
                 "                <path fill=\"currentColor\"\n" +
-                "                      d=\"M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z\"></path>\n" +
+                "                      d=\"M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z\"></path>\n"+
                 "              </svg>\n" +
                 "            </button>\n" +
                 "            <div class=\"dropdown-menu dropdownbg\" aria-labelledby=\"dropdownMenuButton1\"\n" +
@@ -107,7 +128,7 @@ public class htmls {
         // 同上
         return "<footer style=\"flex: 0 0 auto;\">\n" +
                 "        <div class=\"info\">\n" +
-                "          <div style=\"width: calc(100% - 500px);\">\n" +
+                "          <div id=\"info-main\">\n" +
                 "            <span id=\"title\">NeTEx China Group</span>\n" +
                 "            <div id=\"sevlink\">\n" +
                 "              <a>免责声明</a>\n" +
@@ -116,7 +137,7 @@ public class htmls {
                 "              <a>Cookie 设置</a>\n" +
                 "            </div>\n" +
                 "          </div>\n" +
-                "          <div>\n" +
+                "          <div id=\"find-us\">\n" +
                 "            <span id=\"title\">联系我们</span>\n" +
                 "            <div id=\"findus\">\n" +
                 "              <a href=\"https://github.com/SSF-Team/NeTEx/issues\" target=\"_blank\">\n" +

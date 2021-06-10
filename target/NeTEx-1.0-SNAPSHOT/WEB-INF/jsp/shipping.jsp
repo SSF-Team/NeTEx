@@ -9,7 +9,7 @@
 </head>
 <body>
 <%
-    out.println(htmls.header());
+    out.println(htmls.header(request.getCookies()));
 %>
 <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
 <link rel="stylesheet" href="../../index.css">

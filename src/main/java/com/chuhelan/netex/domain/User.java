@@ -32,4 +32,8 @@ public class User {
         this.user_id = i;
         this.user_name = passToken;
     }
+
+    public User(Integer id) {
+        this.user_id = id;
+    }
 }
